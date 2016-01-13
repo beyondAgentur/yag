@@ -29,7 +29,7 @@ return array(
     'types' => array(
         '1' => array('showitem' =>
             '--div--;Metadata,
-			title,description,href,link,date,
+			title,description,link,date,
 			--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,
 			hidden,fe_group'),
     ),
