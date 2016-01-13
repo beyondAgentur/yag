@@ -25,8 +25,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-use \TYPO3\CMS\Extbase\Utility;
-
 /**
  * Controller for the itemList
  *
@@ -143,7 +141,7 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
         foreach ($entries as $entry) {
             $category = new stdClass();
             $category->key = $entry;
-            $category->value = LocalizationUtility::translate('tx_yag_domain_model_item.href.target.' . $entry, 'yag');
+            $category->value = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_yag_domain_model_item.href.target.' . $entry, 'yag');
             $categories[] = $category;
         }
         return $categories;
