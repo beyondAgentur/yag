@@ -136,14 +136,16 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
      * @return array
      */
     public function getHrefTargets() {
-        $categories = array();
+        $targets = array();
         $entries = array('', '_blank', '_self');
+
         foreach ($entries as $entry) {
-            $category = new stdClass();
-            $category->key = $entry;
-            $category->value = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_yag_domain_model_item.href.target.' . $entry, 'yag');
-            $categories[] = $category;
+            $target = new stdClass();
+            $target->key = $entry;
+            $target->value = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_yag_domain_model_item.href.target.' . $entry, 'yag');
+            $targets[] = $target;
         }
+
         return $categories;
     }
 
