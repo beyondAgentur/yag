@@ -116,6 +116,8 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
         $this->view->assign('albums', $albums);
         $this->view->assign('album', $selectedAlbum);
 
+        $this->view->assign('hrefTargets', $this->getHrefTargets());
+
         $this->view->assign('filterBoxCollection', $this->extListContext->getFilterBoxCollection());
         $this->view->assign('listData', $this->extListContext->getRenderedListData());
         $this->view->assign('pagerCollection', $this->extListContext->getPagerCollection());
@@ -128,6 +130,22 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
     }
 
 
+    /**
+     * prepare href targets for select box
+     *
+     * @return array
+     */
+    public function getHrefTargets() {
+        $categories = array();
+        $entries = array('', '_blank', '_self');
+        foreach ($entries as $entry) {
+            $category = new stdClass();
+            $category->key = $entry;
+            $category->value = LocalizationUtility::translate('tx_yag_domain_model_item.href.target.' . $entry, 'yag');
+            $categories[] = $category;
+        }
+        return $categories;
+    }
 
     /**
      * Show a an unCached itemList
