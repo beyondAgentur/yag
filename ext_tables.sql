@@ -90,6 +90,7 @@ CREATE TABLE tx_yag_domain_model_item (
 	
 	title tinytext,
 	description text,
+	href tinytext,
 	tags int(11) unsigned DEFAULT '0' NOT NULL,
 	
 	filename varchar(200) DEFAULT '' NOT NULL,

@@ -67,6 +67,13 @@ class Tx_Yag_Domain_Model_Item
      * @var string $description
      */
     protected $description;
+
+    /**
+     * Href of item
+     *
+     * @var string $href
+     */
+    protected $href;
     
 
     /**
@@ -340,6 +347,28 @@ class Tx_Yag_Domain_Model_Item
         return $this->description;
     }
 
+    /**
+     * Setter for href
+     *
+     * @param string $href Link of item
+     * @return void
+     */
+    public function setHref($href)
+    {
+        $this->href = $href;
+    }
+
+
+
+    /**
+     * Getter for href
+     *
+     * @return string Link of item
+     */
+    public function getHref()
+    {
+        return $this->href;
+    }
 
 
     /**

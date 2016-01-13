@@ -206,6 +206,7 @@ class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractControl
                 $itemArray = $bulkEditData['album']['item'][$itemUid];
                 $item->setTitle($itemArray['title']);
                 $item->setDescription($itemArray['description']);
+                $item->setHref($itemArray['href']);
 
                 $itemAlbum = $this->albumRepository->findByUid(intval($itemArray['album']['__identity']));
                 if ($itemAlbum != null) {

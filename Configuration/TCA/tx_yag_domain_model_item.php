@@ -109,6 +109,17 @@ return array(
                 'eval' => 'trim'
             ),
         ),
+
+        'href' => array(
+            'exclude' => 0,
+            'label' => 'LLL:EXT:yag/Resources/Private/Language/locallang_db.xlf:tx_yag_domain_model_item.href',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim'
+            ),
+        ),
+
         'filename' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:yag/Resources/Private/Language/locallang_db.xlf:tx_yag_domain_model_item.filename',
