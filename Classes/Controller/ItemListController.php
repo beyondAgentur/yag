@@ -146,7 +146,7 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
             $targets[] = $target;
         }
 
-        return $categories;
+        return $targets;
     }
 
     /**
