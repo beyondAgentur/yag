@@ -358,8 +358,6 @@ class Tx_Yag_Domain_Model_Item
         $this->href = $href;
     }
 
-
-
     /**
      * Getter for href
      *
