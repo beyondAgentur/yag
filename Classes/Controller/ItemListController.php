@@ -112,11 +112,11 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
         $selectableGalleries = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository')->findAll();
         $albums = $this->objectManager->get('Tx_Yag_Domain_Repository_AlbumRepository')->findAll();
 
+        $this->view->assign('hrefTargets', $this->getHrefTargets());
+
         $this->view->assign('selectableGalleries', $selectableGalleries);
         $this->view->assign('albums', $albums);
         $this->view->assign('album', $selectedAlbum);
-
-        $this->view->assign('hrefTargets', $this->getHrefTargets());
 
         $this->view->assign('filterBoxCollection', $this->extListContext->getFilterBoxCollection());
         $this->view->assign('listData', $this->extListContext->getRenderedListData());
@@ -141,10 +141,12 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
 
         foreach ($entries as $entry) {
             $target = new stdClass();
-            $target->key = $entry;
-            $target->value = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_yag_domain_model_item.href.target.' . $entry, 'yag');
+            $target->target = $entry;
+            $target->label = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_yag_controller_item_list.href.target.' . $entry, 'yag');
             $targets[] = $target;
         }
+
+        print_r($targets);
 
         return $targets;
     }

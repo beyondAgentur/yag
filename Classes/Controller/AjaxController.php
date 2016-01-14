@@ -192,6 +192,24 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
         $this->returnDataAndShutDown();
     }
 
+    /**
+     * Updates href of a given item
+     *
+     * @param Tx_Yag_Domain_Model_Item $item Item to update hrefTarget
+     * @param string $itemHrefTarget New hrefTarget of item
+     * @rbacNeedsAccess
+     * @rbacObject Item
+     * @rbacAction edit
+     */
+    public function updateItemHrefTargetAction(Tx_Yag_Domain_Model_Item $item, $itemHrefTarget)
+    {
+        $item->setHrefTarget(utf8_encode($itemHrefTarget));
+
+        $this->itemRepository->update($item);
+
+        $this->returnDataAndShutDown();
+    }
+
 
     /**
      * Sets an item as thumb file for album

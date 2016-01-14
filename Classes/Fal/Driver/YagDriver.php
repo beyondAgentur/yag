@@ -1004,6 +1004,7 @@ class YagDriver extends \TYPO3\CMS\Core\Resource\Driver\AbstractDriver
             'description' => $item->getDescription(),
             'title' => $item->getTitle(),
             'href' => $item->getHref(),
+            'hrefTarget' => $item->getHrefTarget(),
             'height' => $item->getHeight(),
             'width' => $item->getWidth(),
             'sourceUri' => $item->getSourceuri(),
