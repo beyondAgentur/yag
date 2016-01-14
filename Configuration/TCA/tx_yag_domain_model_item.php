@@ -120,6 +120,16 @@ return array(
             ),
         ),
 
+        'href_target' => array(
+            'exclude' => 0,
+            'label' => 'LLL:EXT:yag/Resources/Private/Language/locallang_db.xlf:tx_yag_domain_model_item.href_target',
+            'config' => array(
+                'type' => 'select',
+                'minitems' => 0,
+                'maxitems' => 1,
+            ),
+        ),
+
         'filename' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:yag/Resources/Private/Language/locallang_db.xlf:tx_yag_domain_model_item.filename',
