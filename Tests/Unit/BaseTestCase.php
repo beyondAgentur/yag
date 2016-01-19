@@ -25,6 +25,10 @@
 
 namespace DL\Yag\Tests\Unit;
 
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Model\Album;
+use DL\Yag\Domain\Model\Gallery;
+use DL\Yag\Domain\Model\Item;
 use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -65,9 +69,9 @@ abstract class BaseTestCase extends UnitTestCase
      */
     protected function getTestItemObject()
     {
-        $item = new Tx_Yag_Domain_Model_Item();
-        $album = new Tx_Yag_Domain_Model_Album();
-        $gallery = new Tx_Yag_Domain_Model_Gallery();
+        $item = new Item();
+        $album = new Album();
+        $gallery = new Gallery();
 
         $album->setGallery($gallery);
         $item->setAlbum($album);
@@ -86,12 +90,12 @@ abstract class BaseTestCase extends UnitTestCase
     {
         if (!$settings) {
             $tsFilePath = ExtensionManagementUtility::extPath($this->extensionName) . 'Configuration/TypoScript/setup.txt';
-            $typoscript = Tx_PtExtbase_Div::loadTypoScriptFromFile($tsFilePath);
+            $typoscript = \Tx_PtExtbase_Div::loadTypoScriptFromFile($tsFilePath);
             $settings = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService')->convertTypoScriptArrayToPlainArray($typoscript);
             $settings = $settings['plugin']['tx_yag']['settings'];
         }
 
-        Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::injectSettings($settings);
-        $this->configurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance('test', 'default');
+        ConfigurationBuilderFactory::injectSettings($settings);
+        $this->configurationBuilder = ConfigurationBuilderFactory::getInstance('test', 'default');
     }
 }

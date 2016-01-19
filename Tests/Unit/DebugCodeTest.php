@@ -25,6 +25,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 namespace DL\Yag\Tests\Unit;
 
 use TYPO3\CMS\Core\Tests\UnitTestCase;

@@ -23,6 +23,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Tests\Unit\Domain\ImageProcessing;
+
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Model\ResolutionFileCache;
+use DL\Yag\Tests\Unit\BaseTestCase;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -33,7 +39,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @subpackage Domain/ImageProcessing
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Tests_Domain_ImageProcessing_Typo3ProcessorTest extends Tx_Yag_Tests_BaseTestCase
+class Typo3ProcessorTest extends BaseTestCase
 {
     /**
      * @var path to the testImage
@@ -55,7 +61,7 @@ class Tx_Yag_Tests_Domain_ImageProcessing_Typo3ProcessorTest extends Tx_Yag_Test
      */
     public function classExists()
     {
-        $this->isTrue(class_exists('Tx_Yag_Domain_ImageProcessing_Typo3Processor'));
+        $this->isTrue(class_exists('DL\\Yag\\Domain\\ImageProcessing\\Typo3Processor'));
     }
 
 
@@ -77,9 +83,9 @@ class Tx_Yag_Tests_Domain_ImageProcessing_Typo3ProcessorTest extends Tx_Yag_Test
             'maxH' => 200,
         );
 
-        $resolutionConfig = new Tx_Yag_Domain_Configuration_Image_ResolutionConfig($this->configurationBuilder, $resolutionSettings);
+        $resolutionConfig = new ResolutionConfig($this->configurationBuilder, $resolutionSettings);
         $item = $this->getTestItemObject();
-        $resolutionFileCacheObject = new Tx_Yag_Domain_Model_ResolutionFileCache($item);
+        $resolutionFileCacheObject = new ResolutionFileCache($item);
         
         $typo3Processor = $this->getTypo3ProcessorMock($testImage);
         $typo3Processor->_callRef('processFile', $resolutionConfig, $item, $resolutionFileCacheObject);
@@ -146,9 +152,9 @@ class Tx_Yag_Tests_Domain_ImageProcessing_Typo3ProcessorTest extends Tx_Yag_Test
         $resolutionSettings = $resolutionSettings['medium'];
         $resolutionSettings['name'] = 'medium';
 
-        $resolutionConfig = new Tx_Yag_Domain_Configuration_Image_ResolutionConfig($this->configurationBuilder, $resolutionSettings);
+        $resolutionConfig = new ResolutionConfig($this->configurationBuilder, $resolutionSettings);
         $item = $this->getTestItemObject();
-        $resolutionFileCacheObject = new Tx_Yag_Domain_Model_ResolutionFileCache($item);
+        $resolutionFileCacheObject = new ResolutionFileCache($item);
 
         $typo3Processor = $this->getTypo3ProcessorMock($testImage);
         $typo3Processor->_callRef('processFile', $resolutionConfig, $item, $resolutionFileCacheObject);
@@ -184,7 +190,7 @@ class Tx_Yag_Tests_Domain_ImageProcessing_Typo3ProcessorTest extends Tx_Yag_Test
 
         $accessibleProcessor->_injectProcessorConfiguration($this->configurationBuilder->buildImageProcessorConfiguration());
         $accessibleProcessor->injectConfigurationManager($configurationManager);
-        $accessibleProcessor->injectFileSystemDiv(new Tx_Yag_Domain_FileSystem_Div());
+        $accessibleProcessor->injectFileSystemDiv(new Div());
         $accessibleProcessor->injectPidDetector($pidDetector);
 
         $accessibleProcessor->expects($this->once())

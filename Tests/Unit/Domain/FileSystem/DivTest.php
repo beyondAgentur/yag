@@ -23,6 +23,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Tests\Unit\Domain\FileSystem;
+
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Tests\Unit\BaseTestCase;
+
 /**
  * Testcase for filesystem div
  *
@@ -30,10 +35,10 @@
  * @subpackage Domain\FileSystem
  * @author Daniel Lienert
  */
-class Tx_Yag_Tests_Domain_FileSystem_DivTest extends Tx_Yag_Tests_BaseTestCase
+class DivTest extends BaseTestCase
 {
     /**
-     * @var Tx_Yag_Domain_FileSystem_Div
+     * @var Div
      */
     protected $fileSystemDiv;
 
@@ -48,7 +53,7 @@ class Tx_Yag_Tests_Domain_FileSystem_DivTest extends Tx_Yag_Tests_BaseTestCase
         $this->testDirectory = Tx_PtExtbase_Utility_Files::concatenatePaths(array(__DIR__, 'workspace'));
         mkdir($this->testDirectory);
 
-        $this->fileSystemDiv = new Tx_Yag_Domain_FileSystem_Div();
+        $this->fileSystemDiv = new Div();
     }
 
     public function tearDown()

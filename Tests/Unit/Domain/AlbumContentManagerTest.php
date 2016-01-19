@@ -43,26 +43,22 @@ class AlbumContentManagerTest extends BaseTestCase
      * @var Tx_Yag_Domain_AlbumContentManager
      */
     protected $fixture;
-    
-    
-    
+
     /**
      * Sets up the testcase
      */
     public function setUp()
     {
-        $albumMock = $this->getMock('Tx_Yag_Domain_Model_Album', array(), array(), '', false);
+        $albumMock = $this->getMock('DL\\Yag\\Domain\\Model\\Album', array(), array(), '', false);
         $this->fixture = new AlbumContentManager($albumMock);
     }
-    
-    
     
     /**
      * @test
      */
     public function getAlbumReturnsAlbum()
     {
-        $albumMock = $this->getMock('Tx_Yag_Domain_Model_Album', array(), array(), '', false);
+        $albumMock = $this->getMock('DL\\Yag\\Domain\\Model\\Album', array(), array(), '', false);
         $albumContentManager = new AlbumContentManager($albumMock);
         $this->assertEquals($albumContentManager->getAlbum(), $albumMock);
     }

@@ -23,6 +23,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Tests\Unit\Domain\FileSystem;
+
+use DL\Yag\Domain\FileSystem\HashFileSystem;
+use DL\Yag\Tests\Unit\BaseTestCase;
+
 /**
  * Testcase for hash filesystem
  *
@@ -30,12 +35,12 @@
  * @subpackage Domain\FileSystem
  * @author Michael Knoll <mimi@kaktsuteam.de>
  */
-class Tx_Yag_Tests_Domain_FileSystem_HashFileSystemTest extends Tx_Yag_Tests_BaseTestCase
+class HashFileSystemTest extends BaseTestCase
 {
     /**
      * Holds an instance of hash file system for testing
      *
-     * @var Tx_Yag_Domain_Filehandling_HashFileSystem
+     * @var HashFileSystem
      */
     protected $fixture;
     
@@ -46,7 +51,7 @@ class Tx_Yag_Tests_Domain_FileSystem_HashFileSystemTest extends Tx_Yag_Tests_Bas
      */
     public function setUp()
     {
-        $this->fixture = new Tx_Yag_Domain_FileSystem_HashFileSystem('fileadmin');
+        $this->fixture = new HashFileSystem('fileadmin');
     }
     
     
@@ -57,7 +62,7 @@ class Tx_Yag_Tests_Domain_FileSystem_HashFileSystemTest extends Tx_Yag_Tests_Bas
     public function hashFileSystemThrowsExceptionOnConstructForNonExistingDirectory()
     {
         try {
-            new Tx_Yag_Domain_FileSystem_HashFileSystem('asdfasdfasdf');
+            new HashFileSystem('asdfasdfasdf');
         } catch (Exception $e) {
             return;
         }

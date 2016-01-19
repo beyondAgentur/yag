@@ -23,13 +23,18 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Tests\Unit\Domain\Configuration;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Class holds default TS configuration for testcases
  *
  * @package Tests
  * @author Michael Knoll <mimi@kaktsuteam.de>
  */
-class Tx_Yag_Tests_DefaultTsConfig
+class DefaultTsConfig
 {
     /**
      * Typoscript configuration
@@ -105,9 +110,9 @@ class Tx_Yag_Tests_DefaultTsConfig
      */
     protected function initTsConfigArray()
     {
-        $typoScriptParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TypoScript\\Parser\\TypoScriptParser');
+        $typoScriptParser = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\TypoScript\\Parser\\TypoScriptParser');
         $typoScriptParser->parse($this->tsConfigString);
-        $this->tsConfigArray = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService')->convertTypoScriptArrayToPlainArray($typoScriptParser->setup);
+        $this->tsConfigArray = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService')->convertTypoScriptArrayToPlainArray($typoScriptParser->setup);
     }
     
     
@@ -119,6 +124,6 @@ class Tx_Yag_Tests_DefaultTsConfig
      */
     public function getDefaultConfigurationBuilder()
     {
-        return new Tx_Yag_Domain_Configuration_ConfigurationBuilder($this->tsConfigArray['plugin']['tx_yag']['settings'], 'test', 'test');
+        return new ConfigurationBuilder($this->tsConfigArray['plugin']['tx_yag']['settings'], 'test', 'test');
     }
 }

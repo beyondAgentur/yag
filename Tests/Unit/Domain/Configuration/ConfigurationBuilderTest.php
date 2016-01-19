@@ -23,6 +23,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Tests\Unit\Domain\Configuration;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use DL\Yag\Tests\Unit\BaseTestCase;
+
 /**
  * Testcase for configuration builder
  *
@@ -30,16 +35,14 @@
  * @subpackage Domain\Configuration
  * @author Michael Knoll <mimi@kaktsuteam.de>
  */
-class Tx_Yag_Tests_Domain_Configuration_ConfigurationBuilderTest extends Tx_Yag_Tests_BaseTestCase
+class ConfigurationBuilderTest extends BaseTestCase
 {
     /**
      * Holds fixture for this testcase
      *
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $fixture;
-    
-    
     
     /**
      * Sets up fixture for this testcase
@@ -47,21 +50,17 @@ class Tx_Yag_Tests_Domain_Configuration_ConfigurationBuilderTest extends Tx_Yag_
      */
     public function setUp()
     {
-        $settings = Tx_Yag_Tests_DefaultTsConfig::getInstance()->tsConfigArray;
-        $this->fixture = new Tx_Yag_Domain_Configuration_ConfigurationBuilder($settings['plugin']['tx_yag']['settings'], 'test', 'test');
+        $settings = DefaultTsConfig::getInstance()->tsConfigArray;
+        $this->fixture = new ConfigurationBuilder($settings['plugin']['tx_yag']['settings'], 'test', 'test');
     }
-    
-    
     
     /**
      * @test
      */
     public function classExists()
     {
-        $this->assertTrue(class_exists('Tx_Yag_Domain_Configuration_ConfigurationBuilder'));
+        $this->assertTrue(class_exists('DL\\Yag\\Domain\\Configuration\\ConfigurationBuilder'));
     }
-    
-    
     
     /**
      * @test
@@ -69,6 +68,6 @@ class Tx_Yag_Tests_Domain_Configuration_ConfigurationBuilderTest extends Tx_Yag_
     public function buildImageProcessorConfigurationReturnsImageProcessorConfiguration()
     {
         $imageProcessorConfiguration = $this->fixture->buildImageProcessorConfiguration();
-        $this->assertTrue(is_a($imageProcessorConfiguration, 'Tx_Yag_Domain_Configuration_ImageProcessing_ImageProcessorConfiguration'));
+        $this->assertTrue(is_a($imageProcessorConfiguration, 'DL\\Yag\\Domain\\Configuration\\ImageProcessing\\ImageProcessorConfiguration'));
     }
 }
