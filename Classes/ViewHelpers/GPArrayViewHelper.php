@@ -26,7 +26,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-namespace DL\Yag\ViewHelpers\NameSpace;
+namespace DL\Yag\ViewHelpers;
 
 /**
  * GPValueViewHelper
