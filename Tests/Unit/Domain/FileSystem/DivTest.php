@@ -50,7 +50,7 @@ class DivTest extends BaseTestCase
 
     public function setUp()
     {
-        $this->testDirectory = Tx_PtExtbase_Utility_Files::concatenatePaths(array(__DIR__, 'workspace'));
+        $this->testDirectory = \Tx_PtExtbase_Utility_Files::concatenatePaths(array(__DIR__, 'workspace'));
         mkdir($this->testDirectory);
 
         $this->fileSystemDiv = new Div();
@@ -58,7 +58,7 @@ class DivTest extends BaseTestCase
 
     public function tearDown()
     {
-        Tx_PtExtbase_Utility_Files::removeDirectoryRecursively($this->testDirectory);
+        \Tx_PtExtbase_Utility_Files::removeDirectoryRecursively($this->testDirectory);
     }
 
 
@@ -67,12 +67,12 @@ class DivTest extends BaseTestCase
      */
     public function checkDirAndCreateIfMissingDataProvider()
     {
-        $this->testDirectory = Tx_PtExtbase_Utility_Files::concatenatePaths(array(__DIR__, 'workspace'));
+        $this->testDirectory = \Tx_PtExtbase_Utility_Files::concatenatePaths(array(__DIR__, 'workspace'));
 
         return array(
             'alreadyExisting' => array('directoryToCreate' => $this->testDirectory),
-            'notExisting' => array('directoryToCreate' => Tx_PtExtbase_Utility_Files::concatenatePaths(array($this->testDirectory, 'test1'))),
-            'notExistingDeep' => array('directoryToCreate' => Tx_PtExtbase_Utility_Files::concatenatePaths(array($this->testDirectory, 'test1', 'test2'))),
+            'notExisting' => array('directoryToCreate' => \Tx_PtExtbase_Utility_Files::concatenatePaths(array($this->testDirectory, 'test1'))),
+            'notExistingDeep' => array('directoryToCreate' => \Tx_PtExtbase_Utility_Files::concatenatePaths(array($this->testDirectory, 'test1', 'test2'))),
         );
     }
 

@@ -73,7 +73,7 @@ class FileCrawlerTest extends BaseTestCase
     {
         try {
             $this->fixture->getFilesForGivenDirectory('asdfasdfasdf');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return;
         }
         $this->fail('No Exception has been thrown on non-existing directory');
@@ -87,7 +87,7 @@ class FileCrawlerTest extends BaseTestCase
     {
         try {
             $this->fixture->getFilesForGivenDirectory(getcwd());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->fail('An Exception has been thrown on an existing directory');
         }
     }

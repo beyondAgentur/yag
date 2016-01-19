@@ -80,7 +80,7 @@ class AlbumFilterTest extends BaseTestCase
 
         $this->assertCount(1, $criteriaArray);
 
-        $criteria = current($criteriaArray); /** @var Tx_PtExtlist_Domain_QueryObject_SimpleCriteria $criteria */
+        $criteria = current($criteriaArray); /** @var \Tx_PtExtlist_Domain_QueryObject_SimpleCriteria $criteria */
 
         $this->assertEquals(1, $criteria->getValue());
     }

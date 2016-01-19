@@ -63,7 +63,7 @@ class HashFileSystemTest extends BaseTestCase
     {
         try {
             new HashFileSystem('asdfasdfasdf');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return;
         }
         $this->fail('No Exception has been thrown on trying to construct hfs with non existing directory');

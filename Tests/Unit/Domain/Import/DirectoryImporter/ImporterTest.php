@@ -45,7 +45,7 @@ class ImporterTest extends BaseTestCase
         try {
             $importer = new Importer();
             $importer->setDirectory('asdfasdfasdf');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return;
         }
         $this->fail('No Exception has been thrown on constructing with non-existing directory');

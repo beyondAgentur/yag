@@ -78,7 +78,7 @@ class GalleryFilterTest extends BaseTestCase
 
         $this->assertCount(1, $criteriaArray);
 
-        $simpleCriteria = current($criteriaArray); /** @var Tx_PtExtlist_Domain_QueryObject_AndCriteria $andCriteria */
+        $simpleCriteria = current($criteriaArray); /** @var \Tx_PtExtlist_Domain_QueryObject_AndCriteria $andCriteria */
 
         $this->assertEquals(1, $simpleCriteria->getValue());
     }

@@ -112,7 +112,7 @@ class PidDetectorTest extends BaseTestCase
         $pidDetector = new idDetector(PidDetector::FE_MODE);
         try {
             $pidDetector->getCurrentPageIsYagPage();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return;
         }
         $this->fail("No exception has been thrown when trying to call PidDetector::getCurrentPageIsYagPage in non-backend mode.");
