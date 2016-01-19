@@ -23,10 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-namespace DL\Yag\Tests\Domain;
+namespace DL\Yag\Tests\Unit\Domain;
 
 use DL\Yag\Domain\AlbumContentManager;
-use DL\Yag\Tests\BaseTestCase;
+use DL\Yag\Tests\Unit\BaseTestCase;
 
 /**
  * Testcase for album content manager
