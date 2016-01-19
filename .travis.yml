@@ -1,6 +1,8 @@
 language: php
 
 matrix:
+  fast_finish: true
+
   include:
       - php: 5.5
         env: UNIT_TESTS=yes FUNCTIONAL_TESTS=yes PHP_LINT=yes XLF_CHECK=yes SUBMODULE_TEST=yes
@@ -35,7 +37,7 @@ script:
     if [[ "$UNIT_TESTS" == "yes" ]]; then
       echo;
       echo "Running unit tests";
-      ./bin/phpunit -c phpunit.xml.dist
+      phpunit -c phpunit.xml.dist
     fi
   - >
     if [[ "$PHP_LINT" == "yes" ]]; then
