@@ -166,6 +166,9 @@ return array(
                         'title' => 'Full screen Rich Text Editing',
                         'icon' => 'wizard_rte2.gif',
                         'script' => 'wizard_rte.php',
+                        'module' => array(
+                        	'name' => 'wizard_rte'
+                        )
                     ),
                 ),
             )
@@ -243,6 +246,9 @@ return array(
                         'icon' => 'link_popup.gif',
                         'script' => 'browse_links.php?mode=wizard',
                         'JSopenParams' => 'height=300,width=500,status=0,menubar=0,scrollbars=1',
+                        'module' => array(
+                        	'name' => 'wizard_link'
+                        )
                     ),
                 ),
                 'softref' => 'typolink',
@@ -302,6 +308,9 @@ return array(
                         'icon' => 'edit2.gif',
                         'popup_onlyOpenIfSelected' => 1,
                         'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
+                        'module' => array(
+                        	'name' => 'wizard_edit'
+                        )
                     ),
                     'add' => array(
                         'type' => 'script',
@@ -313,6 +322,9 @@ return array(
                             'setValue' => 'prepend'
                         ),
                         'script' => 'wizard_add.php',
+                        'module' => array(
+                        	'name' => 'wizard_add'
+                        )
                     ),
                 ),
             ),
@@ -335,6 +347,9 @@ return array(
                         'icon' => 'edit2.gif',
                         'popup_onlyOpenIfSelected' => 1,
                         'JSopenParams' => 'height=350,width=580,status=0,menubar=0,scrollbars=1',
+                        'module' => array(
+                        	'name' => 'wizard_edit'
+                        )
                     ),
                     'add' => array(
                         'type' => 'script',
@@ -346,14 +361,11 @@ return array(
                             'setValue' => 'prepend'
                         ),
                         'script' => 'wizard_add.php',
+                        'module' => array(
+                        	'name' => 'wizard_add'
+                        )
                     ),
                 ),
-            ),
-        ),
-
-        'album' => array(
-            'config' => array(
-                'type' => 'passthrough',
             ),
         ),
 

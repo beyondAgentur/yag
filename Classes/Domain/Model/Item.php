@@ -4,7 +4,7 @@
 *  Copyright notice
 *
 *  (c) 2010-2011 Michael Knoll <mimi@kaktusteam.de>
-*  			Daniel Lienert <daniel@lienert.cc>
+*  			Daniel Lienert <typo3@lienert.cc>
 *  			
 *  All rights reserved
 *
@@ -30,7 +30,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Gallery implements Item domain object. An item is anything that can be 
  * attached to an album as content.
  * 
- * @author Daniel Lienert <daniel@lienert.cc>
+ * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  * @package Domain
  * @subpackage Model
@@ -902,9 +902,10 @@ class Tx_Yag_Domain_Model_Item
     public function setTagsFromCSV($tagsAsCSV)
     {
         $tags = array_filter(GeneralUtility::trimExplode(',', $tagsAsCSV));
+        $currentTags = clone $this->tags;
 
-        foreach ($this->tags as $tag) { /** @var Tx_Yag_Domain_Model_Tag $tag */
-            if (!in_array($tag->getName(), $tags)) {
+        foreach ($currentTags as $tag) { /** @var Tx_Yag_Domain_Model_Tag $tag */
+            if (!in_array(trim($tag->getName()), $tags)) {
                 $tag->decreaseCount();
                 $this->tags->detach($tag);
             }
