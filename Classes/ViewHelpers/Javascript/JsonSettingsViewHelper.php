@@ -24,6 +24,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Javascript;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /**
  * This ViewHelper returns settings as JSON array
  *
@@ -32,7 +37,7 @@
  * @subpackage Javascript
  * 
  */
-class Tx_Yag_ViewHelpers_Javascript_JsonSettingsViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class JsonSettingsViewHelper extends AbstractViewHelper
 {
     /**
      * @param string $tsPath
@@ -45,9 +50,9 @@ class Tx_Yag_ViewHelpers_Javascript_JsonSettingsViewHelper extends \TYPO3\CMS\Fl
         $jsonCompliantSettings = array();
 
         if ($tsPath !== '') {
-            $jsonCompliantSettings = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance()->getJSCompliantSettings($tsPath);
+            $jsonCompliantSettings = ConfigurationBuilderFactory::getInstance()->getJSCompliantSettings($tsPath);
         } elseif ($settings !== null) {
-            $jsonCompliantSettings = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance()->convertToJSCompliantSettings($settings);
+            $jsonCompliantSettings = ConfigurationBuilderFactory::getInstance()->convertToJSCompliantSettings($settings);
         }
 
         $jsonSettings = json_encode($jsonCompliantSettings);

@@ -23,6 +23,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Extlist\Filter;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Context\YagContextFactory;
+
 /**
  * Class implements the album->image filter
  * 
@@ -30,11 +35,11 @@
  * @package Extlist
  * @subpackage Filter
  */
-class Tx_Yag_Extlist_Filter_AlbumFilter extends Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
+class AlbumFilter extends \Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
 {
     /**
      * YAG ConfigurationBuilder
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $yagConfigurationBuilder;
 
@@ -51,7 +56,7 @@ class Tx_Yag_Extlist_Filter_AlbumFilter extends Tx_PtExtlist_Domain_Model_Filter
     {
         parent::__construct();
         
-        $this->yagConfigurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+        $this->yagConfigurationBuilder = ConfigurationBuilderFactory::getInstance();
     }
     
 
@@ -73,13 +78,13 @@ class Tx_Yag_Extlist_Filter_AlbumFilter extends Tx_PtExtlist_Domain_Model_Filter
     
     
     /**
-     * @see Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
+     * @see \Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
      *
      */
     public function reset()
     {
         $this->albumUid = 0;
-        $this->filterQuery = new Tx_PtExtlist_Domain_QueryObject_Query();
+        $this->filterQuery = new \Tx_PtExtlist_Domain_QueryObject_Query();
         $this->init();
     }
     
@@ -87,11 +92,11 @@ class Tx_Yag_Extlist_Filter_AlbumFilter extends Tx_PtExtlist_Domain_Model_Filter
     
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/Model/Filter/Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::initFilter()
+     * @see Classes/Domain/Model/Filter/\Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::initFilter()
      */
     public function initFilter()
     {
-        $this->albumUid = Tx_Yag_Domain_Context_YagContextFactory::getInstance()->getAlbumUid();
+        $this->albumUid = YagContextFactory::getInstance()->getAlbumUid();
         $this->setActiveState();
     }
     
@@ -99,7 +104,7 @@ class Tx_Yag_Extlist_Filter_AlbumFilter extends Tx_PtExtlist_Domain_Model_Filter
     public function getFilterValueForBreadCrumb()
     {
     }
-    public function buildFilterCriteria(Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
+    public function buildFilterCriteria(\Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
     {
     }
     
@@ -107,11 +112,11 @@ class Tx_Yag_Extlist_Filter_AlbumFilter extends Tx_PtExtlist_Domain_Model_Filter
     
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/Model/Filter/Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
+     * @see Classes/Domain/Model/Filter/\Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
      */
     public function setActiveState()
     {
-        if ($this->albumUid > 0 || Tx_Yag_Domain_Context_YagContextFactory::getInstance()->isInStrictFilterMode()) {
+        if ($this->albumUid > 0 || YagContextFactory::getInstance()->isInStrictFilterMode()) {
             $this->isActive = true;
         }
     }
@@ -121,14 +126,14 @@ class Tx_Yag_Extlist_Filter_AlbumFilter extends Tx_PtExtlist_Domain_Model_Filter
     /**
      * Build the filterCriteria for filter 
      * 
-     * @return Tx_PtExtlist_Domain_QueryObject_Criteria
+     * @return \Tx_PtExtlist_Domain_QueryObject_Criteria
      */
     protected function buildFilterCriteriaForAllFields()
     {
         $albumField = $this->fieldIdentifierCollection->getFieldConfigByIdentifier('album');
-        $fieldName = Tx_PtExtlist_Utility_DbUtils::getSelectPartByFieldConfig($albumField);
+        $fieldName = \Tx_PtExtlist_Utility_DbUtils::getSelectPartByFieldConfig($albumField);
 
-        $criteria = Tx_PtExtlist_Domain_QueryObject_Criteria::equals($fieldName, $this->albumUid);
+        $criteria = \Tx_PtExtlist_Domain_QueryObject_Criteria::equals($fieldName, $this->albumUid);
 
         return $criteria;
     }

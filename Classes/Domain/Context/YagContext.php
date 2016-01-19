@@ -23,6 +23,14 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Context;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use DL\Yag\Domain\Model\Gallery;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+
 /**
  * Class holds settings and objects for yag gallery.
  *
@@ -31,8 +39,8 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_SessionPersistableInterface,
-                                                Tx_PtExtbase_State_GpVars_GpVarsInjectableInterface
+class YagContext implements \Tx_PtExtbase_State_Session_SessionPersistableInterface,
+                                                \Tx_PtExtbase_State_GpVars_GpVarsInjectableInterface
 {
     /**
      * Holds constant for identifier for gallery list in typoscript configuration
@@ -83,7 +91,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
 
 
     /**
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
 
@@ -97,19 +105,19 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
 
 
     /**
-     * @var Tx_Yag_Domain_Model_Gallery
+     * @var Gallery
      */
     protected $selectedGallery = null;
     
 
     /**
-     * @var Tx_Yag_Domain_Model_Album
+     * @var Album
      */
     protected $selectedAlbum = null;
     
 
     /**
-     * @var Tx_Yag_Domain_Model_Item
+     * @var Item
      */
     protected $selectedItem = null;
     
@@ -139,19 +147,19 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
 
 
     /**
-     * @var Tx_PtExtlist_ExtlistContext_ExtlistContext
+     * @var \Tx_PtExtlist_ExtlistContext_ExtlistContext
      */
     protected $galleryListContext = null;
 
 
     /**
-     * @var Tx_PtExtlist_ExtlistContext_ExtlistContext
+     * @var \Tx_PtExtlist_ExtlistContext_ExtlistContext
      */
     protected $albumListContext = null;
 
 
     /**
-     * @var Tx_PtExtlist_ExtlistContext_ExtlistContext
+     * @var \Tx_PtExtlist_ExtlistContext_ExtlistContext
      */
     protected $itemListContext = null;
 
@@ -172,9 +180,9 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
+    public function injectObjectManager( ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }
@@ -182,9 +190,9 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
 
     
     /**
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
+     * @param ConfigurationBuilder $configurationBuilder
      */
-    public function _injectConfigurationBuilder(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public function _injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder)
     {
         $this->configurationBuilder = $configurationBuilder;
     }
@@ -192,9 +200,9 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     
     
     /**
-     * @param \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext
+     * @param ControllerContext $controllerContext
      */
-    public function injectControllerContext(\TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext)
+    public function injectControllerContext( ControllerContext $controllerContext)
     {
         $this->controllerContext = $controllerContext;
     }
@@ -202,7 +210,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/StateAdapter/Tx_PtExtlist_Domain_StateAdapter_IdentifiableInterface::getObjectNamespace()
+     * @see Classes/Domain/StateAdapter/\Tx_PtExtlist_Domain_StateAdapter_IdentifiableInterface::getObjectNamespace()
      */
     public function getObjectNamespace()
     {
@@ -288,9 +296,13 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
         switch ($pluginModeIdentifier) {
             case 'Item_showSingle':
                 $this->selectedItemUid = $this->configurationBuilder->buildContextConfiguration()->getSelectedItemUid();
+                break;
+
             case 'Album_showSingle':
             case 'ItemList_list':
                 $this->selectedAlbumUid = $this->configurationBuilder->buildContextConfiguration()->getSelectedAlbumUid();
+                break;
+
             case 'Gallery_showSingle':
             case 'Album_list':
                 $this->selectedGalleryUid = $this->configurationBuilder->buildContextConfiguration()->getSelectedGalleryUid();
@@ -335,9 +347,9 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
 
     
     /**
-     * @param Tx_Yag_Domain_Model_Gallery $gallery
+     * @param Gallery $gallery
      */
-    public function setGallery(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function setGallery(Gallery $gallery)
     {
         $this->selectedGallery = $gallery;
         $this->selectedGalleryUid = $gallery->getUid();
@@ -346,9 +358,9 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     
 
     /**
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      */
-    public function setAlbum(Tx_Yag_Domain_Model_Album $album)
+    public function setAlbum(Album $album)
     {
         $this->selectedAlbum = $album;
         $this->selectedAlbumUid = $album->getUid();
@@ -357,9 +369,9 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     
     
     /**
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      */
-    public function setItem(Tx_Yag_Domain_Model_Item $item)
+    public function setItem(Item $item)
     {
         $this->selectedItem = $item;
         $this->selectedItemUid = $item->getUid();
@@ -398,7 +410,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     
         
     /**
-     * @return \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext
+     * @return ControllerContext $controllerContext
      */
     public function getControllerContext()
     {
@@ -408,7 +420,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     
     
     /**
-     * @return Tx_Yag_Domain_Model_Gallery
+     * @return Gallery
      */
     public function getGallery()
     {
@@ -416,10 +428,10 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
             return null;
         }
         
-        if ($this->selectedGallery instanceof Tx_Yag_Domain_Model_Gallery && $this->selectedGallery->getUid() == $this->selectedGalleryUid) {
+        if ($this->selectedGallery instanceof Gallery && $this->selectedGallery->getUid() == $this->selectedGalleryUid) {
             return $this->selectedGallery;
         } else {
-            return $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository')->findByUid($this->selectedGalleryUid);
+            return $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository')->findByUid($this->selectedGalleryUid);
         }
     }
     
@@ -436,7 +448,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     
     
     /**
-     * @return Tx_Yag_Domain_Model_Album
+     * @return Album
      */
     public function getAlbum()
     {
@@ -444,10 +456,10 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
             return null;
         }
         
-        if ($this->selectedAlbum instanceof Tx_Yag_Domain_Model_Album && $this->selectedAlbum->getUid() == $this->selectedAlbumUid) {
+        if ($this->selectedAlbum instanceof Album && $this->selectedAlbum->getUid() == $this->selectedAlbumUid) {
             return $this->selectedAlbum;
         } else {
-            return $this->objectManager->get('Tx_Yag_Domain_Repository_AlbumRepository')->findByUid($this->selectedAlbumUid);
+            return $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository')->findByUid($this->selectedAlbumUid);
         }
     }
     
@@ -464,7 +476,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     
     
     /**
-     * @return Tx_Yag_Domain_Model_Item
+     * @return Item
      */
     public function getItem()
     {
@@ -472,10 +484,10 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
             return null;
         }
         
-        if ($this->selectedItem instanceof Tx_Yag_Domain_Model_Item && $this->selectedItem->getUid() == $this->selectedItemUid) {
+        if ($this->selectedItem instanceof Item && $this->selectedItem->getUid() == $this->selectedItemUid) {
             return $this->selectedItem;
         } else {
-            return $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository')->findByUid($this->selectedItemUid);
+            return $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository')->findByUid($this->selectedItemUid);
         }
     }
     
@@ -494,12 +506,12 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     /**
      * Getter for itemlist context
      *
-     * @return Tx_PtExtlist_ExtlistContext_ExtlistContext
+     * @return \Tx_PtExtlist_ExtlistContext_ExtlistContext
      */
     public function getItemListContext()
     {
         if ($this->itemListContext === null) {
-            $this->itemListContext = Tx_PtExtlist_ExtlistContext_ExtlistContextFactory::getContextByCustomConfiguration(
+            $this->itemListContext = \Tx_PtExtlist_ExtlistContext_ExtlistContextFactory::getContextByCustomConfiguration(
                 $this->configurationBuilder->buildExtlistConfiguration()->getExtlistSettingsByListId(self::ITEM_LIST_ID),
                 self::ITEM_LIST_ID . $this->identifier, false);
         }
@@ -516,7 +528,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     public function getGalleryListContext()
     {
         if ($this->galleryListContext === null) {
-            $this->galleryListContext = Tx_PtExtlist_ExtlistContext_ExtlistContextFactory::getContextByCustomConfiguration(
+            $this->galleryListContext = \Tx_PtExtlist_ExtlistContext_ExtlistContextFactory::getContextByCustomConfiguration(
                 $this->configurationBuilder->buildExtlistConfiguration()->getExtlistSettingsByListId(self::GALLERY_LIST_ID),
                 self::GALLERY_LIST_ID . $this->identifier, false);
         }
@@ -533,7 +545,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     public function getAlbumListContext()
     {
         if ($this->albumListContext === null) {
-            $this->albumListContext = Tx_PtExtlist_ExtlistContext_ExtlistContextFactory::getContextByCustomConfiguration(
+            $this->albumListContext = \Tx_PtExtlist_ExtlistContext_ExtlistContextFactory::getContextByCustomConfiguration(
                 $this->configurationBuilder->buildExtlistConfiguration()->getExtlistSettingsByListId(self::ALBUM_LIST_ID),
                 self::ALBUM_LIST_ID . $this->identifier, false);
         }
@@ -556,7 +568,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
     {
         if (!$this->pluginModeIdentifier) {
             $configurationManager = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManagerInterface');
-            $frameworkConfiguration = $configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+            $frameworkConfiguration = $configurationManager->getConfiguration( ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
             $controllerConfiguration = $frameworkConfiguration['controllerConfiguration'];
 
             if (!is_array($controllerConfiguration) || count($controllerConfiguration) == 0) {
@@ -597,7 +609,7 @@ class Tx_Yag_Domain_Context_YagContext implements Tx_PtExtbase_State_Session_Ses
 
 
     /**
-     * @return Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @return ConfigurationBuilder
      */
     public function getConfigurationBuilder()
     {

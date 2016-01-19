@@ -24,6 +24,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Repository;
+
 /**
  * Class implements tag repository
  *
@@ -31,18 +33,21 @@
  * @subpackage repository
  * @author Daniel Lienert <typo3@lienert.cc>
  */
+use DL\Yag\Domain\Context\YagContextFactory;
 
 
 /**
- * Repository for Tx_Yag_Domain_Model_Tag
+ * Repository for Tag
  */
-class Tx_Yag_Domain_Repository_TagRepository extends Tx_Yag_Domain_Repository_AbstractRepository
+class TagRepository extends AbstractRepository
 {
     /**
      * Add tag only if it is not existing already
-     * 
+     *
      * (non-PHPdoc)
      * @see \TYPO3\CMS\Extbase\Persistence\Repository::add()
+     *
+     * @param $tag
      */
     public function add($tag)
     {
@@ -61,7 +66,7 @@ class Tx_Yag_Domain_Repository_TagRepository extends Tx_Yag_Domain_Repository_Ab
      */
     public function getTagsByCurrentItemListFilterSettings()
     {
-        $dataBackend = Tx_Yag_Domain_Context_YagContextFactory::getInstance()->getItemlistContext()->getDataBackend();
+        $dataBackend = YagContextFactory::getInstance()->getItemlistContext()->getDataBackend();
 
         $statement[] = '
 			SELECT COUNT(*) as tagCount, tag.name
@@ -101,9 +106,9 @@ class Tx_Yag_Domain_Repository_TagRepository extends Tx_Yag_Domain_Repository_Ab
     {
         $whereClauses = array();
 
-        foreach ($filterBoxCollection as $filterBox) { /* @var $filterBox Tx_PtExtlist_Domain_Model_Filter_Filterbox */
-            foreach ($filterBox as $filter) {  /* @var $filter Tx_PtExtlist_Domain_Model_Filter_FilterInterface */
-                $whereClauses[] = Tx_PtExtlist_Domain_DataBackend_MySqlDataBackend_MySqlInterpreter_MySqlInterpreter::getCriterias($filter->getFilterQuery());
+        foreach ($filterBoxCollection as $filterBox) { /* @var $filterBox \Tx_PtExtlist_Domain_Model_Filter_Filterbox */
+            foreach ($filterBox as $filter) {  /* @var $filter \Tx_PtExtlist_Domain_Model_Filter_FilterInterface */
+                $whereClauses[] = \Tx_PtExtlist_Domain_DataBackend_MySqlDataBackend_MySqlInterpreter_MySqlInterpreter::getCriterias($filter->getFilterQuery());
             }
         }
 
@@ -111,7 +116,7 @@ class Tx_Yag_Domain_Repository_TagRepository extends Tx_Yag_Domain_Repository_Ab
         $whereClauses = array_filter($whereClauses);
 
         if (count($whereClauses)) {
-            $whereClauseString = sizeof($whereClauses) > 1 ?  implode(' AND ', $whereClauses) : current($whereClauses);
+            $whereClauseString = count($whereClauses) > 1 ?  implode(' AND ', $whereClauses) : current($whereClauses);
         }
 
         return $whereClauseString;

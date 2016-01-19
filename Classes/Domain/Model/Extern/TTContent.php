@@ -24,6 +24,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Model\Extern;
+
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /**
  * Class implements read only access to tt_content table
  *
@@ -31,7 +35,7 @@
  * @subpackage Model\Extern
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Model_Extern_TTContent extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class TTContent extends AbstractEntity
 {
     /**
      * Type of the content element

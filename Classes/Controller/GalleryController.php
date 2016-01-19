@@ -24,6 +24,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\Model\Gallery;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -33,7 +37,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Controller_GalleryController extends Tx_Yag_Controller_AbstractController
+class GalleryController extends AbstractController
 {
     /**
      * Show list of galleries
@@ -57,10 +61,10 @@ class Tx_Yag_Controller_GalleryController extends Tx_Yag_Controller_AbstractCont
     /**
      * Show the albums of the gallery
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery to be rendered
+     * @param Gallery $gallery Gallery to be rendered
      * @return string Rendered Index action
      */
-    public function indexAction(Tx_Yag_Domain_Model_Gallery $gallery = null)
+    public function indexAction(Gallery $gallery = null)
     {
         $extlistContext = $this->yagContext->getAlbumListContext();
         $extlistContext->getPagerCollection()->setItemsPerPage($this->configurationBuilder->buildAlbumListConfiguration()->getItemsPerPage());
@@ -74,7 +78,7 @@ class Tx_Yag_Controller_GalleryController extends Tx_Yag_Controller_AbstractCont
         }
 
         if ($gallery === null) {
-            $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_gallery.noGallerySelected', $this->extensionName), '', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_gallery.noGallerySelected', $this->extensionName), '', FlashMessage::ERROR);
             $this->forward('index', 'Error');
         }
 
@@ -102,14 +106,14 @@ class Tx_Yag_Controller_GalleryController extends Tx_Yag_Controller_AbstractCont
     /**
      * Edit action for gallery object
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery to be edited
+     * @param Gallery $gallery Gallery to be edited
      * @return string The rendered edit action
      * @dontvalidate $gallery
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction edit
      */
-    public function editAction(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function editAction(Gallery $gallery)
     {
         $this->view->assign('gallery', $gallery);
     }
@@ -118,13 +122,13 @@ class Tx_Yag_Controller_GalleryController extends Tx_Yag_Controller_AbstractCont
     /**
      * Update action for gallery object
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery to be updated
+     * @param Gallery $gallery Gallery to be updated
      * @return string The rendered update action
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction edit
      */
-    public function updateAction(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function updateAction(Gallery $gallery)
     {
         $this->galleryRepository->update($gallery);
         $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_gallery.gallerySuccessfullyUpdated', $this->extensionName));
@@ -135,12 +139,12 @@ class Tx_Yag_Controller_GalleryController extends Tx_Yag_Controller_AbstractCont
     /**
      * Delete action for deleting a gallery
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery object to be deleted
+     * @param Gallery $gallery Gallery object to be deleted
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction delete
      */
-    public function deleteAction(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function deleteAction(Gallery $gallery)
     {
         $gallery->delete();
         $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_gallery.gallerySuccessfullyDeleted', $this->extensionName, array($gallery->getName())));
@@ -152,16 +156,16 @@ class Tx_Yag_Controller_GalleryController extends Tx_Yag_Controller_AbstractCont
     /**
      * new action
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery
+     * @param Gallery $gallery
      * @return string The rendered new action
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction create
      */
-    public function newAction(Tx_Yag_Domain_Model_Gallery $gallery = null)
+    public function newAction(Gallery $gallery = null)
     {
         if ($gallery === null) {
-            $gallery = $this->objectManager->get('Tx_Yag_Domain_Model_Gallery');
+            $gallery = $this->objectManager->get('Gallery');
         }
 
         $this->view->assign('gallery', $gallery);
@@ -171,13 +175,13 @@ class Tx_Yag_Controller_GalleryController extends Tx_Yag_Controller_AbstractCont
     /**
      * Create  gallery action
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery
+     * @param Gallery $gallery
      * @return string The rendered create action
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction create
      */
-    public function createAction(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function createAction(Gallery $gallery)
     {
         $this->galleryRepository->add($gallery);
         $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_gallery.gallerySuccessfullyCreated', $this->extensionName));

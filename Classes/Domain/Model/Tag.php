@@ -24,6 +24,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Model;
+
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /**
  * Class implements Tag domain object
  *
@@ -31,9 +35,7 @@
  * @subpackage Model
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Model_Tag
-    extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
-    implements Tx_Yag_Domain_Model_DomainModelInterface
+class Tag extends AbstractEntity implements DomainModelInterface
 {
     /**
      * name

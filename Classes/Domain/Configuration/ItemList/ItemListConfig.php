@@ -24,6 +24,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\ItemList;
+
 /**
  * Class implements album configuration object for YAG.
  *
@@ -32,7 +34,7 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Configuration_ItemList_ItemListConfig extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class ItemListConfig extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * Column count for item view

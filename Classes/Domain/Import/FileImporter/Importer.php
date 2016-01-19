@@ -23,6 +23,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\FileImporter;
+
+use DL\Yag\Domain\Import\AbstractImporter;
+use DL\Yag\Domain\Model\Item;
+
 /**
  * File importer for importing single files into YAG gallery
  *
@@ -30,7 +35,7 @@
  * @subpackage Import\FileImporter
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Import_FileImporter_Importer extends Tx_Yag_Domain_Import_AbstractImporter
+class Importer extends AbstractImporter
 {
     // @TODO consider to move variables like filepath / originalfilename / itemType / desc to an fileImportObject that a every importer can handle
 
@@ -63,7 +68,7 @@ class Tx_Yag_Domain_Import_FileImporter_Importer extends Tx_Yag_Domain_Import_Ab
     
     /**
      * Runs import of file previously set by setFilePath
-     * @return Tx_Yag_Domain_Model_Item Imported item
+     * @return Item Imported item
      */
     public function runImport()
     {

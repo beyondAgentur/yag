@@ -24,6 +24,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Extlist\Renderer;
+
 /**
  * Type: Pre-list Renderer
  * 
@@ -34,15 +36,15 @@
  * @author Daniel Lienert <lienert@punkt.de>
  */
 
-class Tx_Yag_Extlist_Renderer_ImageListRenderer extends Tx_PtExtlist_Domain_Renderer_AbstractRenderer
+class ImageListRenderer extends \Tx_PtExtlist_Domain_Renderer_AbstractRenderer
 {
     /**
      * Renders list data
      *
-     * @param Tx_PtExtlist_Domain_Model_List_ListData $listData
-     * @return Tx_PtExtlist_Domain_Model_List_ListData
+     * @param \Tx_PtExtlist_Domain_Model_List_ListData $listData
+     * @return \Tx_PtExtlist_Domain_Model_List_ListData
      */
-    public function renderList(Tx_PtExtlist_Domain_Model_List_ListData $listData)
+    public function renderList(\Tx_PtExtlist_Domain_Model_List_ListData $listData)
     {
         $pageStartIndex = $this->getPageStartingIndex();
 
@@ -62,7 +64,7 @@ class Tx_Yag_Extlist_Renderer_ImageListRenderer extends Tx_PtExtlist_Domain_Rend
     protected function getPageStartingIndex()
     {
         $listIdentifier = $this->rendererConfiguration->getListIdentifier();
-        $dataBackend = Tx_PtExtlist_Domain_DataBackend_DataBackendFactory::getInstanceByListIdentifier($listIdentifier);
+        $dataBackend = \Tx_PtExtlist_Domain_DataBackend_DataBackendFactory::getInstanceByListIdentifier($listIdentifier);
         $pager = $dataBackend->getPagerCollection();
         
         $startIndex = $pager->getItemsPerPage() * ($pager->getCurrentPage()-1);

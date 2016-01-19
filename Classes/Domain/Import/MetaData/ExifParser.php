@@ -23,6 +23,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\MetaData;
+
+use DL\Yag\Utility\Encoding;
+use TYPO3\CMS\Core\SingletonInterface;
+
 /**
  * Exif parser for image meta data
  *
@@ -30,7 +35,7 @@
  * @subpackage Import\MetaData
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Import_MetaData_ExifParser extends Tx_Yag_Domain_Import_MetaData_AbstractParser implements \TYPO3\CMS\Core\SingletonInterface
+class ExifParser extends AbstractParser implements SingletonInterface
 {
     /**
      * Parses exif data from a given file
@@ -62,7 +67,7 @@ class Tx_Yag_Domain_Import_MetaData_ExifParser extends Tx_Yag_Domain_Import_Meta
                 $exifArray['ApertureValue'] = $this->calculateApertureValue($exifArray);
                 $exifArray['CaptureTimeStamp'] = $this->calculateCaptureTimeStamp($exifArray);
                 $exifArray['FocalLength'] = (int) $this->getFloatFromValue($exifArray['FocalLength']);
-                $exifArray['ImageDescription'] = Tx_Yag_Utility_Encoding::toUTF8($exifArray['ImageDescription']);
+                $exifArray['ImageDescription'] = Encoding::toUTF8($exifArray['ImageDescription']);
                 $exifArray['GPSLong'] = $this->getGps($exifArray["GPSLongitude"], $exifArray['GPSLongitudeRef']);
                 $exifArray['GPSLat'] = $this->getGps($exifArray["GPSLatitude"], $exifArray['GPSLatitudeRef']);
             }

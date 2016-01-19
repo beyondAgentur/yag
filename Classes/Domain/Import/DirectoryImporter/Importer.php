@@ -23,6 +23,13 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Domain\Import\DirectoryImporter;
+
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Import\AbstractImporter;
+use DL\Yag\Domain\Import\FileCrawler;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+
 /**
  * Directory based importer importing files for a given directory on the server
  *
@@ -30,7 +37,7 @@
  * @subpackage Import\DirectoryImporter
  * @author Michael Knoll <mimi@kaktsuteam.de>
  */
-class Tx_Yag_Domain_Import_DirectoryImporter_Importer extends Tx_Yag_Domain_Import_AbstractImporter
+class Importer extends AbstractImporter
 {
     /**
      * Holds directory to import files from
@@ -43,7 +50,7 @@ class Tx_Yag_Domain_Import_DirectoryImporter_Importer extends Tx_Yag_Domain_Impo
     /**
      * Holds an instance of a file crawler
      *
-     * @var Tx_Yag_Domain_Import_FileCrawler
+     * @var FileCrawler
      */
     protected $fileCrawler;
 
@@ -81,7 +88,7 @@ class Tx_Yag_Domain_Import_DirectoryImporter_Importer extends Tx_Yag_Domain_Impo
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -89,18 +96,18 @@ class Tx_Yag_Domain_Import_DirectoryImporter_Importer extends Tx_Yag_Domain_Impo
     /**
      * Injector for file crawler
      *
-     * @param Tx_Yag_Domain_Import_FileCrawler $fileCrawler
+     * @param FileCrawler $fileCrawler
      */
-    public function _injectFileCrawler(Tx_Yag_Domain_Import_FileCrawler $fileCrawler)
+    public function _injectFileCrawler(FileCrawler $fileCrawler)
     {
         $this->fileCrawler = $fileCrawler;
     }
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager)
+    public function injectObjectManager( ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }
@@ -183,10 +190,10 @@ class Tx_Yag_Domain_Import_DirectoryImporter_Importer extends Tx_Yag_Domain_Impo
                 $item = $this->getNewPersistedItem();
                 $filePath = $this->moveFileToOrigsDirectory($filePath, $item);
             } else {
-                $item = $this->objectManager->get('Tx_Yag_Domain_Model_Item');
+                $item = $this->objectManager->get('DL\\Yag\\Domain\\Model\\Item');
             }
 
-            $item->setOriginalFilename(Tx_Yag_Domain_FileSystem_Div::getFilenameFromFilePath($origFilePath));
+            $item->setOriginalFilename(Div::getFilenameFromFilePath($origFilePath));
 
             // We increase item sorting with each item that has to be imported
             $item->setSorting(++$this->itemSorting);

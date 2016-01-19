@@ -23,6 +23,24 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration;
+
+use DL\Yag\Domain\Configuration\AlbumList\AlbumListConfig;
+use DL\Yag\Domain\Configuration\Context\ContextConfig;
+use DL\Yag\Domain\Configuration\Extension\ExtensionConfiguration;
+use DL\Yag\Domain\Configuration\Extlist\ExtlistConfiguration;
+use DL\Yag\Domain\Configuration\FrontendLib\FrontendLibConfigCollection;
+use DL\Yag\Domain\Configuration\GalleryList\GalleryListConfig;
+use DL\Yag\Domain\Configuration\Image\SysImageConfigCollection;
+use DL\Yag\Domain\Configuration\ImageProcessing\ImageProcessorConfiguration;
+use DL\Yag\Domain\Configuration\Import\ImporterConfiguration;
+use DL\Yag\Domain\Configuration\Item\CustomMetaConfig;
+use DL\Yag\Domain\Configuration\Item\ItemConfig;
+use DL\Yag\Domain\Configuration\ItemList\ItemListConfig;
+use DL\Yag\Domain\Configuration\Theme\ThemeConfigCollection;
+use DL\Yag\Domain\Configuration\Theme\ThemeConfiguration;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
+
 /**
  * Configuration Builder for YAG configuration
  *
@@ -32,7 +50,7 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Configuration_AbstractConfigurationBuilder
+class ConfigurationBuilder extends \Tx_PtExtbase_Configuration_AbstractConfigurationBuilder
 {
     /**
      * Holds settings to build configuration objects
@@ -41,36 +59,36 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
      */
     protected $configurationObjectSettings = array(
         'albumList' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_AlbumList_AlbumListConfigFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\AlbumList\\AlbumListConfigFactory'),
         'itemList' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_ItemList_ItemListConfigFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\ItemList\\ItemListConfigFactory'),
         'item' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Item_ItemConfigFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Item\\ItemConfigFactory'),
         'crawler' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Import_CrawlerConfigurationFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Import\\CrawlerConfigurationFactory'),
         'galleryList' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_GalleryList_GalleryListConfigFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\GalleryList\\GalleryListConfigFactory'),
         'imageProcessor' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_ImageProcessing_ImageProcessorConfigurationFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\ImageProcessing\\ImageProcessorConfigurationFactory'),
         'importer' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Import_ImporterConfigurationFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Import\\ImporterConfigurationFactory'),
         'extension' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Extension_ExtensionConfigurationFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Extension\\ExtensionConfigurationFactory'),
         'theme' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Theme_ThemeConfigurationFactory',
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Theme\\ThemeConfigurationFactory',
                       'tsKey' => null,),
         'themes' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Theme_ThemeConfigCollectionFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Theme\\ThemeConfigCollectionFactory'),
         'extlist' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Extlist_ExtlistConfigurationFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Extlist\\ExtlistConfigurationFactory'),
         'sysImages' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Image_SysImageConfigCollectionFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Image\\SysImageConfigCollectionFactory'),
         'frontendLib' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfigCollectionFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\FrontendLib\\FrontendLibConfigCollectionFactory'),
         'context' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Context_ContextConfigFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Context\\ContextConfigFactory'),
         'customMetaData' =>
-                array('factory' => 'Tx_Yag_Domain_Configuration_Item_CustomMetaConfigCollectionFactory'),
+                array('factory' => 'DL\\Yag\\Domain\\Configuration\\Item\\CustomMetaConfigCollectionFactory'),
     );
     
     
@@ -170,7 +188,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
         $this->settings = $settingsToBeMerged;
 
         if (is_array($this->origSettings['themes'][$this->theme])) {
-            \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule(
+            ArrayUtility::mergeRecursiveWithOverrule(
                 $this->settings,
                 $this->origSettings['themes'][$this->theme]
             );
@@ -260,7 +278,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of importer configuration
      *
-     * @return Tx_Yag_Domain_Configuration_Import_ImporterConfiguration
+     * @return ImporterConfiguration
      */
     public function buildImporterConfiguration()
     {
@@ -272,7 +290,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of image processor configuration
      *
-     * @return Tx_Yag_Domain_Configuration_ImageProcessing_ImageProcessorConfiguration
+     * @return ImageProcessorConfiguration
      */
     public function buildImageProcessorConfiguration()
     {
@@ -284,7 +302,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of general configuration
      *
-     * @return Tx_Yag_Domain_Configuration_Extension_ExtensionConfiguration
+     * @return ExtensionConfiguration
      */
     public function buildExtensionConfiguration()
     {
@@ -296,7 +314,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of itemList configuration
      *
-     * @return Tx_Yag_Domain_Configuration_ItemList_ItemListConfig
+     * @return ItemListConfig
      */
     public function buildItemListConfiguration()
     {
@@ -308,7 +326,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of album configuration
      *
-     * @return Tx_Yag_Domain_Configuration_AlbumList_AlbumListConfig
+     * @return AlbumListConfig
      */
     public function buildAlbumListConfiguration()
     {
@@ -320,7 +338,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of context configuration
      *
-     * @return Tx_Yag_Domain_Configuration_Context_ContextConfig
+     * @return ContextConfig
      */
     public function buildContextConfiguration()
     {
@@ -332,7 +350,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of item configuration
      *
-     * @return Tx_Yag_Domain_Configuration_Item_ItemConfig
+     * @return ItemConfig
      */
     public function buildItemConfiguration()
     {
@@ -343,7 +361,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of custom meta data configuration
      *
-     * @return Tx_Yag_Domain_Configuration_Item_CustomMetaConfig
+     * @return CustomMetaConfig
      */
     public function buildCustomMetaDataConfiguration()
     {
@@ -354,7 +372,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of gallery configuration
      *
-     * @return Tx_Yag_Domain_Configuration_GalleryList_GalleryListConfig
+     * @return GalleryListConfig
      */
     public function buildGalleryListConfiguration()
     {
@@ -366,7 +384,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of theme configuration
      *
-     * @return Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration
+     * @return ThemeConfiguration
      */
     public function buildThemeConfiguration()
     {
@@ -378,7 +396,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of extlist configuration 
      *
-     * @return Tx_Yag_Domain_Configuration_Extlist_ExtlistConfiguration
+     * @return ExtlistConfiguration
      */
     public function buildExtlistConfiguration()
     {
@@ -389,7 +407,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of sysImage configuration 
      *
-     * @return Tx_Yag_Domain_Configuration_Image_SysImageConfigCollection
+     * @return SysImageConfigCollection
      */
     public function buildSysImageConfiguration()
     {
@@ -400,7 +418,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
     /**
      * Returns an instance of frontendLib configuration 
      *
-     * @return Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfigCollection
+     * @return FrontendLibConfigCollection
      */
     public function buildFrontendLibConfiguration()
     {
@@ -410,7 +428,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
 
 
     /**
-     * @return Tx_Yag_Domain_Configuration_Theme_ThemeConfigCollection
+     * @return ThemeConfigCollection
      */
     public function buildThemeConfigurationCollection()
     {
@@ -426,7 +444,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilder extends Tx_PtExtbase_Conf
      */
     public function getJSCompliantSettings($key = null)
     {
-        $settings = Tx_PtExtbase_Utility_NameSpace::getArrayContentByArrayAndNamespace($this->settings, $key);
+        $settings = \Tx_PtExtbase_Utility_NameSpace::getArrayContentByArrayAndNamespace($this->settings, $key);
         return $this->convertToJSCompliantSettings($settings);
     }
 

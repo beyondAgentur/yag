@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\MetaData;
+
 /**
  * Abstract class for meta data parser
  *
@@ -30,6 +32,6 @@
  * @subpackage Import\MetaData
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-abstract class Tx_Yag_Domain_Import_MetaData_AbstractParser
+abstract class AbstractParser
 {
 }

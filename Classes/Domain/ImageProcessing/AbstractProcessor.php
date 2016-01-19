@@ -22,7 +22,18 @@
 *
 * This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\Domain\ImageProcessing;
+
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\Configuration\ImageProcessing\ImageProcessorConfiguration;
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Model\Item;
+use DL\Yag\Domain\Model\ResolutionFileCache;
+use DL\Yag\Domain\Repository\ResolutionFileCacheRepository;
+use DL\Yag\Utility\PidDetector;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
 * Abstract image processor
@@ -32,12 +43,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 * @author Daniel Lienert <typo3@lienert.cc>
 */
 
-abstract class Tx_Yag_Domain_ImageProcessing_AbstractProcessor implements Tx_Yag_Domain_ImageProcessing_ProcessorInterface
+abstract class AbstractProcessor implements ProcessorInterface
 {
     /**
      * Holds configuration for image processor
      *
-     * @var Tx_Yag_Domain_Configuration_ImageProcessing_ImageProcessorConfiguration
+     * @var ImageProcessorConfiguration
      */
     protected $processorConfiguration;
 
@@ -45,86 +56,86 @@ abstract class Tx_Yag_Domain_ImageProcessing_AbstractProcessor implements Tx_Yag
     /**
      * Holds an instance of hash file system for this gallery
      *
-     * @var Tx_Yag_Domain_FileSystem_HashFileSystem
+     * @var HashFileSystem
      */
     protected $hashFileSystem;
     
     
     
     /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
+     * @var ConfigurationManagerInterface
      */
     protected $configurationManager;
     
     
     
     /**
-     * @var Tx_Yag_Domain_Repository_ResolutionFileCacheRepository
+     * @var ResolutionFileCacheRepository
      */
     protected $resolutionFileCacheRepository;
 
 
     /**
-     * @var Tx_Yag_Domain_FileSystem_Div
+     * @var Div
      */
     protected $fileSystemDiv;
 
 
     /**
-     * @var Tx_Yag_Utility_PidDetector
+     * @var PidDetector
      */
     protected $pidDetector;
 
 
     /**
-     * @param Tx_Yag_Utility_PidDetector $pidDetector
+     * @param PidDetector $pidDetector
      */
-    public function injectPidDetector(Tx_Yag_Utility_PidDetector $pidDetector)
+    public function injectPidDetector(PidDetector $pidDetector)
     {
         $this->pidDetector = $pidDetector;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_FileSystem_Div $fileSystemDiv
+     * @param Div $fileSystemDiv
      */
-    public function injectFileSystemDiv(Tx_Yag_Domain_FileSystem_Div $fileSystemDiv)
+    public function injectFileSystemDiv(Div $fileSystemDiv)
     {
         $this->fileSystemDiv = $fileSystemDiv;
     }
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+     * @param ConfigurationManagerInterface $configurationManager
      */
-    public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
+    public function injectConfigurationManager( ConfigurationManagerInterface $configurationManager)
     {
         $this->configurationManager = $configurationManager;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_ResolutionFileCacheRepository $resolutionFileCacheRepository
+     * @param ResolutionFileCacheRepository $resolutionFileCacheRepository
      */
-    public function injectResolutionFileCacheRepository(Tx_Yag_Domain_Repository_ResolutionFileCacheRepository $resolutionFileCacheRepository)
+    public function injectResolutionFileCacheRepository(ResolutionFileCacheRepository $resolutionFileCacheRepository)
     {
         $this->resolutionFileCacheRepository = $resolutionFileCacheRepository;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Configuration_ImageProcessing_ImageProcessorConfiguration $processorConfiguration
+     * @param ImageProcessorConfiguration $processorConfiguration
      */
-    public function _injectProcessorConfiguration(Tx_Yag_Domain_Configuration_ImageProcessing_ImageProcessorConfiguration $processorConfiguration)
+    public function _injectProcessorConfiguration(ImageProcessorConfiguration $processorConfiguration)
     {
         $this->processorConfiguration = $processorConfiguration;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_FileSystem_HashFileSystem $hashFileSystem
+     * @param HashFileSystem $hashFileSystem
      */
-    public function _injectHashFileSystem(Tx_Yag_Domain_FileSystem_HashFileSystem $hashFileSystem)
+    public function _injectHashFileSystem(HashFileSystem $hashFileSystem)
     {
         $this->hashFileSystem = $hashFileSystem;
     }
@@ -142,20 +153,22 @@ abstract class Tx_Yag_Domain_ImageProcessing_AbstractProcessor implements Tx_Yag
 
     public function __construct()
     {
-        $this->fileSystemDiv = GeneralUtility::makeInstance('Tx_Yag_Domain_FileSystem_Div'); // Somehow this particular inject does not work??!
+        $this->fileSystemDiv = GeneralUtility::makeInstance('Div'); // Somehow this particular inject does not work??!
     }
 
 
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/ImageProcessing/Tx_Yag_Domain_ImageProcessing_ProcessorInterface::generateResolution()
-     * @param Tx_Yag_Domain_Model_Item $origFile
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration
-     * @return Tx_Yag_Domain_Model_ResolutionFileCache
+     * @see ProcessorInterface::generateResolution()
+     *
+     * @param Item|Item        $origFile
+     * @param ResolutionConfig $resolutionConfiguration
+     *
+     * @return ResolutionFileCache
      */
-    public function generateResolution(Tx_Yag_Domain_Model_Item $origFile, Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration)
+    public function generateResolution(Item $origFile, ResolutionConfig $resolutionConfiguration)
     {
-        $resolutionFile = new Tx_Yag_Domain_Model_ResolutionFileCache($origFile, '', 0, 0, $resolutionConfiguration->getParameterHash());
+        $resolutionFile = new ResolutionFileCache($origFile, '', 0, 0, $resolutionConfiguration->getParameterHash());
 
         $this->processFile($resolutionConfiguration, $origFile, $resolutionFile);
 
@@ -169,11 +182,11 @@ abstract class Tx_Yag_Domain_ImageProcessing_AbstractProcessor implements Tx_Yag
     /**
      * Process a file and set the resulting path in the resolution file object
      * 
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration
-     * @param Tx_Yag_Domain_Model_Item $origFile
-     * @param Tx_Yag_Domain_Model_ResolutionFileCache $resolutionFile
+     * @param ResolutionConfig $resolutionConfiguration
+     * @param Item $origFile
+     * @param ResolutionFileCache $resolutionFile
      */
-    abstract protected function processFile(Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration, Tx_Yag_Domain_Model_Item $origFile, Tx_Yag_Domain_Model_ResolutionFileCache $resolutionFile);
+    abstract protected function processFile(ResolutionConfig $resolutionConfiguration, Item $origFile, ResolutionFileCache $resolutionFile);
     
 
     /**

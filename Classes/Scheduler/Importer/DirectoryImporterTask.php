@@ -22,7 +22,11 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\Scheduler\Importer;
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
  * YAG Scheduler Task
@@ -30,7 +34,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package YAG
  * @subpackage Scheduler
  */
-class Tx_Yag_Scheduler_Importer_DirectoryImporterTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
+class DirectoryImporterTask extends AbstractTask
 {
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager

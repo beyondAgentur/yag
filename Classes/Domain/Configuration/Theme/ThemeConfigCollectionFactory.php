@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Theme;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Factory for theme configuration
  *
@@ -31,21 +35,21 @@
  
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Theme_ThemeConfigCollectionFactory
+class ThemeConfigCollectionFactory
 {
     /**
      * Returns an instance of theme configuration collection
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_Theme_ThemeConfigCollection
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return ThemeConfigCollection
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         $themes = $configurationBuilder->getOrigSettings('themes');
-        $themeConfigCollection = new Tx_Yag_Domain_Configuration_Theme_ThemeConfigCollection();
+        $themeConfigCollection = new ThemeConfigCollection();
 
         foreach ($themes as $themeName => $themeSettings) {
-            $themeConfigCollection->addThemeConfig(Tx_Yag_Domain_Configuration_Theme_ThemeConfigurationFactory::getInstance($configurationBuilder, $themeSettings, $themeName), $themeName);
+            $themeConfigCollection->addThemeConfig(ThemeConfigurationFactory::getInstance($configurationBuilder, $themeSettings, $themeName), $themeName);
         }
          
         return $themeConfigCollection;

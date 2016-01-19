@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Theme;
+
 /**
  * collection of resolution configs
  *
@@ -31,21 +33,21 @@
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Theme_ThemeConfigCollection extends Tx_PtExtbase_Collection_ObjectCollection
+class ThemeConfigCollection extends \Tx_PtExtbase_Collection_ObjectCollection
 {
     /**
      * @var string
      */
-    protected $restrictedClassName = 'Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration';
+    protected $restrictedClassName = 'ThemeConfiguration';
     
     
     
     /**
-     * @param Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration $themeConfig
+     * @param ThemeConfiguration $themeConfig
      * @param $themeName string
      * @return void
      */
-    public function addThemeConfig(Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration $themeConfig, $themeName)
+    public function addThemeConfig(ThemeConfiguration $themeConfig, $themeName)
     {
         $this->addItem($themeConfig, $themeName);
     }
@@ -53,7 +55,7 @@ class Tx_Yag_Domain_Configuration_Theme_ThemeConfigCollection extends Tx_PtExtba
     
     
     /**
-     * @throws Exception Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration
+     * @throws Exception ThemeConfiguration
      * @param $themeName string
      * @return mixed
      */

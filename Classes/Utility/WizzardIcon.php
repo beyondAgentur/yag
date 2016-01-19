@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Utility;
+
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -32,7 +34,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * @package Utility
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Utility_WizzardIcon
+class WizzardIcon
 {
     /**
      * Processing the wizard items array

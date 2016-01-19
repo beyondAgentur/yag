@@ -23,14 +23,18 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Repository;
+
+use TYPO3\CMS\Extbase\Persistence\Repository;
+
 /**
- * Repository for Tx_Yag_Domain_Model_ItemMeta
+ * Repository for ItemMeta
  *
  * @package Domain
  * @subpackage Repository
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Repository_ItemMetaRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class ItemMetaRepository extends Repository
 {
     /**
      * Set to false --> pidDetector is NOT respected

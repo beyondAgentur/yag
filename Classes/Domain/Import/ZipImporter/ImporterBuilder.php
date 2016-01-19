@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\ZipImporter;
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Model\Album;
+
 /**
  * Builder for Zip importer
  *
@@ -31,12 +35,12 @@
  * @author Michael Knoll <mimi@kaktusteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Import_ZipImporter_ImporterBuilder extends Tx_Yag_Domain_Import_ImporterBuilder
+class ImporterBuilder extends \DL\Yag\Domain\Import\ImporterBuilder
 {
     /**
      * Holds a singleton instance of this class
      *
-     * @var Tx_Yag_Domain_Import_ZipImporter_ImporterBuilder
+     * @var ImporterBuilder
      */
     protected static $instance = null;
 
@@ -44,12 +48,12 @@ class Tx_Yag_Domain_Import_ZipImporter_ImporterBuilder extends Tx_Yag_Domain_Imp
     /**
      * Factory method for getting an instance of this class as a singleton
      *
-     * @return Tx_Yag_Domain_Import_ZipImporter_ImporterBuilder Singleton instance of zip importer builder
+     * @return ImporterBuilder Singleton instance of zip importer builder
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new self(Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance());
+            self::$instance = new self(ConfigurationBuilderFactory::getInstance());
         }
         return self::$instance;
     }
@@ -59,15 +63,15 @@ class Tx_Yag_Domain_Import_ZipImporter_ImporterBuilder extends Tx_Yag_Domain_Imp
     /**
      * Returns an instance of zip impoter for a given album
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      * @param string $filePath Path to zip file
-     * @return Tx_Yag_Domain_Import_ZipImporter_Importer Instance of lightroom importer
+     * @return Importer Instance of lightroom importer
      */
-    public function getZipImporterInstanceForAlbumAndFilePath(Tx_Yag_Domain_Model_Album $album, $filePath)
+    public function getZipImporterInstanceForAlbumAndFilePath(Album $album, $filePath)
     {
-        $zipImporter = $this->createImporterForAlbum('Tx_Yag_Domain_Import_ZipImporter_Importer', $album);
+        $zipImporter = $this->createImporterForAlbum('Importer', $album);
 
-        /* @var $zipImporter Tx_Yag_Domain_Import_ZipImporter_Importer */
+        /* @var $zipImporter Importer */
         $zipImporter->setZipFilename($filePath);
         $zipImporter->setUnzipExecutable(self::checkAndReturnUnzipExecutable());
 

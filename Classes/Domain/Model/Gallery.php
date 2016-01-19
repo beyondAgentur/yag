@@ -24,15 +24,20 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Model;
+
+use DL\Yag\Domain\Repository\GalleryRepository;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
 /**
  * Class implements Gallery domain object
  *
  * @package Domain
  * @subpackage Model
  */
-class Tx_Yag_Domain_Model_Gallery
-    extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
-    implements Tx_Yag_Domain_Model_DomainModelInterface
+class Gallery extends AbstractEntity implements DomainModelInterface
 {
     /**
      * Name of gallery
@@ -92,7 +97,7 @@ class Tx_Yag_Domain_Model_Gallery
      * Holds albums for this gallery
      * 
      * @lazy
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Tx_Yag_Domain_Model_Album> $albums
+     * @var ObjectStorage<Album> $albums
      */
     protected $albums;
 
@@ -102,7 +107,7 @@ class Tx_Yag_Domain_Model_Gallery
      * Holds an album which is used as thumbnail for gallery
      * 
      * @lazy
-     * @var Tx_Yag_Domain_Model_Album $thumbAlbum
+     * @var Album $thumbAlbum
      */
     protected $thumbAlbum;
     
@@ -124,7 +129,7 @@ class Tx_Yag_Domain_Model_Gallery
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -137,9 +142,9 @@ class Tx_Yag_Domain_Model_Gallery
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager)
+    public function injectObjectManager( ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }
@@ -152,7 +157,7 @@ class Tx_Yag_Domain_Model_Gallery
      */
     protected function initStorageObjects()
     {
-        $this->albums = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->albums = new ObjectStorage();
     }
 
     
@@ -281,16 +286,16 @@ class Tx_Yag_Domain_Model_Gallery
     {
         return $this->feGroupUid;
     }
-    
-    
+
 
     /**
      * Setter for albums
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Tx_Yag_Domain_Model_Album> $albums Holds albums for this gallery
-     * @return void
+     * @param ObjectStorage $albums
+     *
+     * @internal param $ \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Album> $albums Holds albums for this gallery
      */
-    public function setAlbums(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $albums)
+    public function setAlbums( ObjectStorage $albums)
     {
         $this->albums = $albums;
     }
@@ -300,7 +305,7 @@ class Tx_Yag_Domain_Model_Gallery
     /**
      * Getter for albums
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Tx_Yag_Domain_Model_Album> Holds albums for this gallery
+     * @return ObjectStorage<Album> Holds albums for this gallery
      */
     public function getAlbums()
     {
@@ -312,10 +317,10 @@ class Tx_Yag_Domain_Model_Gallery
     /**
      * Adds a Album
      *
-     * @param Tx_Yag_Domain_Model_Album the Album to be added
+     * @param Album the Album to be added
      * @return void
      */
-    public function addAlbum(Tx_Yag_Domain_Model_Album $album)
+    public function addAlbum(Album $album)
     {
         $this->albums->attach($album);
     }
@@ -325,10 +330,10 @@ class Tx_Yag_Domain_Model_Gallery
     /**
      * Removes a Album
      *
-     * @param Tx_Yag_Domain_Model_Album the Album to be removed
+     * @param Album the Album to be removed
      * @return void
      */
-    public function removeAlbum(Tx_Yag_Domain_Model_Album $albumToRemove)
+    public function removeAlbum(Album $albumToRemove)
     {
         $this->albums->detach($albumToRemove);
     }
@@ -339,13 +344,13 @@ class Tx_Yag_Domain_Model_Gallery
      * Returns an album designated as thumbnail for this gallery
      * If the album thumb was marked as hidden, return the first not hidden album
      *
-     * @return Tx_Yag_Domain_Model_Album Thumbnail album for gallery
+     * @return Album Thumbnail album for gallery
      */
     public function getThumbAlbum()
     {
-        $album = Tx_PtExtbase_Div::getLazyLoadedObject($this->thumbAlbum);
+        $album = \Tx_PtExtbase_Div::getLazyLoadedObject($this->thumbAlbum);
 
-        if (!($album instanceof Tx_Yag_Domain_Model_Album)) {
+        if (!($album instanceof Album)) {
             if ($this->albums->count() > 0) {
                 $album = $this->albums->current();
             }
@@ -359,9 +364,9 @@ class Tx_Yag_Domain_Model_Gallery
     /**
      * Setter for thumb album of this gallery. Given album is set as gallery thumb.
      *
-     * @param Tx_Yag_Domain_Model_Album $thumbAlbum
+     * @param Album $thumbAlbum
      */
-    public function setThumbAlbum(Tx_Yag_Domain_Model_Album $thumbAlbum)
+    public function setThumbAlbum(Album $thumbAlbum)
     {
         $this->thumbAlbum = $thumbAlbum;
     }
@@ -412,13 +417,13 @@ class Tx_Yag_Domain_Model_Gallery
     public function delete($deleteAlbums = true)
     {
         if ($deleteAlbums) {
-            foreach ($this->albums->toArray() as $album) { /* @var $album Tx_Yag_Domain_Model_Album */
+            foreach ($this->albums->toArray() as $album) { /* @var $album Album */
                 $this->removeAlbum($album);
                 $album->delete();
             }
         }
 
-        $galleryRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository'); /* @var $galleryRepository Tx_Yag_Domain_Repository_GalleryRepository */
+        $galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository'); /* @var $galleryRepository GalleryRepository */
         $galleryRepository->remove($this);
     }
     
@@ -445,7 +450,7 @@ class Tx_Yag_Domain_Model_Gallery
      */
     public function getItemCount()
     {
-        return $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository')->countItemsInGallery($this);
+        return $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository')->countItemsInGallery($this);
     }
 
 

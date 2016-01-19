@@ -24,6 +24,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Model;
+
 /**
  * Interface for classes that implement yag domain models
  *
@@ -33,6 +35,6 @@
  * @subpackage Model
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-interface Tx_Yag_Domain_Model_DomainModelInterface
+interface DomainModelInterface
 {
 }

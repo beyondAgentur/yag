@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\FrontendLib;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Class implementing factory for collection of frontendlib configurations
  * 
@@ -30,19 +34,20 @@
  * @package Domain
  * @subpackage Configuration\FrontendLib
  */
-class Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfigCollectionFactory
+class FrontendLibConfigCollectionFactory
 {
     /**
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @param $frontendLibSettings
-     * @return Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfigCollection
+     * @param ConfigurationBuilder $configurationBuilder
+     *
+     * @return FrontendLibConfigCollection
+     * @internal param $frontendLibSettings
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
-        $frontendLibConfigCollection = new Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfigCollection();
+        $frontendLibConfigCollection = new FrontendLibConfigCollection();
         $frontendLibSettings = $configurationBuilder->getSettingsForConfigObject('frontendLib');
         foreach ($frontendLibSettings as $frontendLibName => $frontendLibSetting) {
-            $frontendLibConfig = new Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfig($configurationBuilder, $frontendLibSetting);
+            $frontendLibConfig = new FrontendLibConfig($configurationBuilder, $frontendLibSetting);
             $frontendLibConfigCollection->addFrontendLibConfig($frontendLibConfig, $frontendLibName);
         }
         

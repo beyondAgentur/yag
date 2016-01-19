@@ -7,7 +7,9 @@
  * @example  http://www.framework2.com.ar/dzone/forceUTF8-es/
  */
 
-class Tx_Yag_Utility_Encoding
+namespace DL\Yag\Utility;
+
+class Encoding
 {
     protected static $win1252ToUtf8 = array(
         128 => "\xe2\x82\xac",

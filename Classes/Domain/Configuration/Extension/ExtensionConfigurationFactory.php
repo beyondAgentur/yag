@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Extension;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Factory for general configuration
  *
@@ -31,17 +35,17 @@
  
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Extension_ExtensionConfigurationFactory
+class ExtensionConfigurationFactory
 {
     /**
      * Returns an instance of general configuration
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_Extension_GeneralConfiguration
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return GeneralConfiguration
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         $extensionSettings = $configurationBuilder->getExtConfSettings();
-        return new Tx_Yag_Domain_Configuration_Extension_ExtensionConfiguration($configurationBuilder, $extensionSettings);
+        return new ExtensionConfiguration($configurationBuilder, $extensionSettings);
     }
 }

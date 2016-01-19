@@ -23,6 +23,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Theme;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Factory for theme configuration
  *
@@ -31,22 +35,22 @@
 
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Theme_ThemeConfigurationFactory
+class ThemeConfigurationFactory
 {
     /**
      * @static
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
+     * @param ConfigurationBuilder $configurationBuilder
      * @param null $themeSettings array
      * @param null $themeName string
-     * @return Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration
+     * @return ThemeConfiguration
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder, $themeSettings = null, $themeName = null)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder, $themeSettings = null, $themeName = null)
     {
         if (!$themeSettings) {
             $themeSettings = $configurationBuilder->getSettingsForConfigObject('theme');
             $themeName = $configurationBuilder->getTheme();
         }
 
-        return new Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration($configurationBuilder, $themeSettings, $themeName);
+        return new ThemeConfiguration($configurationBuilder, $themeSettings, $themeName);
     }
 }

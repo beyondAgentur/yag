@@ -23,16 +23,23 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class Tx_Yag_Service_ZipPackingService
+namespace DL\Yag\Service;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Model\Item;
+
+class ZipPackingService
 {
     /**
-     * @var Tx_PtExtlist_Domain_Model_List_ListData
+     * @var \Tx_PtExtlist_Domain_Model_List_ListData
      */
     protected $itemListData;
 
 
     /**
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
 
@@ -56,24 +63,24 @@ class Tx_Yag_Service_ZipPackingService
 
 
     /**
-     * @var Tx_Yag_Domain_FileSystem_Div
+     * @var Div
      */
     protected $fileSystemDiv;
 
 
     /**
-     * @param Tx_Yag_Domain_FileSystem_Div $fileSystemDiv
+     * @param Div $fileSystemDiv
      */
-    public function injectFileSystemDiv(Tx_Yag_Domain_FileSystem_Div $fileSystemDiv)
+    public function injectFileSystemDiv(Div $fileSystemDiv)
     {
         $this->fileSystemDiv = $fileSystemDiv;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
+     * @param ConfigurationBuilder $configurationBuilder
      */
-    public function _injectConfigurationBuilder(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public function _injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder)
     {
         $this->configurationBuilder = $configurationBuilder;
         $this->initializeSettings();
@@ -117,8 +124,8 @@ class Tx_Yag_Service_ZipPackingService
             throw new Exception('Unable to create a temp file for zip creation.(' . $zipOpenCode . ')', 1367131215);
         }
 
-        foreach ($this->itemListData as $listRow) { /** @var Tx_PtExtlist_Domain_Model_List_Row $listRow  */
-            $item = $listRow->getCell('image')->getValue(); /** @var Tx_Yag_Domain_Model_Item $item */
+        foreach ($this->itemListData as $listRow) { /** @var \Tx_PtExtlist_Domain_Model_List_Row $listRow  */
+            $item = $listRow->getCell('image')->getValue(); /** @var Item $item */
             $zip->addFile($this->getFilePathOfResolution($item), $item->getOriginalFilename());
         }
 
@@ -133,22 +140,22 @@ class Tx_Yag_Service_ZipPackingService
 
 
     /**
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      * @return string
      */
-    protected function getFilePathOfResolution(Tx_Yag_Domain_Model_Item $item)
+    protected function getFilePathOfResolution(Item $item)
     {
         if ($this->resolutionIdentifier === 'original') {
-            return Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($item->getSourceuri());
+            return Div::makePathAbsolute($item->getSourceuri());
         } else {
-            return  Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($item->getResolutionByConfig($this->getRequestedResolutionConfig())->getPath());
+            return  Div::makePathAbsolute($item->getResolutionByConfig($this->getRequestedResolutionConfig())->getPath());
         }
     }
 
 
 
     /**
-     * @return Tx_Yag_Domain_Configuration_Image_ResolutionConfig
+     * @return ResolutionConfig
      */
     protected function getRequestedResolutionConfig()
     {
@@ -165,7 +172,7 @@ class Tx_Yag_Service_ZipPackingService
         $parameters = array();
 
         if ($this->itemListData->count() > 0) {
-            $item = $this->itemListData->getFirstRow()->getCell('image')->getValue(); /** @var Tx_Yag_Domain_Model_Item $item */
+            $item = $this->itemListData->getFirstRow()->getCell('image')->getValue(); /** @var Item $item */
 
             $parameters = array(
                 'album' => $item->getAlbum()->getName(),
@@ -173,7 +180,7 @@ class Tx_Yag_Service_ZipPackingService
             );
         }
 
-        $formattedFileName = Tx_PtExtlist_Utility_RenderValue::renderDataByConfigArray($parameters, $this->fileNameFormat);
+        $formattedFileName = \Tx_PtExtlist_Utility_RenderValue::renderDataByConfigArray($parameters, $this->fileNameFormat);
         if (substr(strtolower($formattedFileName), -4, 4) != '.zip') {
             $formattedFileName .= '.zip';
         }

@@ -23,13 +23,15 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Repository;
+
 /**
- * Repository for Tx_Yag_Domain_Model_Gallery
+ * Repository for Gallery
  *
  * @package Domain
  * @subpackage Repository
  */
-class Tx_Yag_Domain_Repository_GalleryRepository extends Tx_Yag_Domain_Repository_AbstractRepository
+class GalleryRepository extends AbstractRepository
 {
     /**
      * This method keeps translated galleries in sync when properties of the original galleries (sorting / delete)

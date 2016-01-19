@@ -22,7 +22,13 @@
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\Utility;
+
+use DL\Yag\Utility\Flexform\RecordSelector;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * Pid detector class for getting storage PID informations.
@@ -41,7 +47,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Utility
  * @author Michael Knoll
  */
-class Tx_Yag_Utility_PidDetector implements \TYPO3\CMS\Core\SingletonInterface
+class PidDetector implements SingletonInterface
 {
     /**
      * Holds an array of pids if we are in manual mode
@@ -55,7 +61,7 @@ class Tx_Yag_Utility_PidDetector implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Holds instance of fe/be mode detector
      *
-     * @var Tx_PtExtbase_Utility_FeBeModeDetector
+     * @var \Tx_PtExtbase_Utility_FeBeModeDetector
      */
     protected $feBeModeDetector;
 
@@ -92,7 +98,7 @@ class Tx_Yag_Utility_PidDetector implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Holds instance of extbase configuration manager
      *
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
+     * @var ConfigurationManagerInterface
      */
     protected $configurationManager;
 
@@ -124,9 +130,9 @@ class Tx_Yag_Utility_PidDetector implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Injects fe / be mode detector
      *
-     * @param Tx_PtExtbase_Utility_FeBeModeDetector $feBeModeDetector
+     * @param \Tx_PtExtbase_Utility_FeBeModeDetector $feBeModeDetector
      */
-    public function injectFeBeModeDetector(Tx_PtExtbase_Utility_FeBeModeDetector $feBeModeDetector)
+    public function injectFeBeModeDetector(\Tx_PtExtbase_Utility_FeBeModeDetector $feBeModeDetector)
     {
         $this->feBeModeDetector = $feBeModeDetector;
     }
@@ -136,9 +142,9 @@ class Tx_Yag_Utility_PidDetector implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Injects configuration manager
      *
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+     * @param ConfigurationManagerInterface $configurationManager
      */
-    public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
+    public function injectConfigurationManager( ConfigurationManagerInterface $configurationManager)
     {
         $this->configurationManager = $configurationManager;
     }
@@ -163,14 +169,14 @@ class Tx_Yag_Utility_PidDetector implements \TYPO3\CMS\Core\SingletonInterface
     public function getExtensionMode()
     {
         if (TYPO3_MODE === 'BE') {
-            if (user_Tx_Yag_Utility_Flexform_RecordSelector::$flexFormMode) {
+            if (RecordSelector::$flexFormMode) {
                 // Record selector is activated => we are in flexform mode
-                return Tx_Yag_Utility_PidDetector::BE_CONTENT_ELEMENT_MODE;
+                return PidDetector::BE_CONTENT_ELEMENT_MODE;
             } else {
-                return Tx_Yag_Utility_PidDetector::BE_YAG_MODULE_MODE;
+                return PidDetector::BE_YAG_MODULE_MODE;
             }
         } elseif (TYPO3_MODE === 'FE') {
-            return Tx_Yag_Utility_PidDetector::FE_MODE;
+            return PidDetector::FE_MODE;
         }
     }
 
@@ -328,7 +334,7 @@ class Tx_Yag_Utility_PidDetector implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function getPidsInFeMode()
     {
-        $settings = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
+        $settings = $this->configurationManager->getConfiguration( ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS);
         $selectedPid = $settings['overwriteFlexForm']['context']['selectedPid'] ? $settings['overwriteFlexForm']['context']['selectedPid'] : (int) $settings['context']['selectedPid'];
         return $selectedPid ? array($selectedPid) : array(-1);
     }

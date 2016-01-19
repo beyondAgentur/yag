@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
 *  Copyright notice
 *
@@ -24,7 +23,18 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\Domain\Model;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\FileSystem\ResolutionFileCacheFactory;
+use DL\Yag\Domain\Repository\ItemMetaRepository;
+use DL\Yag\Domain\Repository\ResolutionFileCacheRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Gallery implements Item domain object. An item is anything that can be 
@@ -35,9 +45,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Domain
  * @subpackage Model
  */
-class Tx_Yag_Domain_Model_Item
-    extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
-    implements Tx_Yag_Domain_Model_DomainModelInterface
+class Item extends AbstractEntity implements DomainModelInterface
 {
     /**
      * Title of item
@@ -151,7 +159,7 @@ class Tx_Yag_Domain_Model_Item
     /**
      * Holds album to which item belongs to
      *
-     * @var Tx_Yag_Domain_Model_Album $album
+     * @var Album $album
      */
     protected $album;
     
@@ -161,7 +169,7 @@ class Tx_Yag_Domain_Model_Item
      * Holds meta data for item
      * 
      * @lazy
-     * @var Tx_Yag_Domain_Model_ItemMeta $itemMeta
+     * @var ItemMeta $itemMeta
      */
     protected $itemMeta;
     
@@ -178,13 +186,13 @@ class Tx_Yag_Domain_Model_Item
     /**
      * tags
      * @lazy
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Tx_Yag_Domain_Model_Tag> $tags
+     * @var ObjectStorage<Tag> $tags
      */
     protected $tags;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
+     * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
      * @lazy
      */
     protected $categories;
@@ -225,7 +233,7 @@ class Tx_Yag_Domain_Model_Item
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -239,16 +247,16 @@ class Tx_Yag_Domain_Model_Item
 
     public function __wakeUp()
     {
-        if (!$this->objectManager instanceof \TYPO3\CMS\Extbase\Object\ObjectManager) {
+        if (!$this->objectManager instanceof ObjectManager) {
             $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
         } // TYPO3 4.5 Fix
     }
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager)
+    public function injectObjectManager( ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }
@@ -261,8 +269,8 @@ class Tx_Yag_Domain_Model_Item
      */
     protected function initStorageObjects()
     {
-        $this->tags = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->categories = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+        $this->tags = new ObjectStorage();
+        $this->categories = new ObjectStorage();
     }
 
 
@@ -545,10 +553,10 @@ class Tx_Yag_Domain_Model_Item
     /**
      * Setter for album
      *
-     * @param Tx_Yag_Domain_Model_Album $album Holds album to which item belongs to
+     * @param Album $album Holds album to which item belongs to
      * @return void
      */
-    public function setAlbum(Tx_Yag_Domain_Model_Album $album)
+    public function setAlbum(Album $album)
     {
         $this->album = $album;
     }
@@ -558,11 +566,11 @@ class Tx_Yag_Domain_Model_Item
     /**
      * Getter for album
      *
-     * @return Tx_Yag_Domain_Model_Album Holds album to which item belongs to
+     * @return Album Holds album to which item belongs to
      */
     public function getAlbum()
     {
-        return Tx_PtExtbase_Div::getLazyLoadedObject($this->album);
+        return \Tx_PtExtbase_Div::getLazyLoadedObject($this->album);
     }
 
 
@@ -594,10 +602,10 @@ class Tx_Yag_Domain_Model_Item
     /**
      * Setter for itemMeta
      *
-     * @param Tx_Yag_Domain_Model_ItemMeta $itemMeta Holds meta data for item
+     * @param ItemMeta $itemMeta Holds meta data for item
      * @return void
      */
-    public function setItemMeta(Tx_Yag_Domain_Model_ItemMeta $itemMeta)
+    public function setItemMeta(ItemMeta $itemMeta)
     {
         $this->itemMeta = $itemMeta;
         if ($itemMeta->getCaptureDate() instanceof \DateTime) {
@@ -610,13 +618,13 @@ class Tx_Yag_Domain_Model_Item
     /**
      * Getter for itemMeta
      *
-     * @return Tx_Yag_Domain_Model_ItemMeta Holds meta data for item
+     * @return ItemMeta Holds meta data for item
      */
     public function getItemMeta()
     {
-        Tx_PtExtbase_Div::getLazyLoadedObject($this->itemMeta);
-        if (!$this->itemMeta instanceof Tx_Yag_Domain_Model_ItemMeta) {
-            $this->itemMeta = $this->objectManager->get('Tx_Yag_Domain_Model_ItemMeta');
+        \Tx_PtExtbase_Div::getLazyLoadedObject($this->itemMeta);
+        if (!$this->itemMeta instanceof ItemMeta) {
+            $this->itemMeta = $this->objectManager->get('ItemMeta');
         }
         return $this->itemMeta;
     }
@@ -646,13 +654,13 @@ class Tx_Yag_Domain_Model_Item
     /**
      * Get image path by resolution config
      *
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfig
-     * @return Tx_Yag_Domain_Model_ResolutionFileCache
+     * @param ResolutionConfig $resolutionConfig
+     * @return ResolutionFileCache
      */
     public function getResolutionByConfig($resolutionConfig)
     {
         if ($resolutionConfig != null) {
-            return Tx_Yag_Domain_FileSystem_ResolutionFileCacheFactory::getInstance()->getItemFileResolutionPathByConfiguration($this, $resolutionConfig);
+            return ResolutionFileCacheFactory::getInstance()->getItemFileResolutionPathByConfiguration($this, $resolutionConfig);
         } else {
             return $this->getOriginalResolution();
         }
@@ -667,7 +675,7 @@ class Tx_Yag_Domain_Model_Item
      */
     public function getResolutions()
     {
-        $resolutionConfigs = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance()
+        $resolutionConfigs = ConfigurationBuilderFactory::getInstance()
                                     ->buildThemeConfiguration()
                                     ->getResolutionConfigCollection();
 
@@ -685,11 +693,11 @@ class Tx_Yag_Domain_Model_Item
     /**
      * Get a resolutionFile that points to the original file path
      *
-     * @return Tx_Yag_Domain_Model_ResolutionFileCache
+     * @return ResolutionFileCache
      */
     public function getOriginalResolution()
     {
-        $resolutionFile = new Tx_Yag_Domain_Model_ResolutionFileCache(
+        $resolutionFile = new ResolutionFileCache(
             $this,
             $this->sourceuri,
             $this->width,
@@ -740,13 +748,13 @@ class Tx_Yag_Domain_Model_Item
             $resetThumb = true;
         }
 
-        $this->objectManager->get('Tx_Yag_Domain_FileSystem_FileManager')->removeImageFileFromAlbumDirectory($this);
+        $this->objectManager->get('FileManager')->removeImageFileFromAlbumDirectory($this);
         if ($deleteCachedFiles) {
             $this->deleteCachedFiles();
         }
 
         if ($this->getItemMeta()) {
-            $itemMetaRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_ItemMetaRepository'); /* @var $itemMetaRepository Tx_Yag_Domain_Repository_ItemMetaRepository */
+            $itemMetaRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemMetaRepository'); /* @var $itemMetaRepository ItemMetaRepository */
             $itemMetaRepository->remove($this->getItemMeta());
         }
         
@@ -756,9 +764,9 @@ class Tx_Yag_Domain_Model_Item
             $this->album->setThumbToTopOfItems();
         }
 
-        $this->objectManager->get('Tx_Yag_Domain_Repository_AlbumRepository')->update($this->album);
+        $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository')->update($this->album);
 
-        $itemRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository'); /* @var $itemRepository Tx_Yag_Domain_Repository_ItemRepository */
+        $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository'); /* @var $itemRepository ItemRepository */
         $itemRepository->remove($this);
     }
     
@@ -769,7 +777,7 @@ class Tx_Yag_Domain_Model_Item
      */
     public function deleteCachedFiles()
     {
-        $resolutionFileCacheRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_ResolutionFileCacheRepository'); /* @var $resolutionFileCacheRepository Tx_Yag_Domain_Repository_ResolutionFileCacheRepository */
+        $resolutionFileCacheRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ResolutionFileCacheRepository'); /* @var $resolutionFileCacheRepository ResolutionFileCacheRepository */
         $resolutionFileCacheRepository->removeByItem($this);
     }
     
@@ -795,8 +803,8 @@ class Tx_Yag_Domain_Model_Item
      */
     public function getIsAlbumThumb()
     {
-        if ($this->getAlbum() instanceof Tx_Yag_Domain_Model_Album
-            && $this->getAlbum()->getThumb() instanceof Tx_Yag_Domain_Model_Item
+        if ($this->getAlbum() instanceof Album
+            && $this->getAlbum()->getThumb() instanceof Item
             && $this->getAlbum()->getThumb()->getUid() === $this->uid) {
             return true;
         } else {
@@ -816,7 +824,7 @@ class Tx_Yag_Domain_Model_Item
 
 
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @return ObjectStorage
      */
     public function getCategories()
     {
@@ -849,7 +857,7 @@ class Tx_Yag_Domain_Model_Item
         $tags = array_filter(GeneralUtility::trimExplode(',', $tagsAsCSV));
         $currentTags = clone $this->tags;
 
-        foreach ($currentTags as $tag) { /** @var Tx_Yag_Domain_Model_Tag $tag */
+        foreach ($currentTags as $tag) { /** @var Tag $tag */
             if (!in_array(trim($tag->getName()), $tags)) {
                 $tag->decreaseCount();
                 $this->tags->detach($tag);
@@ -859,14 +867,14 @@ class Tx_Yag_Domain_Model_Item
         foreach ($tags as $tagName) {
             $tagIsExistent = false;
 
-            foreach ($this->tags as $existentTag) { /** @var Tx_Yag_Domain_Model_Tag $existentTag */
+            foreach ($this->tags as $existentTag) { /** @var Tag $existentTag */
                 if ($existentTag->getName() == $tagName) {
                     $tagIsExistent = true;
                 }
             }
 
             if (!$tagIsExistent) {
-                $tagToBeAdded = new Tx_Yag_Domain_Model_Tag();
+                $tagToBeAdded = new Tag();
 
                 $tagToBeAdded->setName($tagName);
                 $this->addTag($tagToBeAdded);
@@ -886,7 +894,7 @@ class Tx_Yag_Domain_Model_Item
         $tags = array_filter(GeneralUtility::trimExplode(',', $tagsAsCSV));
 
         foreach ($tags as $tagName) {
-            $tag = new Tx_Yag_Domain_Model_Tag();
+            $tag = new Tag();
             
             $tag->setName($tagName);
             
@@ -916,7 +924,7 @@ class Tx_Yag_Domain_Model_Item
     
     
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Tx_Yag_Domain_Model_Tag>
+     * @return ObjectStorage<Tag>
      */
     public function getTags()
     {
@@ -939,13 +947,13 @@ class Tx_Yag_Domain_Model_Item
     /**
      * Add Tag if it is not already existing and update counter
      * 
-     * @param Tx_Yag_Domain_Model_Tag the Tag to be added
+     * @param Tag the Tag to be added
      * @return void
      */
-    public function addTag(Tx_Yag_Domain_Model_Tag $tag)
+    public function addTag(Tag $tag)
     {
-        $tagRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_TagRepository');
-        $existingTag = $tagRepository->findOneByName($tag->getName()); /** @var Tx_Yag_Domain_Model_Tag $existingTag */
+        $tagRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\TagRepository');
+        $existingTag = $tagRepository->findOneByName($tag->getName()); /** @var Tag $existingTag */
         
         if ($existingTag === null || $tag === $existingTag) {
             $tag->setCount(1);
@@ -959,15 +967,15 @@ class Tx_Yag_Domain_Model_Item
     
     
     /**
-     * @param Tx_Yag_Domain_Model_Tag the Tag to be removed
+     * @param Tag the Tag to be removed
      * @return void
      */
-    public function removeTag(Tx_Yag_Domain_Model_Tag $tagToRemove)
+    public function removeTag(Tag $tagToRemove)
     {
-        $tagRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_TagRepository');
-        $existingTag = $tagRepository->findOneByName($tagToRemove->getName()); /** @var Tx_Yag_Domain_Model_Tag $existingTag */
+        $tagRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\TagRepository');
+        $existingTag = $tagRepository->findOneByName($tagToRemove->getName()); /** @var Tag $existingTag */
 
-        if ($existingTag instanceof Tx_Yag_Domain_Model_Tag) {
+        if ($existingTag instanceof Tag) {
             $existingTag->decreaseCount();
         }
 

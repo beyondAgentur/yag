@@ -24,15 +24,17 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Model;
+
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /**
  * Class implements container for meta data for images.
  *
  * @package Domain
  * @subpackage Model
  */
-class Tx_Yag_Domain_Model_ItemMeta
-    extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
-    implements Tx_Yag_Domain_Model_DomainModelInterface
+class ItemMeta extends AbstractEntity implements DomainModelInterface
 {
     /**
      * EXIF data of item
@@ -227,7 +229,7 @@ class Tx_Yag_Domain_Model_ItemMeta
      * Item to which meta data belongs to
      *
      * @lazy
-     * @var Tx_Yag_Domain_Model_Item $item
+     * @var Item $item
      */
     protected $item;
 
@@ -724,10 +726,10 @@ class Tx_Yag_Domain_Model_ItemMeta
     /**
      * Setter for item
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item to which meta data belongs to
+     * @param Item $item Item to which meta data belongs to
      * @return void
      */
-    public function setItem(Tx_Yag_Domain_Model_Item $item)
+    public function setItem(Item $item)
     {
         $this->item = $item;
     }
@@ -737,7 +739,7 @@ class Tx_Yag_Domain_Model_ItemMeta
     /**
      * Getter for item
      *
-     * @return Tx_Yag_Domain_Model_Item Item to which meta data belongs to
+     * @return Item Item to which meta data belongs to
      */
     public function getItem()
     {

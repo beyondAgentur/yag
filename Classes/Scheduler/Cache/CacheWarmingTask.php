@@ -1,7 +1,4 @@
 <?php
-
-namespace YAG\Yag\Scheduler\Cache;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -26,16 +23,25 @@ namespace YAG\Yag\Scheduler\Cache;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Scheduler\Cache;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Configuration\Image\ResolutionConfigCollectionFactory;
+use DL\Yag\Domain\FileSystem\ResolutionFileCacheFactory;
+use DL\Yag\Domain\Repository\ItemRepository;
+use DL\Yag\Scheduler\AbstractTask;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+
 /**
  * YAG Scheduler Task
  *
  * @package YAG
  * @subpackage Scheduler
  */
-class CacheWarmingTask extends \YAG\Yag\Scheduler\AbstractTask
+class CacheWarmingTask extends AbstractTask
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
+     * @var ConfigurationManagerInterface
      */
     protected $configurationManager;
 
@@ -77,8 +83,8 @@ class CacheWarmingTask extends \YAG\Yag\Scheduler\AbstractTask
     public function execute()
     {
         $selectedResolutionConfigCollection = $this->getSelectedResolutionConfigs();
-        $itemRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository'); /** @var $itemRepository \Tx_Yag_Domain_Repository_ItemRepository */
-        $resolutionFileCache = \Tx_Yag_Domain_FileSystem_ResolutionFileCacheFactory::getInstance(); /** @var  $resolutionFileCache \Tx_Yag_Domain_FileSystem_ResolutionFileCache */
+        $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository'); /** @var $itemRepository ItemRepository */
+        $resolutionFileCache = ResolutionFileCacheFactory::getInstance(); /** @var  $resolutionFileCache ResolutionFileCache */
         $items = $itemRepository->findImagesWithUnRenderedResolutions($selectedResolutionConfigCollection, $this->imagesPerRun);
 
         foreach ($items as $item) {
@@ -91,15 +97,15 @@ class CacheWarmingTask extends \YAG\Yag\Scheduler\AbstractTask
 
 
     /**
-     * @return \Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection
+     * @return ResolutionConfigCollection
      */
     protected function getSelectedResolutionConfigs()
     {
-        $settings = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Yag', 'pi1');
+        $settings = $this->configurationManager->getConfiguration( ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Yag', 'pi1');
 
-        \Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::injectSettings($settings);
-        $configurationBuilder = \Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance('default', 'backend');
-        $resolutionConfigCollection = \Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollectionFactory::getInstanceOfAllThemes($configurationBuilder);
+        ConfigurationBuilderFactory::injectSettings($settings);
+        $configurationBuilder = ConfigurationBuilderFactory::getInstance('default', 'backend');
+        $resolutionConfigCollection = ResolutionConfigCollectionFactory::getInstanceOfAllThemes($configurationBuilder);
         $selectedResolutionConfigCollection =  $resolutionConfigCollection->extractCollectionByThemeList($this->selectedThemes);
 
         return $selectedResolutionConfigCollection;
@@ -111,7 +117,7 @@ class CacheWarmingTask extends \YAG\Yag\Scheduler\AbstractTask
      */
     public function getAdditionalInformation()
     {
-        $itemRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository'); /** @var $itemRepository \Tx_Yag_Domain_Repository_ItemRepository */
+        $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository'); /** @var $itemRepository ItemRepository */
 
         $unRenderedCount = $itemRepository->countImagesWithUnRenderedResolutions($this->getSelectedResolutionConfigs());
 

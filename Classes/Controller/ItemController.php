@@ -24,6 +24,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Model\Item;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -34,7 +38,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * @author Michael Knoll <mimi@kaktusteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractController
+class ItemController extends AbstractController
 {
     /**
      * Initializes the current action
@@ -97,9 +101,9 @@ class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractControl
     /**
      * Show a single (flexform defined) image
      *
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      */
-    public function showSingleAction(Tx_Yag_Domain_Model_Item $item = null)
+    public function showSingleAction(Item $item = null)
     {
         if ($item === null) {
             $itemUid = $this->configurationBuilder->buildContextConfiguration()->getSelectedItemUid();
@@ -117,9 +121,9 @@ class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractControl
 
 
     /**
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      */
-    public function updateAction(Tx_Yag_Domain_Model_Item $item)
+    public function updateAction(Item $item)
     {
         $this->itemRepository->update($item);
 
@@ -131,14 +135,14 @@ class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractControl
     /**
      * Action for deleting an item
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item to be deleted
-     * @param Tx_Yag_Domain_Model_Album $album Album to forward to
+     * @param Item $item Item to be deleted
+     * @param Album $album Album to forward to
      * @return string Rendered delete action
      * @rbacNeedsAccess
      * @rbacObject item
      * @rbacAction delete
      */
-    public function deleteAction(Tx_Yag_Domain_Model_Item $item, Tx_Yag_Domain_Model_Album $album = null)
+    public function deleteAction(Item $item, Album $album = null)
     {
         $item->delete();
         if ($album) {
@@ -163,7 +167,7 @@ class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractControl
 
         // Somehow, mapping does not seem to work here - so we do it manually
         $album = $this->albumRepository->findByUid($bulkEditData['album']['uid']);
-        /* @var $album Tx_Yag_Domain_Model_Album */
+        /* @var $album Album */
 
         if ($album == null) {
            $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_album.noAlbumSelected', $this->extensionName), '', FlashMessage::ERROR);
@@ -171,7 +175,7 @@ class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractControl
         }
 
         // Do we have to change thumb for album?
-        if (!$album->getThumb() instanceof Tx_Yag_Domain_Model_Item || $album->getThumb()->getUid() != $bulkEditData['album']['thumb']) {
+        if (!$album->getThumb() instanceof Item || $album->getThumb()->getUid() != $bulkEditData['album']['thumb']) {
             $thumb = $this->itemRepository->findByUid($bulkEditData['album']['thumb']);
             if ($thumb !== null) {
                 $album->setThumb($thumb);
@@ -183,7 +187,7 @@ class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractControl
         foreach ($bulkEditData['itemsToBeDeleted'] as $itemUid => $value) {
             if (intval($value) === 1) {
                 $item = $this->itemRepository->findByUid($itemUid);
-                /* @var $item Tx_Yag_Domain_Model_Item */
+                /* @var $item Item */
                 if ($item != null) {
                     $item->delete();
                 }
@@ -192,7 +196,7 @@ class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractControl
 
         // Update each item that is associated to the album
         foreach ($album->getItems() as $item) {
-            /* @var $item Tx_Yag_Domain_Model_Item */
+            /* @var $item Item */
 
             $itemUid = $item->getUid();
             $item->injectObjectManager($this->objectManager);
@@ -225,12 +229,12 @@ class Tx_Yag_Controller_ItemController extends Tx_Yag_Controller_AbstractControl
      * Sends an item as download. The fileHash (or at least a part of 5 characters) is used to avoid grabbing the whole
      * database by incrementing the itemUid.
      *
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      * @param string $fileHash
      */
-    public function downloadAction(Tx_Yag_Domain_Model_Item $item, $fileHash)
+    public function downloadAction(Item $item, $fileHash)
     {
-        $requestedFileName = Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($item->getSourceuri());
+        $requestedFileName = Div::makePathAbsolute($item->getSourceuri());
         $hashLength = strlen($fileHash) > 5 ? 5 : strlen($fileHash);
 
         if ($fileHash == '' || $fileHash !== substr($item->getFilehash(), 0, $hashLength) || !is_readable($requestedFileName)) {

@@ -22,8 +22,12 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\Report;
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Reports\Status;
+use TYPO3\CMS\Reports\StatusProviderInterface;
 
 /**
  * Class implements a status report checking environment variables
@@ -31,7 +35,7 @@ use TYPO3\CMS\Reports\Status;
  * @author Michael Knoll
  * @package Report
  */
-class Tx_Yag_Report_EnvironmentVariables implements \TYPO3\CMS\Reports\StatusProviderInterface
+class EnvironmentVariables implements StatusProviderInterface
 {
     protected $reports = array();
 

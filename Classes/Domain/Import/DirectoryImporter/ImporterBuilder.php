@@ -23,6 +23,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\DirectoryImporter;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Import\FileCrawler;
+use DL\Yag\Domain\Model\Album;
+
 /**
  * Importer Builder for directory importer
  *
@@ -30,12 +36,12 @@
  * @subpackage Import\DirectoryImporter
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Import_DirectoryImporter_ImporterBuilder extends Tx_Yag_Domain_Import_ImporterBuilder
+class ImporterBuilder extends \DL\Yag\Domain\Import\ImporterBuilder
 {
     /**
      * Holds a singleton instance of this class
      *
-     * @var Tx_Yag_Domain_Import_DirectoryImporter_ImporterBuilder
+     * @var ImporterBuilder
      */
     protected static $instance = null;
 
@@ -43,12 +49,12 @@ class Tx_Yag_Domain_Import_DirectoryImporter_ImporterBuilder extends Tx_Yag_Doma
     /**
      * Factory method for getting an instance of this class as a singleton
      *
-     * @return Tx_Yag_Domain_Import_DirectoryImporter_ImporterBuilder Singleton instance of directory importer builder
+     * @return ImporterBuilder Singleton instance of directory importer builder
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new self(Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance());
+            self::$instance = new self(ConfigurationBuilderFactory::getInstance());
         }
         return self::$instance;
     }
@@ -58,15 +64,15 @@ class Tx_Yag_Domain_Import_DirectoryImporter_ImporterBuilder extends Tx_Yag_Doma
      * Returns an instance of directory importer
      *
      * @param string $directory Directory to be crawled for files
-     * @param Tx_Yag_Domain_Model_Album $album Album to add imported images to
-     * @return Tx_Yag_Domain_Import_DirectoryImporter_Importer
+     * @param Album $album Album to add imported images to
+     * @return Importer
      */
-    public function getInstanceByDirectoryAndAlbum($directory, Tx_Yag_Domain_Model_Album $album)
+    public function getInstanceByDirectoryAndAlbum($directory, Album $album)
     {
-        $importer = parent::createImporterForAlbum('Tx_Yag_Domain_Import_DirectoryImporter_Importer', $album);
-        /* @var $importer Tx_Yag_Domain_Import_DirectoryImporter_Importer */
+        $importer = parent::createImporterForAlbum('Importer', $album);
+        /* @var $importer Importer */
         $importer->setDirectory($directory);
-        $importer->_injectFileCrawler(new Tx_Yag_Domain_Import_FileCrawler($this->configurationBuilder->buildImporterConfiguration()));
+        $importer->_injectFileCrawler(new FileCrawler($this->configurationBuilder->buildImporterConfiguration()));
         return $importer;
     }
 }

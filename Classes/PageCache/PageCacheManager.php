@@ -23,6 +23,15 @@
 * This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\PageCache;
+
+use DL\Yag\Domain\Model\Extern\TTContent;
+use DL\Yag\Domain\Repository\Extern\TTContentRepository;
+use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\CMS\Extbase\Service\CacheService;
+
 /**
 * Class implements PageCache mangement methods
 *
@@ -30,22 +39,22 @@
 * @author Daniel Lienert <typo3@lienert.cc>
 */
 
-class Tx_Yag_PageCache_PageCacheManager implements Tx_PtExtbase_Lifecycle_EventInterface, \TYPO3\CMS\Core\SingletonInterface
+class PageCacheManager implements \Tx_PtExtbase_Lifecycle_EventInterface, SingletonInterface
 {
     /**
-     * @var Tx_Yag_Domain_Repository_Extern_TTContentRepository
+     * @var TTContentRepository
      */
     protected $ttContentRepository;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Service\CacheService
+     * @var CacheService
      */
     protected $cacheService;
 
     
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
     
@@ -60,32 +69,32 @@ class Tx_Yag_PageCache_PageCacheManager implements Tx_PtExtbase_Lifecycle_EventI
     /**
      * Int internal state, used to avoid more than one call of the same state
      */
-    private $internalSessionState = Tx_PtExtbase_Lifecycle_Manager::UNDEFINED;
+    private $internalSessionState = \Tx_PtExtbase_Lifecycle_Manager::UNDEFINED;
     
     
     
     /**
-     * @param Tx_Yag_Domain_Repository_Extern_TTContentRepository $ttContentRepository
+     * @param TTContentRepository $ttContentRepository
      */
-    public function injectTTContentRepository(Tx_Yag_Domain_Repository_Extern_TTContentRepository $ttContentRepository)
+    public function injectTTContentRepository(TTContentRepository $ttContentRepository)
     {
         $this->ttContentRepository = $ttContentRepository;
     }
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
+    public function injectObjectManager( ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Service\CacheService $cacheService
+     * @param CacheService $cacheService
      */
-    public function injectCacheService(\TYPO3\CMS\Extbase\Service\CacheService $cacheService)
+    public function injectCacheService( CacheService $cacheService)
     {
         $this->cacheService = $cacheService;
     }
@@ -111,7 +120,7 @@ class Tx_Yag_PageCache_PageCacheManager implements Tx_PtExtbase_Lifecycle_EventI
     {
         $pageIdsToClear = array();
         
-        /* @var $ttContentEntry Tx_Yag_Domain_Model_Extern_TTContent */
+        /* @var $ttContentEntry TTContent */
         foreach ($ttContentEntries as $ttContentEntry) {
             $pageIdsToClear[] = $ttContentEntry->getPid();
         }
@@ -135,7 +144,7 @@ class Tx_Yag_PageCache_PageCacheManager implements Tx_PtExtbase_Lifecycle_EventI
         }
         $this->internalSessionState = $state;
         
-        if ($state == Tx_PtExtbase_Lifecycle_Manager::END) {
+        if ($state == \Tx_PtExtbase_Lifecycle_Manager::END) {
             $this->doAutomaticCacheClearing();
         }
     }
@@ -160,9 +169,9 @@ class Tx_Yag_PageCache_PageCacheManager implements Tx_PtExtbase_Lifecycle_EventI
     /**
      * Marks an object as updated
      * 
-     * @param \TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject $object
+     * @param AbstractDomainObject $object
      */
-    public function markObjectUpdated(\TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject $object)
+    public function markObjectUpdated( AbstractDomainObject $object)
     {
         if ($object->getUid()) {
             $this->updatedObjects[get_class($object)][] = $object->getUid();

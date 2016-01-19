@@ -23,13 +23,18 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Hooks;
+
+use DL\Yag\Domain\Context\YagContextFactory;
+use TYPO3\CMS\Core\SingletonInterface;
+
 /**
  * Class implements hook for tx_realurl
  *
  * @package Hooks
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class user_Tx_Yag_Hooks_RealUrl extends tx_realurl implements \TYPO3\CMS\Core\SingletonInterface
+class RealUrl extends tx_realurl implements SingletonInterface
 {
     /**
      * @var array
@@ -48,12 +53,12 @@ class user_Tx_Yag_Hooks_RealUrl extends tx_realurl implements \TYPO3\CMS\Core\Si
      */
     protected function init()
     {
-        if (!class_exists('Tx_Yag_Domain_Context_YagContextFactory')) {
+        if (!class_exists('YagContextFactory')) {
             throw new Exception('We are not in yag context', 1302280230);
         }
         
-        if ($this->currentContextIdentifier != Tx_Yag_Domain_Context_YagContextFactory::getInstance()->getIdentifier()) {
-            $this->currentContextIdentifier = Tx_Yag_Domain_Context_YagContextFactory::getInstance()->getIdentifier();
+        if ($this->currentContextIdentifier != YagContextFactory::getInstance()->getIdentifier()) {
+            $this->currentContextIdentifier = YagContextFactory::getInstance()->getIdentifier();
             $this->initVarSetConfig($this->currentContextIdentifier);
         }
     }

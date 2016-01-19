@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Context;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Factory for album configuration
  *
@@ -31,17 +35,17 @@
  
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Context_ContextConfigFactory
+class ContextConfigFactory
 {
     /**
      * Returns an instance of general configuration
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_Context_ContextConfig
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return ContextConfig
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         $contextSettings = $configurationBuilder->getSettingsForConfigObject('context');
-        return new Tx_Yag_Domain_Configuration_Context_ContextConfig($configurationBuilder, $contextSettings);
+        return new ContextConfig($configurationBuilder, $contextSettings);
     }
 }

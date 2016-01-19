@@ -23,15 +23,24 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Repository;
+
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Model\Item;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\Repository;
+
 /**
- * Repository for Tx_Yag_Domain_Model_ResolutionFileCache
+ * Repository for ResolutionFileCache
  *
  * @package Domain
  * @subpackage Repository
  * @author Daniel Lienert <lienert@punkt.de>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Repository_ResolutionFileCacheRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class ResolutionFileCacheRepository extends Repository
 {
     /**
      * Set to false --> pidDetector is NOT respected
@@ -58,14 +67,15 @@ class Tx_Yag_Domain_Repository_ResolutionFileCacheRepository extends \TYPO3\CMS\
     protected $persistCacheAfterItems = 10;
 
 
-
     /**
      * Sets the respect storage page to false.
+     *
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
+    public function __construct( ObjectManagerInterface $objectManager)
     {
         parent::__construct($objectManager);
-        $this->defaultQuerySettings = new \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings();
+        $this->defaultQuerySettings = new Typo3QuerySettings();
         $this->defaultQuerySettings->setRespectStoragePage(false);
         $this->defaultQuerySettings->setRespectSysLanguage(false);
     }
@@ -83,11 +93,11 @@ class Tx_Yag_Domain_Repository_ResolutionFileCacheRepository extends \TYPO3\CMS\
     /**
      * Get the item file resolution object
      * 
-     * @param Tx_Yag_Domain_Model_Item $item
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration
-     * @return Tx_Yag_Domain_Model_ResolutionFileCache
+     * @param Item $item
+     * @param ResolutionConfig $resolutionConfiguration
+     * @return ResolutionFileCache
      */
-    public function getResolutionByItem(Tx_Yag_Domain_Model_Item $item, Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration)
+    public function getResolutionByItem(Item $item, ResolutionConfig $resolutionConfiguration)
     {
         $query = $this->createQuery();
         $constraints = array();
@@ -111,8 +121,8 @@ class Tx_Yag_Domain_Repository_ResolutionFileCacheRepository extends \TYPO3\CMS\
 
 
     /**
-     * @param array<Tx_Yag_Domain_Model_Item>
-     * @param array $parameterHashArray<Tx_Yag_Domain_Model_ResolutionFileCache>
+     * @param array<Item>
+     * @param array $parameterHashArray<ResolutionFileCache>
      * @return array
      */
     public function getResolutionsByItems(array $itemArray, array $parameterHashArray)
@@ -132,8 +142,8 @@ class Tx_Yag_Domain_Repository_ResolutionFileCacheRepository extends \TYPO3\CMS\
 
         if ($result !== null) {
             foreach ($result as $row) {
-                if (is_a($itemArray[$row['item']], 'Tx_Yag_Domain_Model_Item')) {
-                    $fileCacheArray[$row['uid']] = new Tx_Yag_Domain_Model_ResolutionFileCache(
+                if (is_a($itemArray[$row['item']], 'Item')) {
+                    $fileCacheArray[$row['uid']] = new ResolutionFileCache(
                         $itemArray[$row['item']],
                         $row['path'],
                         $row['width'],
@@ -152,15 +162,15 @@ class Tx_Yag_Domain_Repository_ResolutionFileCacheRepository extends \TYPO3\CMS\
     /**
      * Removes all cached files for a given item
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item to remove cached files for
+     * @param Item $item Item to remove cached files for
      */
-    public function removeByItem(Tx_Yag_Domain_Model_Item $item)
+    public function removeByItem(Item $item)
     {
         $query = $this->createQuery();
         $query->matching($query->equals('item', $item->getUid()));
         $cachedFilesForItem = $query->execute();
         
-        foreach ($cachedFilesForItem as $cachedFileForItem) { /* @var $cachedFileForItem Tx_Yag_Domain_Model_ResolutionFileCache */
+        foreach ($cachedFilesForItem as $cachedFileForItem) { /* @var $cachedFileForItem ResolutionFileCache */
             $this->remove($cachedFileForItem);
         }
     }
@@ -170,13 +180,13 @@ class Tx_Yag_Domain_Repository_ResolutionFileCacheRepository extends \TYPO3\CMS\
     /**
      * Removes resolution file cache object and file from filesystem
      *
-     * @param Tx_Yag_Domain_Model_ResolutionFileCache $resolutionFileCache
+     * @param ResolutionFileCache $resolutionFileCache
      */
     public function remove($resolutionFileCache)
     {
-        $cacheFilePath = Tx_Yag_Domain_FileSystem_Div::getT3BasePath() . $resolutionFileCache->getPath();
+        $cacheFilePath = Div::getT3BasePath() . $resolutionFileCache->getPath();
         if (file_exists($cacheFilePath)) {
-            unlink(Tx_Yag_Domain_FileSystem_Div::getT3BasePath() . $resolutionFileCache->getPath());
+            unlink(Div::getT3BasePath() . $resolutionFileCache->getPath());
             parent::remove($resolutionFileCache);
         }
     }

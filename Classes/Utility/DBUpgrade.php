@@ -22,13 +22,19 @@
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\Utility;
+
+use TYPO3\CMS\Core\Exception;
+use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @package Utility
  * @author Daniel Lienert
  */
-class Tx_Yag_Utility_DBUpgrade implements \TYPO3\CMS\Core\SingletonInterface
+class DBUpgrade implements SingletonInterface
 {
     /**
      * @var integer
@@ -41,9 +47,12 @@ class Tx_Yag_Utility_DBUpgrade implements \TYPO3\CMS\Core\SingletonInterface
     protected $currentDatabaseVersion = 0;
 
 
+	/**
+     * @throws Exception
+     */
     public function initializeObject()
     {
-        $this->currentAppVersion = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('yag');
+        $this->currentAppVersion = ExtensionManagementUtility::getExtensionVersion('yag');
         $this->determineDatabaseVersion();
     }
 

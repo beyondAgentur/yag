@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\MetaData;
+
+use TYPO3\CMS\Core\SingletonInterface;
+
 /**
  * Class for IPTC metadata parsing
  *
@@ -30,7 +34,7 @@
  * @subpackage Import\MetaData
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Import_MetaData_IptcParser extends Tx_Yag_Domain_Import_MetaData_AbstractParser implements \TYPO3\CMS\Core\SingletonInterface
+class IptcParser extends AbstractParser implements SingletonInterface
 {
     /**
      * Parses IPTC data for a given file

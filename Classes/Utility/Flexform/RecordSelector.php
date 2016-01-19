@@ -23,10 +23,17 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Utility\Flexform;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Model\Album;
+use DL\Yag\Domain\Model\Item;
+use DL\Yag\Domain\Repository\AlbumRepository;
+use DL\Yag\Domain\Repository\GalleryRepository;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-require_once ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/AbstractFlexformUtility.php';
+//require_once ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/AbstractFlexformUtility.php';
 
 /**
  * Class provides dataProvider for FlexForm select lists
@@ -36,7 +43,7 @@ require_once ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexf
  * @author Daniel Lienert <typo3@lienert.cc>
  * @package Utility
  */
-class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexform_AbstractFlexformUtility
+class RecordSelector extends AbstractFlexformUtility
 {
     /**
      * If set to true, this means, that we are in flexform mode
@@ -51,13 +58,13 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
     /**
      * Album repository
      *
-     * @var Tx_Yag_Domain_Repository_AlbumRepository
+     * @var AlbumRepository
      */
     protected $albumRepository;
 
 
     /**
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory
+     * @var ConfigurationBuilderFactory
      */
     protected $configurationBuilder = null;
 
@@ -71,7 +78,7 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
     /**
      * Holds instance of pid detector
      *
-     * @var Tx_Yag_Utility_PidDetector
+     * @var \DL\Yag\Utility\PidDetector
      */
     protected $pidDetector;
 
@@ -97,15 +104,15 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
         if (!$this->configurationBuilder) {
             try {
                 // try to get the instance from factory cache
-                $this->configurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance('backend', 'backend');
+                $this->configurationBuilder = ConfigurationBuilderFactory::getInstance('backend', 'backend');
             } catch (Exception $e) {
                 if (!$this->currentPid) {
                     throw new Exception('Need PID for initialisation - No PID given!', 1298928835);
                 }
 
                 $settings = $this->getTyposcriptSettings($this->currentPid);
-                Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::injectSettings($settings);
-                $this->configurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance('backend', 'backend');
+                ConfigurationBuilderFactory::injectSettings($settings);
+                $this->configurationBuilder = ConfigurationBuilderFactory::getInstance('backend', 'backend');
 
                 $this->initBackendRequirements();
             }
@@ -113,7 +120,7 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
 
         $yagPid = (int) GeneralUtility::_GP('yagPid');
 
-        $this->pidDetector = $this->objectManager->get('Tx_Yag_Utility_PidDetector');
+        $this->pidDetector = $this->objectManager->get('DL\\Yag\\Utility\\PidDetector');
         $this->pidDetector->setPids(array($yagPid));
     }
 
@@ -126,7 +133,7 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
      */
     protected function getTyposcriptSettings($pid)
     {
-        $typoScript = Tx_PtExtbase_Div::returnTyposcriptSetup($pid, 'module.tx_yag.settings.');
+        $typoScript = \Tx_PtExtbase_Div::returnTyposcriptSetup($pid, 'module.tx_yag.settings.');
 
         if (!is_array($typoScript) || empty($typoScript)) {
             $configuration = array(
@@ -194,10 +201,10 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
         $this->determineCurrentPID();
         $this->init();
 
-        $this->pidDetector->setMode(Tx_Yag_Utility_PidDetector::MANUAL_MODE);
+        $this->pidDetector->setMode(\DL\Yag\Utility\PidDetector::MANUAL_MODE);
 
-        $galleryRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository');
-        /** @var $galleryRepository Tx_Yag_Domain_Repository_GalleryRepository */
+        $galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository');
+        /** @var $galleryRepository GalleryRepository */
 
         $galleries = $galleryRepository->findAll();
 
@@ -222,7 +229,7 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
         $this->determineCurrentPID();
         $this->init();
 
-        $galleryRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository');
+        $galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository');
 
         $galleryID = (int) GeneralUtility::_GP('galleryUid');
         $gallery = $galleryRepository->findByUid($galleryID);
@@ -254,7 +261,7 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
         $this->determineCurrentPID();
         $this->init();
 
-        $albumRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_AlbumRepository');
+        $albumRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository');
 
         $albumID = (int)GeneralUtility::_GP('albumUid');
         $album = $albumRepository->findbyUid($albumID);
@@ -294,15 +301,15 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
         $PA['elementID'] = 'field_' . md5($PA['itemFormElID']);
         $selectedAlbumUid = (int)$PA['itemFormElValue'];
 
-        /* @var $galleryRepository Tx_Yag_Domain_Repository_GalleryRepository */
-        $galleryRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository');
+        /* @var $galleryRepository GalleryRepository */
+        $galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository');
         $galleries = $galleryRepository->findAll();
 
         if ($selectedAlbumUid) {
-            $albumRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_AlbumRepository');
+            $albumRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository');
             $selectedAlbum = $albumRepository->findByUid($selectedAlbumUid);
             if ($selectedAlbum) {
-                /* @var $selectedAlbum Tx_Yag_Domain_Model_Album */
+                /* @var $selectedAlbum Album */
                 $selectedGallery = $selectedAlbum->getGallery();
 
                 if ($selectedGallery) {
@@ -345,8 +352,8 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
 
         $PA['elementID'] = 'field_' . md5($PA['itemFormElID']);
 
-        /* @var $galleryRepository Tx_Yag_Domain_Repository_GalleryRepository */
-        $galleryRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository');
+        /* @var $galleryRepository GalleryRepository */
+        $galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository');
 
         $galleries = $galleryRepository->findAll();
 
@@ -386,16 +393,16 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
         $renderer->setTemplatePathAndFilename($template);
 
 
-        /* @var $galleryRepository Tx_Yag_Domain_Repository_GalleryRepository */
-        $galleryRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository');
+        /* @var $galleryRepository GalleryRepository */
+        $galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository');
         $galleries = $galleryRepository->findAll();
 
         if ($selectedImageUid) {
-            $itemRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository');
+            $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository');
             $selectedImage = $itemRepository->findByUid($selectedImageUid);
 
             if ($selectedImage) {
-                /* @var $selectedImage Tx_Yag_Domain_Model_Item */
+                /* @var $selectedImage Item */
 
                 $selectedAlbum = $selectedImage->getAlbum();
 
@@ -441,8 +448,8 @@ class user_Tx_Yag_Utility_Flexform_RecordSelector extends Tx_Yag_Utility_Flexfor
 
         $renderer->setTemplatePathAndFilename($template);
 
-        /* @var $galleryRepository Tx_Yag_Domain_Repository_GalleryRepository */
-        $galleryRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository');
+        /* @var $galleryRepository GalleryRepository */
+        $galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository');
         $galleries = $galleryRepository->findAll();
 
         $pages = $this->pidDetector->getPageRecords();

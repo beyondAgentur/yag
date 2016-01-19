@@ -23,6 +23,11 @@
 * This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\ImageProcessing;
+
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\Model\Item;
+
 /**
 * Interface for an image processor
 *
@@ -31,13 +36,13 @@
 * @author Daniel Lienert <typo3@lienert.cc>
 */
 
-interface Tx_Yag_Domain_ImageProcessing_ProcessorInterface
+interface ProcessorInterface
 {
     /**
      * Generate a resolution of the given original file, described in the given resolution configuration 
      * 
-     * @param Tx_Yag_Domain_Model_Item $origFile
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration
+     * @param Item $origFile
+     * @param ResolutionConfig $resolutionConfiguration
      */
-    public function generateResolution(Tx_Yag_Domain_Model_Item $origFile, Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration);
+    public function generateResolution(Item $origFile, ResolutionConfig $resolutionConfiguration);
 }

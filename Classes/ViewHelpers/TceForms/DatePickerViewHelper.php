@@ -24,6 +24,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\TceForms;
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Exception;
+use TYPO3\CMS\Fluid\ViewHelpers\Form\TextfieldViewHelper;
+
 /**
  * Class implements a fake viewhelper to add a CSS file to the header
  *
@@ -32,7 +38,7 @@
  * @subpackage Javascript
  * 
  */
-class Tx_Yag_ViewHelpers_TceForms_DatePickerViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\TextfieldViewHelper
+class DatePickerViewHelper extends TextfieldViewHelper
 {
     /**
      * @return void
@@ -41,7 +47,7 @@ class Tx_Yag_ViewHelpers_TceForms_DatePickerViewHelper extends \TYPO3\CMS\Fluid\
     {
         parent::initialize();
 
-        $doc = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
+        $doc = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
         $doc->backPath = $GLOBALS['BACK_PATH'];
 
         $pageRenderer = $doc->getPageRenderer();
@@ -97,7 +103,7 @@ class Tx_Yag_ViewHelpers_TceForms_DatePickerViewHelper extends \TYPO3\CMS\Fluid\
             try {
                 $value = new DateTime($value);
             } catch (Exception $exception) {
-                throw new \TYPO3\CMS\Fluid\Core\ViewHelper\Exception('"' . $date . '" could not be parsed by DateTime constructor.', 1241722579);
+                throw new Exception('"' . $value . '" could not be parsed by DateTime constructor.', 1241722579);
             }
         }
 

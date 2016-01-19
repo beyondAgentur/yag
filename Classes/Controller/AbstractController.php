@@ -25,7 +25,24 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Context\YagContext;
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Repository\AlbumRepository;
+use DL\Yag\Domain\Repository\GalleryRepository;
+use DL\Yag\Domain\Repository\ItemRepository;
+use DL\Yag\Utility\PidDetector;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
+use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -38,7 +55,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * TODO: Move the generic stuff to pt_extbase ...
  *
  */
-abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Controller_AbstractActionController
+abstract class AbstractController extends \Tx_PtExtbase_Controller_AbstractActionController
 {
     /**
      * Holds an instance of fe_user object
@@ -61,7 +78,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Holds an instance of yag configuration builder
      *
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder = null;
 
@@ -70,7 +87,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Holds an instance of gallery context
      *
-     * @var Tx_Yag_Domain_Context_YagContext
+     * @var YagContext
      */
     protected $yagContext;
 
@@ -79,14 +96,14 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Holds instance of extlist context
      *
-     * @var Tx_PtExtlist_ExtlistContext_ExtlistContext
+     * @var \Tx_PtExtlist_ExtlistContext_ExtlistContext
      */
     protected $extListContext;
 
 
 
     /**
-     * @var Tx_PtExtbase_Lifecycle_Manager
+     * @var \Tx_PtExtbase_Lifecycle_Manager
      */
     protected $lifecycleManager;
 
@@ -95,7 +112,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Holds an instance of rbac access controll service
      *
-     * @var Tx_PtExtbase_Rbac_RbacServiceInterface
+     * @var \Tx_PtExtbase_Rbac_RbacServiceInterface
      */
     protected $rbacAccessControllService = null;
 
@@ -104,21 +121,21 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Holds instance of pid detector
      *
-     * @var Tx_Yag_Utility_PidDetector
+     * @var PidDetector
      */
     protected $pidDetector;
 
 
 
     /**
-     * @var Tx_Yag_Domain_Repository_AlbumRepository
+     * @var AlbumRepository
      */
     protected $albumRepository;
 
 
 
     /**
-     * @var Tx_Yag_Domain_Repository_GalleryRepository
+     * @var GalleryRepository
      */
     protected $galleryRepository;
 
@@ -134,14 +151,14 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
 
 
     /**
-     * @var Tx_Yag_Domain_Repository_ItemRepository
+     * @var ItemRepository
      */
     protected $itemRepository;
 
 
 
     /**
-     * @var Tx_PtExtbase_State_Session_SessionPersistenceManagerBuilder
+     * @var \Tx_PtExtbase_State_Session_SessionPersistenceManagerBuilder
      */
     protected $sessionPersistenceManagerBuilder;
 
@@ -149,13 +166,13 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Constructor triggers creation of lifecycle manager
      *
-     * @param Tx_PtExtbase_Lifecycle_Manager $lifecycleManager
-     * @param Tx_PtExtbase_State_Session_SessionPersistenceManagerBuilder $sessionPersistenceManagerBuilder
+     * @param \Tx_PtExtbase_Lifecycle_Manager $lifecycleManager
+     * @param \Tx_PtExtbase_State_Session_SessionPersistenceManagerBuilder $sessionPersistenceManagerBuilder
      */
-    public function __construct(Tx_PtExtbase_Lifecycle_Manager $lifecycleManager, Tx_PtExtbase_State_Session_SessionPersistenceManagerBuilder $sessionPersistenceManagerBuilder)
+    public function __construct(\Tx_PtExtbase_Lifecycle_Manager $lifecycleManager, \Tx_PtExtbase_State_Session_SessionPersistenceManagerBuilder $sessionPersistenceManagerBuilder)
     {
         if (TYPO3_MODE === 'BE') {
-            GeneralUtility::makeInstance('Tx_Yag_Utility_TCAUtility')->deactivateHiddenFields();
+            GeneralUtility::makeInstance('DL\\Yag\\Utility\\TCAUtility')->deactivateHiddenFields();
         }
 
         $this->sessionPersistenceManagerBuilder = $sessionPersistenceManagerBuilder;
@@ -167,9 +184,9 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Injects PID detector
      *
-     * @param Tx_Yag_Utility_PidDetector $pidDetector
+     * @param PidDetector $pidDetector
      */
-    public function injectPidDetector(Tx_Yag_Utility_PidDetector $pidDetector)
+    public function injectPidDetector(PidDetector $pidDetector)
     {
         $this->pidDetector = $pidDetector;
     }
@@ -179,9 +196,9 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Injects rbac access control service
      *
-     * @param Tx_PtExtbase_Rbac_RbacServiceInterface $rbacService
+     * @param \Tx_PtExtbase_Rbac_RbacServiceInterface $rbacService
      */
-    public function injectRbacAccessControlService(Tx_PtExtbase_Rbac_RbacServiceInterface $rbacService)
+    public function injectRbacAccessControlService(\Tx_PtExtbase_Rbac_RbacServiceInterface $rbacService)
     {
         $this->rbacAccessControllService = $rbacService;
     }
@@ -189,9 +206,9 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_GalleryRepository $galleryRepository
+     * @param GalleryRepository $galleryRepository
      */
-    public function injectGalleryRepository(Tx_Yag_Domain_Repository_GalleryRepository $galleryRepository)
+    public function injectGalleryRepository(GalleryRepository $galleryRepository)
     {
         $this->galleryRepository = $galleryRepository;
     }
@@ -199,9 +216,9 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_AlbumRepository $albumRepository
+     * @param AlbumRepository $albumRepository
      */
-    public function injectAlbumRepository(Tx_Yag_Domain_Repository_AlbumRepository $albumRepository)
+    public function injectAlbumRepository(AlbumRepository $albumRepository)
     {
         $this->albumRepository = $albumRepository;
     }
@@ -209,9 +226,9 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_ItemRepository $itemRepository
+     * @param ItemRepository $itemRepository
      */
-    public function injectItemRepository(Tx_Yag_Domain_Repository_ItemRepository $itemRepository)
+    public function injectItemRepository(ItemRepository $itemRepository)
     {
         $this->itemRepository = $itemRepository;
     }
@@ -221,9 +238,9 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Injects persistence manager
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface $persistenceManager
+     * @param PersistenceManagerInterface $persistenceManager
      */
-    public function injectPersistenceManager(\TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface $persistenceManager)
+    public function injectPersistenceManager( PersistenceManagerInterface $persistenceManager)
     {
         $this->persistenceManager = $persistenceManager;
     }
@@ -258,7 +275,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
             }
         }
 
-        $this->lifecycleManager->registerAndUpdateStateOnRegisteredObject($this->objectManager->get('Tx_Yag_PageCache_PageCacheManager'));
+        $this->lifecycleManager->registerAndUpdateStateOnRegisteredObject($this->objectManager->get('DL\\YagPageCache\\PageCacheManager'));
 
         $this->preInitializeAction();
         $this->initializeFeUser();
@@ -270,16 +287,16 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * We overwrite this method to allow some extra-functionality in BE mode
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\RequestInterface $request
-     * @param \TYPO3\CMS\Extbase\Mvc\ResponseInterface $response
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      */
-    public function processRequest(\TYPO3\CMS\Extbase\Mvc\RequestInterface $request, \TYPO3\CMS\Extbase\Mvc\ResponseInterface $response)
+    public function processRequest( RequestInterface $request, ResponseInterface $response)
     {
         parent::processRequest($request, $response);
 
         if (TYPO3_MODE === 'BE') {
             // if we are in BE mode, this ist the last line called
-            $this->lifecycleManager->updateState(Tx_PtExtbase_Lifecycle_Manager::END);
+            $this->lifecycleManager->updateState(\Tx_PtExtbase_Lifecycle_Manager::END);
         }
     }
 
@@ -333,7 +350,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     protected function accessDeniedAction()
     {
         $action = $this->request->getControllerObjectName() . '->' . $this->actionMethodName;
-        $this->addFlashMessage(LocalizationUtility::translate('tx_yag_general.accessDenied', $this->extensionName, array($action)), '', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+        $this->addFlashMessage(LocalizationUtility::translate('tx_yag_general.accessDenied', $this->extensionName, array($action)), '', FlashMessage::ERROR);
         $this->forward('index', 'Error');
     }
 
@@ -359,9 +376,9 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Hook in Configuration set Process
      *
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+     * @param ConfigurationManagerInterface $configurationManager
      */
-    public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager)
+    public function injectConfigurationManager( ConfigurationManagerInterface $configurationManager)
     {
         parent::injectConfigurationManager($configurationManager);
 
@@ -374,13 +391,13 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
 
             $resetContext = isset($this->settings['contextReset']) && (int)$this->settings['contextReset'] == 1 ? true : false;
 
-            Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::injectSettings($this->settings);
-            $this->configurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance($contextIdentifier, $this->settings['theme'], $resetContext);
+            ConfigurationBuilderFactory::injectSettings($this->settings);
+            $this->configurationBuilder = ConfigurationBuilderFactory::getInstance($contextIdentifier, $this->settings['theme'], $resetContext);
 
             if (TYPO3_MODE === 'FE') {
-                GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')->get('Tx_PtExtlist_Extbase_ExtbaseContext')->setInCachedMode(true);
+                GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')->get('\Tx_PtExtlist_Extbase_ExtbaseContext')->setInCachedMode(true);
 
-                $storageAdapter = Tx_PtExtbase_State_Session_Storage_NullStorageAdapter::getInstance();
+                $storageAdapter = \Tx_PtExtbase_State_Session_Storage_NullStorageAdapter::getInstance();
 
                 $this->lifecycleManager->registerAndUpdateStateOnRegisteredObject($this->sessionPersistenceManagerBuilder->getInstance($storageAdapter));
             } else {
@@ -388,7 +405,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
             }
 
             $this->yagContext = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
-                ->get('Tx_Yag_Domain_Context_YagContextFactory')->createInstance($contextIdentifier, $resetContext);
+                ->get('DL\\Yag\\Domain\\Context\\YagContextFactory')->createInstance($contextIdentifier, $resetContext);
         }
     }
 
@@ -403,7 +420,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
             $overwriteSettings = $this->settings['overwriteFlexForm'];
             unset($this->settings['overwriteFlexForm']);
 
-            \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($this->settings, $overwriteSettings, false, false);
+            ArrayUtility::mergeRecursiveWithOverrule($this->settings, $overwriteSettings, false, false);
         }
     }
 
@@ -419,7 +436,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
 
         // Stage 1: get the identifier from GET / POST
         $identifier = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
-            ->get('Tx_PtExtlist_Domain_StateAdapter_GetPostVarAdapterFactory')->getInstance()->extractGpVarsByNamespace('contextIdentifier');
+            ->get('\Tx_PtExtlist_Domain_StateAdapter_GetPostVarAdapterFactory')->getInstance()->extractGpVarsByNamespace('contextIdentifier');
 
         // Stage 2: get a defined identifier
         if (!$identifier) {
@@ -434,7 +451,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
         // Stage 4: we generate ourselves a configurationBuilder and look for contextIdentifier there
         if (!$identifier) {
             try {
-                $configurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance(null, 'default');
+                $configurationBuilder = ConfigurationBuilderFactory::getInstance(null, 'default');
                 $identifier = $configurationBuilder->getContextIdentifier();
             } catch (Exception $e) { /* seems like we do not have a configuration builder yet :-) */
             }
@@ -496,7 +513,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
             return $viewClassName;
         } // we take default view
         else {
-            return 'Tx_PtExtlist_View_BaseView';
+            return '\Tx_PtExtlist_View_BaseView';
         }
     }
 
@@ -537,11 +554,11 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
      * Override this method to solve assign variables common for all actions
      * or prepare the view in another way before the action is called.
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view The view to be initialized
+     * @param ViewInterface $view The view to be initialized
      * @return void
      * @api
      */
-    protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view)
+    protected function initializeView( ViewInterface $view)
     {
         if (method_exists($view, 'injectConfigurationBuilder')) {
             $view->setConfigurationBuilder($this->configurationBuilder);
@@ -563,17 +580,17 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
     /**
      * Set the TS defined custom paths in view
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @param ViewInterface $view
      * @throws Exception
      */
-    protected function setCustomPathsInView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view)
+    protected function setCustomPathsInView( ViewInterface $view)
     {
         $templatePathAndFilename = null;
 
         // We can overwrite a template via TS using plugin.yag.settings.controller.<ControllerName>.<actionName>.template
         if ($this->configurationBuilder) {
             $templatePathAndFilename = $this->configurationBuilder->buildThemeConfiguration()->getTemplate($this->request->getControllerName(), $this->request->getControllerActionName());
-            $this->objectManager->get('Tx_Yag_Utility_HeaderInclusion')->includeThemeDefinedHeader($this->configurationBuilder->buildThemeConfiguration());
+            $this->objectManager->get('DL\\Yag\\Utility\\HeaderInclusion')->includeThemeDefinedHeader($this->configurationBuilder->buildThemeConfiguration());
         }
 
         if (!$templatePathAndFilename) {
@@ -586,7 +603,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
              * Format Overlay
              */
             if ($this->request->getFormat() && strtolower($this->request->getFormat()) !== 'html') {
-                $templatePathAndFilename = Tx_Yag_Domain_FileSystem_Div::concatenatePaths(array(dirname($templatePathAndFilename), basename($templatePathAndFilename, '.html') . '.' . $this->request->getFormat()));
+                $templatePathAndFilename = Div::concatenatePaths(array(dirname($templatePathAndFilename), basename($templatePathAndFilename, '.html') . '.' . $this->request->getFormat()));
             }
 
             if (file_exists(GeneralUtility::getFileAbsFileName($templatePathAndFilename))) {
@@ -617,7 +634,7 @@ abstract class Tx_Yag_Controller_AbstractController extends Tx_PtExtbase_Control
      */
     protected function redirect($actionName, $controllerName = null, $extensionName = null, array $arguments = null, $pageUid = null, $delay = 0, $statusCode = 303)
     {
-        $this->lifecycleManager->updateState(Tx_PtExtbase_Lifecycle_Manager::END);
+        $this->lifecycleManager->updateState(\Tx_PtExtbase_Lifecycle_Manager::END);
         parent::redirect($actionName, $controllerName, $extensionName, $arguments, $pageUid, $delay, $statusCode);
     }
 }

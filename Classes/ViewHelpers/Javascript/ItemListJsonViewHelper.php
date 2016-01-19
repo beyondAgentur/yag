@@ -23,6 +23,15 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Javascript;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Configuration\Image\ResolutionConfigCollection;
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Model\ItemMeta;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /**
  * Class 
  * 
@@ -30,10 +39,10 @@
  * @author Sebastian Helzle <sebastian@helzle.net>
  * @package ViewHelpers
  */
-class Tx_Yag_ViewHelpers_Javascript_ItemListJsonViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class ItemListJsonViewHelper extends AbstractViewHelper
 {
     /**
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
 
@@ -44,21 +53,21 @@ class Tx_Yag_ViewHelpers_Javascript_ItemListJsonViewHelper extends \TYPO3\CMS\Fl
 
 
     /**
-     * @var Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection
+     * @var ResolutionConfigCollection
      */
     protected $resolutionConfigCollection;
 
 
     /**
-     * @var Tx_Yag_Domain_FileSystem_Div
+     * @var Div
      */
     protected $fileSystemDiv;
 
 
     /**
-     * @param Tx_Yag_Domain_FileSystem_Div $fileSystemDiv
+     * @param Div $fileSystemDiv
      */
-    public function injectFileSystemDiv(Tx_Yag_Domain_FileSystem_Div $fileSystemDiv)
+    public function injectFileSystemDiv(Div $fileSystemDiv)
     {
         $this->fileSystemDiv = $fileSystemDiv;
     }
@@ -78,15 +87,15 @@ class Tx_Yag_ViewHelpers_Javascript_ItemListJsonViewHelper extends \TYPO3\CMS\Fl
     public function initialize()
     {
         parent::initialize();
-        $this->configurationBuilder =  Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+        $this->configurationBuilder =  ConfigurationBuilderFactory::getInstance();
 
-        $this->resolutionConfigCollection = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance()
+        $this->resolutionConfigCollection = ConfigurationBuilderFactory::getInstance()
             ->buildThemeConfiguration()
             ->getResolutionConfigCollection();
 
 
         if ($this->arguments['resolutions']) {
-            $this->resolutions = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->arguments['resolutions']);
+            $this->resolutions = GeneralUtility::trimExplode(',', $this->arguments['resolutions']);
         } else {
             foreach ($this->resolutionConfigCollection as $identifier => $config) {
                 $this->resolutions[] = $identifier;
@@ -98,15 +107,15 @@ class Tx_Yag_ViewHelpers_Javascript_ItemListJsonViewHelper extends \TYPO3\CMS\Fl
     /**
      * Renders image tags
      *
-     * @param Tx_PtExtlist_Domain_Model_List_ListData $listData
+     * @param \Tx_PtExtlist_Domain_Model_List_ListData $listData
      * @return string
      */
-    public function render(Tx_PtExtlist_Domain_Model_List_ListData $listData)
+    public function render(\Tx_PtExtlist_Domain_Model_List_ListData $listData)
     {
         $listDataArray = array();
 
         foreach ($listData as $row) {
-            $image = $row->getCell('image')->getValue(); /** @var Tx_YAG_Domain_Model_Item $image  */
+            $image = $row->getCell('image')->getValue(); /** @var Item $image  */
 
             $itemMetaData = array(
                 'title' => $image->getTitle(),
@@ -116,7 +125,7 @@ class Tx_Yag_ViewHelpers_Javascript_ItemListJsonViewHelper extends \TYPO3\CMS\Fl
 
             $imageMeta = $image->getItemMeta();
 
-            if ($imageMeta instanceof Tx_Yag_Domain_Model_ItemMeta) {
+            if ($imageMeta instanceof ItemMeta) {
                 $itemMetaData['gpsLatitude'] = $imageMeta->getGpsLatitude();
                 $itemMetaData['gpsLongitude'] = $imageMeta->getGpsLongitude();
             }

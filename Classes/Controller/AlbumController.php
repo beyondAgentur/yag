@@ -24,7 +24,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\Import\ZipImporter\ImporterBuilder;
+use DL\Yag\Domain\Model\Album;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 
@@ -35,15 +40,15 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
  * @author Michael Knoll <mimi@kaktusteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractController
+class AlbumController extends AbstractController
 {
     /**
      * Show action for album.
      * Set the current album to the albumFilter
      * 
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      */
-    public function showAction(Tx_Yag_Domain_Model_Album $album = null)
+    public function showAction(Album $album = null)
     {
         if ($album === null) {
             $album = $this->yagContext->getAlbum();
@@ -98,20 +103,20 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
     /**
      * Creates a new album
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery	  Gallery object to create album in
-     * @param Tx_Yag_Domain_Model_Album $newAlbum	  New album object in case of an error
+     * @param Gallery $gallery	  Gallery object to create album in
+     * @param Album $newAlbum	  New album object in case of an error
      * @return string  The rendered new action
      * @dontvalidate $newAlbum
      * @rbacNeedsAccess
      * @rbacObject album
      * @rbacAction create
      */
-    public function newAction(Tx_Yag_Domain_Model_Gallery $gallery = null, Tx_Yag_Domain_Model_Album $newAlbum = null)
+    public function newAction(Gallery $gallery = null, Album $newAlbum = null)
     {
         if ($newAlbum === null) {
-            $newAlbum = $this->objectManager->get('Tx_Yag_Domain_Model_Album');
+            $newAlbum = $this->objectManager->get('Album');
         }
-        $selectableGalleries = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository')->findAll();
+        $selectableGalleries = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository')->findAll();
 
         $this->view->assign('selectableGalleries', $selectableGalleries);
         $this->view->assign('selectedGallery', $gallery);
@@ -122,14 +127,14 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
     /**
      * Adds a new album to repository
      *
-     * @param Tx_Yag_Domain_Model_Album $newAlbum  New album to add
-     * @param Tx_Yag_Domain_Model_Gallery $gallery
+     * @param Album $newAlbum  New album to add
+     * @param Gallery $gallery
      * @return string  The rendered create action
      * @rbacNeedsAccess
      * @rbacObject album
      * @rbacAction create
      */
-    public function createAction(Tx_Yag_Domain_Model_Album $newAlbum, Tx_Yag_Domain_Model_Gallery $gallery = null)
+    public function createAction(Album $newAlbum, Gallery $gallery = null)
     {
         if ($gallery != null) {
             $gallery->addAlbum($newAlbum);
@@ -158,13 +163,13 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
     /**
      * Delete action for deleting an album
      *
-     * @param Tx_Yag_Domain_Model_Album $album album that should be deleted
+     * @param Album $album album that should be deleted
      * @return string	The rendered delete action
      * @rbacNeedsAccess
      * @rbacObject album
      * @rbacAction delete
      */
-    public function deleteAction(Tx_Yag_Domain_Model_Album $album)
+    public function deleteAction(Album $album)
     {
         $gallery = $album->getGallery();
         $album->delete(true);
@@ -180,14 +185,14 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
     /**
      * Action for adding new items to an existing album
      *
-     * @param Tx_Yag_Domain_Model_Album $album Album to add items to
+     * @param Album $album Album to add items to
      * @rbacNeedsAccess
      * @rbacObject album
      * @rbacAction edit
      */
-    public function addItemsAction(Tx_Yag_Domain_Model_Album $album)
+    public function addItemsAction(Album $album)
     {
-        $this->view->assign('zipImportAvailable', Tx_Yag_Domain_Import_ZipImporter_ImporterBuilder::checkIfImporterIsAvailable());
+        $this->view->assign('zipImportAvailable', ImporterBuilder::checkIfImporterIsAvailable());
         $this->view->assign('album', $album);
     }
 
@@ -195,15 +200,15 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
     /**
      * Updates an existing Album and forwards to the index action afterwards.
      *
-     * @param Tx_Yag_Domain_Model_Album $album the Album to display
+     * @param Album $album the Album to display
      * @return string A form to edit a Album
      * @rbacNeedsAccess
      * @rbacObject album
      * @rbacAction edit
      */
-    public function editAction(Tx_Yag_Domain_Model_Album $album)
+    public function editAction(Album $album)
     {
-        $selectableGalleries = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository')->findAll();
+        $selectableGalleries = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository')->findAll();
 
         $this->view->assign('album', $album);
         $this->view->assign('selectableGalleries', $selectableGalleries);
@@ -214,12 +219,12 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
     /**
      * Action for updating an album after it has been edited
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      * @rbacNeedsAccess
      * @rbacObject album
      * @rbacAction edit
      */
-    public function updateAction(Tx_Yag_Domain_Model_Album $album)
+    public function updateAction(Album $album)
     {
         $this->albumRepository->update($album);
         $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_album.updatesuccessfull', $this->extensionName), '', FlashMessage::OK);
@@ -231,7 +236,7 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
     /**
      * Sets sorting of whole album to given sorting parameter with given sorting direction
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      * @param string $sortingField
      * @param int $sortingDirection (1 = ASC, -1 = DESC)
      * @rbacNeedsAccess
@@ -239,9 +244,9 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
      * @rbacAction update
      * @return void
      */
-    public function updateSortingAction(Tx_Yag_Domain_Model_Album $album, $sortingField, $sortingDirection)
+    public function updateSortingAction(Album $album, $sortingField, $sortingDirection)
     {
-        $direction = ($sortingDirection == 1 ? \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING : \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING);
+        $direction = ($sortingDirection == 1 ? QueryInterface::ORDER_ASCENDING : QueryInterface::ORDER_DESCENDING);
         $album->updateSorting($sortingField, $direction);
         $this->albumRepository->update($album);
 
@@ -268,7 +273,7 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
 
         // Somehow, mapping does not seem to work here - so we do it manually
         $gallery = $this->galleryRepository->findByUid($postVars['gallery']['uid']);
-        /* @var $gallery Tx_Yag_Domain_Model_Gallery */
+        /* @var $gallery Gallery */
 
         // Do we have to change thumb for album?
         if ($gallery->getThumbAlbum()) {
@@ -293,14 +298,14 @@ class Tx_Yag_Controller_AlbumController extends Tx_Yag_Controller_AbstractContro
         foreach ($postVars['albumsToBeDeleted'] as $albumUid => $value) {
             if (intval($value) === 1) {
                 $album = $this->albumRepository->findByUid($albumUid);
-                /* @var $album Tx_Yag_Domain_Model_Album */
+                /* @var $album Album */
                 $album->delete();
             }
         }
 
         // Update each album that is associated to item
         foreach ($gallery->getAlbums() as $album) {
-            /* @var $album Tx_Yag_Domain_Model_Album */
+            /* @var $album Album */
             $albumUid = $album->getUid();
             $albumArray = $postVars['gallery']['album'][$albumUid];
             if (is_array($albumArray)) {

@@ -23,7 +23,12 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\Domain\Configuration\Theme;
+
+use DL\Yag\Domain\Configuration\Image\ResolutionConfigCollectionFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class implements theme configuration object for YAG.
@@ -32,11 +37,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @subpackage Configuration\Theme
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class ThemeConfiguration extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * Resolution config collection
-     * @var Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection
+     * @var ResolutionConfigCollection
      */
     protected $resolutionConfigCollection;
     
@@ -106,11 +111,11 @@ class Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration extends Tx_PtExtbase_
 
 
     /**
-     * @param Tx_PtExtbase_Configuration_AbstractConfigurationBuilder $configurationBuilder
+     * @param \Tx_PtExtbase_Configuration_AbstractConfigurationBuilder $configurationBuilder
      * @param $themeName
      * @param array $settings
      */
-    public function __construct(Tx_PtExtbase_Configuration_AbstractConfigurationBuilder $configurationBuilder, array $settings = array(), $themeName = null)
+    public function __construct(\Tx_PtExtbase_Configuration_AbstractConfigurationBuilder $configurationBuilder, array $settings = array(), $themeName = null)
     {
         $settings['name'] = $themeName;
         parent::__construct($configurationBuilder, $settings);
@@ -124,7 +129,7 @@ class Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration extends Tx_PtExtbase_
     {
         $this->setRequiredValue('name', 'Theme name was not set! 1316764051');
 
-        $this->resolutionConfigCollection = Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollectionFactory::getInstance($this->configurationBuilder, $this->settings['resolutionConfigs']);
+        $this->resolutionConfigCollection = ResolutionConfigCollectionFactory::getInstance($this->configurationBuilder, $this->settings['resolutionConfigs']);
         $this->setBooleanIfExistsAndNotNothing('showBreadcrumbs');
         
         $this->setValueIfExistsAndNotNothing('includeJS');
@@ -137,12 +142,12 @@ class Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration extends Tx_PtExtbase_
             $this->title = $this->name;
         }
         if (GeneralUtility::isFirstPartOfStr($this->title, 'LLL:')) {
-            $this->name = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($this->title, '');
+            $this->name = LocalizationUtility::translate($this->title, '');
         }
 
         $this->setValueIfExistsAndNotNothing('description');
         if (GeneralUtility::isFirstPartOfStr($this->description, 'LLL:')) {
-            $this->description = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($this->description, '');
+            $this->description = LocalizationUtility::translate($this->description, '');
         }
 
         if (array_key_exists('includeLibJS', $this->settings) && trim($this->settings['includeLibJS'])) {
@@ -204,7 +209,7 @@ class Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration extends Tx_PtExtbase_
     
     
     /**
-     * @return Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection
+     * @return ResolutionConfigCollection
      */
     public function getResolutionConfigCollection()
     {

@@ -25,6 +25,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Domain\Model;
+
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /**
  * Class implements a ResolutionItemFileRelation domain object. For each item a file is stored
  * for each resolution an item is associated with by its album. This class implements an
@@ -36,9 +40,7 @@
  * @package Domain
  * @subpackage Model
  */
-class Tx_Yag_Domain_Model_ResolutionFileCache
-    extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
-    implements Tx_Yag_Domain_Model_DomainModelInterface
+class ResolutionFileCache extends AbstractEntity implements DomainModelInterface
 {
     /**
      * Width of cached file
@@ -68,7 +70,7 @@ class Tx_Yag_Domain_Model_ResolutionFileCache
      * Item to which resolution file cache belongs to
      *
      * @lazy
-     * @var Tx_Yag_Domain_Model_Item $item
+     * @var Item $item
      */
     protected $item;
 
@@ -84,13 +86,13 @@ class Tx_Yag_Domain_Model_ResolutionFileCache
     /**
      * Constructor for resolution item file relation
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item for which file is cached
+     * @param Item $item Item for which file is cached
      * @param string $path Path to cached file
      * @param int $width Width of cached file
      * @param int $height Height of cached file
      * @param $paramhash
      */
-    public function __construct(Tx_Yag_Domain_Model_Item $item = null, $path = '', $width = 0, $height = 0, $paramhash = '')
+    public function __construct(Item $item = null, $path = '', $width = 0, $height = 0, $paramhash = '')
     {
         $this->item = $item;
         $this->path = $path;
@@ -173,6 +175,7 @@ class Tx_Yag_Domain_Model_ResolutionFileCache
      * Setter for the paramhash
      *
      * @paramhash string $name Name of this config
+     * @param $paramhash
      */
     public function setparamhash($paramhash)
     {
@@ -194,10 +197,10 @@ class Tx_Yag_Domain_Model_ResolutionFileCache
     /**
      * Setter for item
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item to which resolution file cache belongs to
+     * @param Item $item Item to which resolution file cache belongs to
      * @return void
      */
-    public function setItem(Tx_Yag_Domain_Model_Item $item)
+    public function setItem(Item $item)
     {
         $this->item = $item;
     }
@@ -206,7 +209,7 @@ class Tx_Yag_Domain_Model_ResolutionFileCache
     /**
      * Getter for item
      *
-     * @return Tx_Yag_Domain_Model_Item Item to which resolution file cache belongs to
+     * @return Item Item to which resolution file cache belongs to
      */
     public function getItem()
     {

@@ -65,7 +65,7 @@ if (TYPO3_MODE == 'BE') {
     $yagExtConfig = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['yag']);
 
     // Hooks
-    $TYPO3_CONF_VARS['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['yag_pi1']['yag'] = 'EXT:yag/Classes/Hooks/CMSLayoutHook.php:user_Tx_Yag_Hooks_CMSLayoutHook->getExtensionSummary';
+    $TYPO3_CONF_VARS['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['yag_pi1']['yag'] = 'EXT:yag/Classes/Hooks/CMSLayoutHook.php:DL\\Yag\\Hooks\\CMSLayoutHook->getExtensionSummary';
 
     // Clear resFileCache with clearCacheCommand
     if ((int) $yagExtConfig['clearResFileCacheWithCacheClearCommand'] === 1) {
@@ -83,7 +83,7 @@ if (TYPO3_MODE == 'BE') {
     // Flexform record selector
     require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag').'Classes/Utility/Flexform/RecordSelector.php';
 
-    $yagGalleryRecordSelectorClass = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/RecordSelector.php:user_Tx_Yag_Utility_Flexform_RecordSelector';
+    $yagGalleryRecordSelectorClass = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/RecordSelector.php:DL\\Yag\\Utility\\Flexform\\RecordSelector';
 
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(

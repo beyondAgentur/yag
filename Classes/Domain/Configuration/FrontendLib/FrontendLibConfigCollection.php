@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\FrontendLib;
+
 /**
  * collection of fe libs
  *
@@ -31,31 +33,31 @@
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfigCollection extends Tx_PtExtbase_Collection_ObjectCollection
+class FrontendLibConfigCollection extends \Tx_PtExtbase_Collection_ObjectCollection
 {
     /**
      * @var string
      */
-    protected $restrictedClassName = 'Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfig';
-    
-    
-    
+    protected $restrictedClassName = 'DL\\Yag\\Domain\\Configuration\\FrontendLib\\FrontendLibConfig';
+
+
     /**
      * Add a frontend lib config
-     * 
-     * @param Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfig $frontendLibConfig
-     * @param string $frontendLibName
+     *
+     * @param FrontendLibConfig $frontendLibConfig
+     * @param string            $frontendLibName
      */
-    public function addFrontendLibConfig(Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfig $frontendLibConfig, $frontendLibName)
+    public function addFrontendLibConfig(FrontendLibConfig $frontendLibConfig, $frontendLibName)
     {
         $this->addItem($frontendLibConfig, $frontendLibName);
     }
-    
-    
-    
-    /** 
+
+
+    /**
      * @param string $frontendLibName
-     * @return Tx_Yag_Domain_Configuration_FrontendLib_FrontendLibConfig
+     *
+     * @return FrontendLibConfig
+     * @throws Exception
      */
     public function getFrontendLibConfig($frontendLibName)
     {

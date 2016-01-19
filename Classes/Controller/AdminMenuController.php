@@ -23,13 +23,15 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Controller;
+
 /**
  * Controller for showing an admin menu
  *
  * @package Controller
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Controller_AdminMenuController extends Tx_Yag_Controller_AbstractController
+class AdminMenuController extends AbstractController
 {
     /**
      * Renders an admin menu

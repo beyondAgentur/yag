@@ -22,6 +22,13 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\Hooks;
+
+use DL\Yag\Domain\Model\Album;
+use DL\Yag\Domain\Model\Gallery;
+use DL\Yag\Domain\Model\Item;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -30,7 +37,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Hooks
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class user_Tx_Yag_Hooks_CMSLayoutHook
+class CMSLayoutHook
 {
     const EXTENSION_NAME = 'Yag';
     const PLUGIN_NAME = 'web_YagTxYagM1';
@@ -62,19 +69,19 @@ class user_Tx_Yag_Hooks_CMSLayoutHook
 
 
     /**
-     * @var Tx_Yag_Domain_Model_Gallery
+     * @var Gallery
      */
     protected $selectedGallery;
 
 
     /**
-     * @var Tx_Yag_Domain_Model_Album
+     * @var Album
      */
     protected $selectedAlbum;
 
 
     /**
-     * @var Tx_Yag_Domain_Model_Item
+     * @var Item
      */
     protected $selectedItem;
 
@@ -146,7 +153,7 @@ class user_Tx_Yag_Hooks_CMSLayoutHook
     {
         $storageUid = (int) $this->getDataValue($data, 'settings.context.selectedPid');
 
-        $rootLineArray = \TYPO3\CMS\Backend\Utility\BackendUtility::BEgetRootLine($storageUid);
+        $rootLineArray = BackendUtility::BEgetRootLine($storageUid);
         $rootLine = '';
 
         foreach ($rootLineArray as $rootLineElement) {
@@ -159,9 +166,10 @@ class user_Tx_Yag_Hooks_CMSLayoutHook
     }
 
 
-    
     /**
      * Get the selected Objects
+     *
+     * @param $data
      */
     protected function getSelectedObjects($data)
     {
@@ -171,19 +179,19 @@ class user_Tx_Yag_Hooks_CMSLayoutHook
             case 'Item_showSingle':
                 $itemUid = (int) $this->getDataValue($data, 'settings.context.selectedItemUid');
                 if ($itemUid) {
-                    $itemRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository');
+                    $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository');
                     $this->selectedItem = $itemRepository->findByUid($itemUid);
                 }
             case 'Album_showSingle':
                 $albumUid = (int) $this->getDataValue($data, 'settings.context.selectedAlbumUid');
                 if ($albumUid) {
-                    $albumRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_AlbumRepository');
+                    $albumRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository');
                     $this->selectedAlbum = $albumRepository->findByUid($albumUid);
                 }
             case 'Gallery_showSingle':
                 $galleryUid = (int) $this->getDataValue($data, 'settings.context.selectedGalleryUid');
                 if ($galleryUid) {
-                    $galleryRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository');
+                    $galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository');
                     $this->selectedGallery =  $galleryRepository->findByUid($galleryUid);
                 }
                 break;

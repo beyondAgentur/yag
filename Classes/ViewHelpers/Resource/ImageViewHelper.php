@@ -23,6 +23,13 @@
 * This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Resource;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\Model\Item;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /**
 * Viewhelper for rendering an URL of an image for a given item and a given resolution.
 * 
@@ -38,10 +45,10 @@
 * @author Michael Knoll <mimi@kaktusteam.de>
 */
 
-class Tx_Yag_ViewHelpers_Resource_ImageViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class ImageViewHelper extends AbstractViewHelper
 {
     /**
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      * @param null $resolutionName
      * @param null $width
      * @param null $height
@@ -49,10 +56,10 @@ class Tx_Yag_ViewHelpers_Resource_ImageViewHelper extends \TYPO3\CMS\Fluid\Core\
      * @param boolean $absolute
      * @return string
      */
-    public function render(Tx_Yag_Domain_Model_Item $item, $resolutionName = null, $width = null, $height = null, $quality = null, $absolute = false)
+    public function render(Item $item, $resolutionName = null, $width = null, $height = null, $quality = null, $absolute = false)
     {
         if ($resolutionName) {
-            $resolutionConfig = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance()
+            $resolutionConfig = ConfigurationBuilderFactory::getInstance()
                                                     ->buildThemeConfiguration()
                                                     ->getResolutionConfigCollection()->getResolutionConfig($resolutionName);
         } elseif ($width || $height) {
@@ -61,7 +68,7 @@ class Tx_Yag_ViewHelpers_Resource_ImageViewHelper extends \TYPO3\CMS\Fluid\Core\
                 'height' => $height,
                 'quality' => $quality
             );
-            $resolutionConfig = new Tx_Yag_Domain_Configuration_Image_ResolutionConfig(Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance(), $resolutionSettings);
+            $resolutionConfig = new ResolutionConfig(ConfigurationBuilderFactory::getInstance(), $resolutionSettings);
         } else {
             $resolutionConfig = null;
         }

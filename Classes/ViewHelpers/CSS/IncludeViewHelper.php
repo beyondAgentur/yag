@@ -24,6 +24,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\CSS;
+
+use DL\Yag\Utility\HeaderInclusion;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /**
  * Class implements a fake viewhelper to add a CSS file to the header
  *
@@ -32,7 +37,7 @@
  * @subpackage Javascript
  * 
  */
-class Tx_Yag_ViewHelpers_CSS_IncludeViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class IncludeViewHelper extends AbstractViewHelper
 {
     /**
      * @param string $library
@@ -40,7 +45,7 @@ class Tx_Yag_ViewHelpers_CSS_IncludeViewHelper extends \TYPO3\CMS\Fluid\Core\Vie
      */
     public function render($library = '', $file = '')
     {
-        $headerInclusion = $this->objectManager->get('Tx_Yag_Utility_HeaderInclusion'); /* @var $headerInclusion  Tx_Yag_Utility_HeaderInclusion  */
+        $headerInclusion = $this->objectManager->get('DL\\Yag\\Utility\\HeaderInclusion'); /* @var $headerInclusion  HeaderInclusion  */
         
         if ($library) {
             $headerInclusion->addDefinedLibCSS($library);

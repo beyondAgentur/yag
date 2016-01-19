@@ -23,6 +23,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Image;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Class implementing factory for collection of filterbox configurations
  * 
@@ -30,20 +35,21 @@
  * @package Domain
  * @subpackage Configuration\Image
  */
-class Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollectionFactory
+class ResolutionConfigCollectionFactory
 {
     /**
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @param $resolutionConfiguration
-     * @return Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection
+     * @param ConfigurationBuilder $configurationBuilder
+     * @param                      $resolutionSettings
+     *
+     * @return ResolutionConfigCollection
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder, $resolutionSettings)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder, $resolutionSettings)
     {
-        $resolutionConfigCollection = new Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection();
+        $resolutionConfigCollection = new ResolutionConfigCollection();
         
         foreach ($resolutionSettings as $resolutionName => $resolutionSetting) {
             $resolutionSetting['name'] = $configurationBuilder->getTheme() . '.' . $resolutionName;
-            $resolutionConfig = new Tx_Yag_Domain_Configuration_Image_ResolutionConfig($configurationBuilder, $resolutionSetting);
+            $resolutionConfig = new ResolutionConfig($configurationBuilder, $resolutionSetting);
             $resolutionConfigCollection->addResolutionConfig($resolutionConfig, $resolutionName);
         }
         
@@ -53,21 +59,21 @@ class Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollectionFactory
 
     /**
      * @static
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return ResolutionConfigCollection
      */
-    public static function getInstanceOfAllThemes(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstanceOfAllThemes(ConfigurationBuilder $configurationBuilder)
     {
         $allSettings = $configurationBuilder->getOrigSettings();
         $themes = $allSettings['themes'];
 
-        $resolutionConfigCollection =  new Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection();
+        $resolutionConfigCollection =  new ResolutionConfigCollection();
         
         foreach ($themes as $themeName => $theme) {
             if (array_key_exists('resolutionConfigs', $theme) && is_array($theme['resolutionConfigs'])) {
                 foreach ($theme['resolutionConfigs'] as $resolutionName => $resolutionSetting) {
                     $resolutionSetting['name'] = $themeName . '.' . $resolutionName;
-                    $resolutionConfig = new Tx_Yag_Domain_Configuration_Image_ResolutionConfig($configurationBuilder, $resolutionSetting);
+                    $resolutionConfig = new ResolutionConfig($configurationBuilder, $resolutionSetting);
                     $resolutionConfigCollection->addResolutionConfig($resolutionConfig, $resolutionSetting['name']);
                 }
             }
@@ -80,15 +86,15 @@ class Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollectionFactory
     
     /**
      * @static
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return ResolutionConfigCollection
      */
-    public static function getInstanceOfRegistrySelectedThemes(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstanceOfRegistrySelectedThemes(ConfigurationBuilder $configurationBuilder)
     {
         $resolutionConfigCollection = self::getInstanceOfAllThemes($configurationBuilder);
 
         $themesToBuild = array('backend');
-        $selectedThemes = unserialize(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry')->get('tx_yag', 'rfcSelectedThemes', serialize(array())));
+        $selectedThemes = unserialize( GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry')->get('tx_yag', 'rfcSelectedThemes', serialize(array())));
 
         if (!array_key_exists('*', $selectedThemes)) {
             foreach ($selectedThemes as $themeName => $isSelected) {

@@ -23,7 +23,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\FileSystem\ResolutionFileCacheFactory;
+use DL\Yag\Utility\DBUpgrade;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -32,19 +37,19 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * @package Controller
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Controller_BackendController extends Tx_Yag_Controller_AbstractController
+class BackendController extends AbstractController
 {
     /**
-     * @var Tx_Yag_Utility_DBUpgrade
+     * @var DBUpgrade
      */
     protected $dbUpgradeUtility;
 
 
 
     /**
-     * @param Tx_Yag_Utility_DBUpgrade $dbUpgradeUtility
+     * @param DBUpgrade $dbUpgradeUtility
      */
-    public function injectUpgradeUtility(Tx_Yag_Utility_DBUpgrade $dbUpgradeUtility)
+    public function injectUpgradeUtility(DBUpgrade $dbUpgradeUtility)
     {
         $this->dbUpgradeUtility = $dbUpgradeUtility;
     }
@@ -104,14 +109,14 @@ class Tx_Yag_Controller_BackendController extends Tx_Yag_Controller_AbstractCont
             $this->forward('dbUpdateNeeded');
         }
 
-        $itemRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository'); /* @var $itemRepository Tx_Yag_Domain_Repository_ItemRepository */
+        $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository'); /* @var $itemRepository ItemRepository */
 
-        $galleryCount = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository')->countAll();
-        $albumCount = $this->objectManager->get('Tx_Yag_Domain_Repository_AlbumRepository')->countAll();
+        $galleryCount = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository')->countAll();
+        $albumCount = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository')->countAll();
 
         $itemCount = $itemRepository->countAll();
-        $itemSizeSum = \TYPO3\CMS\Core\Utility\GeneralUtility::formatSize($itemRepository->getItemSizeSum());
-        $includedCount = $this->objectManager->get('Tx_Yag_Domain_Repository_Extern_TTContentRepository')->countAllYagInstances();
+        $itemSizeSum = GeneralUtility::formatSize($itemRepository->getItemSizeSum());
+        $includedCount = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\Extern\\TTContentRepository')->countAllYagInstances();
 
         $firstItem = $itemRepository->getItemsAfterThisItem();
         if ($firstItem) {
@@ -120,7 +125,7 @@ class Tx_Yag_Controller_BackendController extends Tx_Yag_Controller_AbstractCont
 
 
 
-        $resolutionFileCache = Tx_Yag_Domain_FileSystem_ResolutionFileCacheFactory::getInstance();
+        $resolutionFileCache = ResolutionFileCacheFactory::getInstance();
 
         $this->view->assign('folderStatistics', array(
             'galleryCount' => $galleryCount,
@@ -177,7 +182,7 @@ class Tx_Yag_Controller_BackendController extends Tx_Yag_Controller_AbstractCont
      */
     public function clearAllPageCacheAction()
     {
-        $this->objectManager->get('Tx_Yag_PageCache_PageCacheManager')->clearAll();
+        $this->objectManager->get('DL\\Yag\\PageCache\\PageCacheManager')->clearAll();
         $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_backend_MaintenanceOverview.pageCacheSuccessfullyCleared', $this->extensionName));
         $this->forward('maintenanceOverview');
     }
@@ -191,10 +196,10 @@ class Tx_Yag_Controller_BackendController extends Tx_Yag_Controller_AbstractCont
      */
     public function markPageAsYagSysFolderAction($pid)
     {
-        $pageRepository = $this->objectManager->get('Tx_PtExtbase_Domain_Repository_PageRepository'); /** @var $pageRepository Tx_PtExtbase_Domain_Repository_PageRepository */
-        $page = $pageRepository->findOneByUid($pid); /** @var $page Tx_PtExtbase_Domain_Model_Page */
+        $pageRepository = $this->objectManager->get('\Tx_PtExtbase_Domain_Repository_PageRepository'); /** @var $pageRepository \Tx_PtExtbase_Domain_Repository_PageRepository */
+        $page = $pageRepository->findOneByUid($pid); /** @var $page \Tx_PtExtbase_Domain_Model_Page */
 
-        if ($page instanceof Tx_PtExtbase_Domain_Model_Page) {
+        if ($page instanceof \Tx_PtExtbase_Domain_Model_Page) {
             $page->setModule('yag');
             $pageRepository->update($page);
 

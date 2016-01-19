@@ -1,6 +1,4 @@
 <?php
-namespace YAG\Yag\Scheduler;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -24,7 +22,11 @@ namespace YAG\Yag\Scheduler;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\Scheduler;
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
 
 /**
  * YAG Scheduler Task
@@ -32,7 +34,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package YAG
  * @subpackage Scheduler
  */
-abstract class AbstractAdditionalFieldProvider  implements \TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface
+abstract class AbstractAdditionalFieldProvider  implements AdditionalFieldProviderInterface
 {
     /**
      * @param $templatePathPart

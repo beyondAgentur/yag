@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Extlist;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Factory for extlist configuration
  *
@@ -32,17 +36,17 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Configuration_Extlist_ExtlistConfigurationFactory
+class ExtlistConfigurationFactory
 {
     /**
      * Returns an instance of extlist configuration
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_Extlist_ExtlistConfiguration
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return ExtlistConfiguration
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         $extlistSettings = $configurationBuilder->getSettingsForConfigObject('extlist');
-        return new Tx_Yag_Domain_Configuration_Extlist_ExtlistConfiguration($configurationBuilder, $extlistSettings);
+        return new ExtlistConfiguration($configurationBuilder, $extlistSettings);
     }
 }

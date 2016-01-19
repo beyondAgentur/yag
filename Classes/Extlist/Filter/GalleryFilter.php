@@ -23,6 +23,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Extlist\Filter;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Context\YagContextFactory;
+use DL\Yag\Domain\Repository\AlbumRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Class implements the gallery->album filter
  * 
@@ -31,11 +38,11 @@
  * @package Extlist
  * @subpackage Filter
  */
-class Tx_Yag_Extlist_Filter_GalleryFilter extends Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
+class GalleryFilter extends \Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
 {
     /**
      * YAG ConfigurationBuilder
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $yagConfigurationBuilder;
 
@@ -61,7 +68,7 @@ class Tx_Yag_Extlist_Filter_GalleryFilter extends Tx_PtExtlist_Domain_Model_Filt
     {
         parent::__construct();
         
-        $this->yagConfigurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+        $this->yagConfigurationBuilder = ConfigurationBuilderFactory::getInstance();
     }
     
     
@@ -89,13 +96,13 @@ class Tx_Yag_Extlist_Filter_GalleryFilter extends Tx_PtExtlist_Domain_Model_Filt
     
     
     /**
-     * @see Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
+     * @see \Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
      *
      */
     public function reset()
     {
         $this->galleryUid = null;
-        $this->filterQuery = new Tx_PtExtlist_Domain_QueryObject_Query();
+        $this->filterQuery = new \Tx_PtExtlist_Domain_QueryObject_Query();
         $this->init();
     }
     
@@ -103,7 +110,7 @@ class Tx_Yag_Extlist_Filter_GalleryFilter extends Tx_PtExtlist_Domain_Model_Filt
     
     public function initFilter()
     {
-        $selectedGalleryUid = Tx_Yag_Domain_Context_YagContextFactory::getInstance()->getGalleryUid();
+        $selectedGalleryUid = YagContextFactory::getInstance()->getGalleryUid();
 
         $this->hideHidden = (TYPO3_MODE !== 'BE');
 
@@ -116,11 +123,11 @@ class Tx_Yag_Extlist_Filter_GalleryFilter extends Tx_PtExtlist_Domain_Model_Filt
     
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/Model/Filter/Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
+     * @see Classes/Domain/Model/Filter/\Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
      */
     public function setActiveState()
     {
-        if ($this->galleryUid > 0 || Tx_Yag_Domain_Context_YagContextFactory::getInstance()->isInStrictFilterMode()) {
+        if ($this->galleryUid > 0 || YagContextFactory::getInstance()->isInStrictFilterMode()) {
             $this->isActive = true;
         }
     }
@@ -128,13 +135,13 @@ class Tx_Yag_Extlist_Filter_GalleryFilter extends Tx_PtExtlist_Domain_Model_Filt
 
 
     /**
-     * @param Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier
-     * @return Tx_PtExtlist_Domain_QueryObject_AndCriteria|Tx_PtExtlist_Domain_QueryObject_SimpleCriteria
+     * @param \Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier
+     * @return \Tx_PtExtlist_Domain_QueryObject_AndCriteria|\Tx_PtExtlist_Domain_QueryObject_SimpleCriteria
      */
-    protected function buildFilterCriteria(Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
+    protected function buildFilterCriteria(\Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
     {
         if ($this->galleryUid) {
-            $fieldName = Tx_PtExtlist_Utility_DbUtils::getSelectPartByFieldConfig($fieldIdentifier);
+            $fieldName = \Tx_PtExtlist_Utility_DbUtils::getSelectPartByFieldConfig($fieldIdentifier);
 
             if ($fieldIdentifier->getField() === 'album') {
                 return $this->buildFilterCriteriaForAlbumField($fieldName);
@@ -148,16 +155,16 @@ class Tx_Yag_Extlist_Filter_GalleryFilter extends Tx_PtExtlist_Domain_Model_Filt
 
     /**
      * @param $fieldName
-     * @return Tx_PtExtlist_Domain_QueryObject_AndCriteria|Tx_PtExtlist_Domain_QueryObject_SimpleCriteria
+     * @return \Tx_PtExtlist_Domain_QueryObject_AndCriteria|\Tx_PtExtlist_Domain_QueryObject_SimpleCriteria
      */
     protected function buildFilterCriteriaForGalleryField($fieldName)
     {
-        $criteria = Tx_PtExtlist_Domain_QueryObject_Criteria::equals($fieldName, $this->galleryUid);
+        $criteria = \Tx_PtExtlist_Domain_QueryObject_Criteria::equals($fieldName, $this->galleryUid);
 
         if ($this->hideHidden) {
             $criteria1 = $criteria;
-            $criteria2 = Tx_PtExtlist_Domain_QueryObject_Criteria::equals('hidden', '0');
-            $criteria = Tx_PtExtlist_Domain_QueryObject_Criteria::andOp($criteria1, $criteria2);
+            $criteria2 = \Tx_PtExtlist_Domain_QueryObject_Criteria::equals('hidden', '0');
+            $criteria = \Tx_PtExtlist_Domain_QueryObject_Criteria::andOp($criteria1, $criteria2);
         }
 
         return $criteria;
@@ -166,11 +173,11 @@ class Tx_Yag_Extlist_Filter_GalleryFilter extends Tx_PtExtlist_Domain_Model_Filt
 
     /**
      * @param $fieldName
-     * @return Tx_PtExtlist_Domain_QueryObject_SimpleCriteria
+     * @return \Tx_PtExtlist_Domain_QueryObject_SimpleCriteria
      */
     protected function buildFilterCriteriaForAlbumField($fieldName)
     {
-        $criteria = Tx_PtExtlist_Domain_QueryObject_Criteria::in($fieldName, $this->getAlbumUidsOfGallery());
+        $criteria = \Tx_PtExtlist_Domain_QueryObject_Criteria::in($fieldName, $this->getAlbumUidsOfGallery());
 
         return $criteria;
     }
@@ -181,7 +188,7 @@ class Tx_Yag_Extlist_Filter_GalleryFilter extends Tx_PtExtlist_Domain_Model_Filt
      */
     protected function getAlbumUidsOfGallery()
     {
-        $albumRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')->get('Tx_Yag_Domain_Repository_AlbumRepository'); /** @var $albumRepository Tx_Yag_Domain_Repository_AlbumRepository */
+        $albumRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')->get('DL\\Yag\\Domain\\Repository\\AlbumRepository'); /** @var $albumRepository AlbumRepository */
 
         $albums = $albumRepository->findByGallery($this->galleryUid);
 

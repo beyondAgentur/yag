@@ -23,8 +23,13 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\ViewHelpers\Javascript;
+
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class implements a viewhelper for inline javascript 
@@ -39,7 +44,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * extKey: Extension Key
  * pluginNamespace: Plugin Namespace for GET/POST parameters
  */
-class Tx_Yag_ViewHelpers_Javascript_TemplateViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class TemplateViewHelper extends AbstractViewHelper
 {
     /**
      * Relative extpath to the extension (eg typo3conf/ext/yag/)
@@ -137,7 +142,7 @@ class Tx_Yag_ViewHelpers_Javascript_TemplateViewHelper extends \TYPO3\CMS\Fluid\
 
             return $jsOutput;
         } else {
-            $this->objectManager->get('Tx_Yag_Utility_HeaderInclusion')
+            $this->objectManager->get('DL\\Yag\\Utility\\HeaderInclusion')
                 ->addJsInlineCode(basename($templatePath), $this->substituteMarkers($this->loadJsCodeFromFile($absoluteFileName), $arguments), true, false, $position);
         }
     }
@@ -227,7 +232,7 @@ class Tx_Yag_ViewHelpers_Javascript_TemplateViewHelper extends \TYPO3\CMS\Fluid\
         preg_match_all($pattern, $jsCode, $matches);
         foreach ($matches[0] as $match) {
             $translateKey = substr($match, 7, -3);
-            $translation = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($translateKey, $this->extKey);
+            $translation = LocalizationUtility::translate($translateKey, $this->extKey);
             $translation = $translation ? $translation : $translateKey;
             $markers[$match] = $translation;
         }

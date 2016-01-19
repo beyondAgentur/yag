@@ -23,27 +23,35 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\FileSystem;
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\Configuration\Theme\ThemeConfiguration;
+use DL\Yag\Domain\ImageProcessing\AbstractProcessor;
+use DL\Yag\Domain\Model\Item;
+use DL\Yag\Domain\Repository\ResolutionFileCacheRepository;
+
 /**
  * @package Domain
  * @subpackage FileSystem
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_FileSystem_ResolutionFileCache
+class ResolutionFileCache
 {
     /**
-     * @var Tx_Yag_Domain_Repository_ResolutionFileCacheRepository
+     * @var ResolutionFileCacheRepository
      */
     protected $resolutionFileCacheRepository;
     
     
     /**
-     * @var Tx_Yag_Domain_FileSystem_HashFileSystem
+     * @var HashFileSystem
      */
     protected $hashFileSystem;
     
     
     /**
-     * @var Tx_Yag_Domain_ImageProcessing_AbstractProcessor
+     * @var AbstractProcessor
      */
     protected $imageProcessor;
     
@@ -51,7 +59,7 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
     
     /**
      *  Configurationbuilder
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
     
@@ -62,16 +70,16 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
      * image (eg the file-not-found image) multiple times in one run
      * without saving it to the database
      * 
-     * @var array of Tx_Yag_Domain_Model_ResolutionFileCache
+     * @var array of ResolutionFileCache
      */
     protected $localResolutionFileCache = array();
 
 
     /**
      * Inject resolution file cache
-     * @param Tx_Yag_Domain_Repository_ResolutionFileCacheRepository $resolutionFileCacheRepository
+     * @param ResolutionFileCacheRepository $resolutionFileCacheRepository
      */
-    public function injectResolutionFileCacheRepository(Tx_Yag_Domain_Repository_ResolutionFileCacheRepository $resolutionFileCacheRepository)
+    public function injectResolutionFileCacheRepository(ResolutionFileCacheRepository $resolutionFileCacheRepository)
     {
         $this->resolutionFileCacheRepository = $resolutionFileCacheRepository;
     }
@@ -79,9 +87,9 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
 
     /**
      * Inject hash file system
-     * @param Tx_Yag_Domain_FileSystem_HashFileSystem $hashFileSystem
+     * @param HashFileSystem $hashFileSystem
      */
-    public function _injectHashFileSystem(Tx_Yag_Domain_FileSystem_HashFileSystem $hashFileSystem)
+    public function _injectHashFileSystem(HashFileSystem $hashFileSystem)
     {
         $this->hashFileSystem = $hashFileSystem;
     }
@@ -89,9 +97,9 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
 
     /**
      * Inject resolution file cache
-     * @param Tx_Yag_Domain_ImageProcessing_AbstractProcessor $imageProcessor
+     * @param AbstractProcessor $imageProcessor
      */
-    public function _injectImageProcessor(Tx_Yag_Domain_ImageProcessing_AbstractProcessor $imageProcessor)
+    public function _injectImageProcessor(AbstractProcessor $imageProcessor)
     {
         $this->imageProcessor = $imageProcessor;
     }
@@ -99,9 +107,9 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
 
 
     /**
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
+     * @param ConfigurationBuilder $configurationBuilder
      */
-    public function _injectConfigurationBuilder(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public function _injectConfigurationBuilder(ConfigurationBuilder $configurationBuilder)
     {
         $this->configurationBuilder = $configurationBuilder;
     }
@@ -111,12 +119,12 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
     /**
      * Get a file resolution 
      * 
-     * @param Tx_Yag_Domain_Model_Item $item
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration
+     * @param Item $item
+     * @param ResolutionConfig $resolutionConfiguration
      * 
-     * @return Tx_Yag_Domain_Model_ResolutionFileCache
+     * @return ResolutionFileCache
      */
-    public function getItemFileResolutionPathByConfiguration(Tx_Yag_Domain_Model_Item $item, Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration)
+    public function getItemFileResolutionPathByConfiguration(Item $item, ResolutionConfig $resolutionConfiguration)
     {
         $resolutionFile = $this->getResolutionFileFromLocalCache($resolutionConfiguration, $item);
         
@@ -124,7 +132,7 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
             $resolutionFile = $this->resolutionFileCacheRepository->getResolutionByItem($item, $resolutionConfiguration);
         }
         
-        if ($resolutionFile == null || !file_exists(Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($resolutionFile->getPath()))) {
+        if ($resolutionFile == null || !file_exists(Div::makePathAbsolute($resolutionFile->getPath()))) {
             $resolutionFile = $this->imageProcessor->generateResolution($item, $resolutionConfiguration);
         }
     
@@ -136,29 +144,29 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
 
 
     /**
-     * @param array<Tx_PtExtlist_Domain_Model_List_Row> $itemArray
-     * @param Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration $themeConfiguration
+     * @param array<\Tx_PtExtlist_Domain_Model_List_Row> $itemArray
+     * @param ThemeConfiguration $themeConfiguration
      * @return void
      */
-    public function preloadCacheForItemsAndTheme($itemArray, Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration $themeConfiguration)
+    public function preloadCacheForItemsAndTheme($itemArray, ThemeConfiguration $themeConfiguration)
     {
         $imageArray = array();
         $parameterHashArray = array();
 
         foreach ($itemArray as $item) {
-            if (is_a($item, 'Tx_PtExtlist_Domain_Model_List_Row') && is_a($item['image']->getValue(), 'Tx_Yag_Domain_Model_Item')) {
+            if (is_a($item, '\Tx_PtExtlist_Domain_Model_List_Row') && is_a($item['image']->getValue(), 'Item')) {
                 $item = $item['image']->getValue();
                 $imageArray[$item->getUid()] = $item;
             }
         }
 
-        foreach ($themeConfiguration->getResolutionConfigCollection() as $resolutionConfig) { /** @var $resolutionConfig Tx_Yag_Domain_Configuration_Image_ResolutionConfig */
+        foreach ($themeConfiguration->getResolutionConfigCollection() as $resolutionConfig) { /** @var $resolutionConfig ResolutionConfig */
             $parameterHashArray[] = $resolutionConfig->getParameterHash();
         }
 
         $resolutions = $this->resolutionFileCacheRepository->getResolutionsByItems($imageArray, $parameterHashArray);
-        foreach ($resolutions as $resolution) { /** @var $resolution Tx_Yag_Domain_Model_ResolutionFileCache */
-            if (is_a($resolution, 'Tx_Yag_Domain_Model_ResolutionFileCache')) {
+        foreach ($resolutions as $resolution) { /** @var $resolution ResolutionFileCache */
+            if (is_a($resolution, 'ResolutionFileCache')) {
                 $this->addResolutionFiletoLocalCache($resolution);
             }
         }
@@ -169,11 +177,11 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
     /**
      * Retrieve a resolution file from local cache
      *
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration
-     * @param Tx_Yag_Domain_Model_Item $item
-     * @return Tx_Yag_Domain_Model_ResolutionFileCache|null
+     * @param ResolutionConfig $resolutionConfiguration
+     * @param Item $item
+     * @return ResolutionFileCache|null
      */
-    protected function getResolutionFileFromLocalCache(Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration, Tx_Yag_Domain_Model_Item $item)
+    protected function getResolutionFileFromLocalCache(ResolutionConfig $resolutionConfiguration, Item $item)
     {
         $objectIdentifier = md5($resolutionConfiguration->getParameterHash() . $item->getSourceuri());
     
@@ -189,9 +197,9 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
     /**
      * Add cachefileobjrct to local cache
      * 
-     * @param Tx_Yag_Domain_Model_ResolutionFileCache $cacheFileObject
+     * @param ResolutionFileCache $cacheFileObject
      */
-    protected function addResolutionFiletoLocalCache(Tx_Yag_Domain_Model_ResolutionFileCache $cacheFileObject)
+    protected function addResolutionFiletoLocalCache(ResolutionFileCache $cacheFileObject)
     {
         $objectIdentifier = md5($cacheFileObject->getParamhash() . $cacheFileObject->getItem()->getSourceuri());
         $this->localResolutionFileCache[$objectIdentifier] = $cacheFileObject;
@@ -200,13 +208,13 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
 
     
     /**
-     * @param Tx_Yag_Domain_Model_Item $item
-     * @param $resolutionConfigs Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection
+     * @param Item $item
+     * @param $resolutionConfigs ResolutionConfigCollection
      */
-    public function buildResolutionFilesForItem(Tx_Yag_Domain_Model_Item $item, Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection $resolutionConfigs = null)
+    public function buildResolutionFilesForItem(Item $item, ResolutionConfigCollection $resolutionConfigs = null)
     {
         if ($resolutionConfigs == null) {
-            $resolutionConfigs = Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollectionFactory::getInstanceOfAllThemes($this->configurationBuilder);
+            $resolutionConfigs = ResolutionConfigCollectionFactory::getInstanceOfAllThemes($this->configurationBuilder);
         }
 
         foreach ($resolutionConfigs as $resolutionConfig) {
@@ -222,10 +230,10 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
      */
     public function clear()
     {
-        $GLOBALS['TYPO3_DB']->sql_query('TRUNCATE tx_yag_domain_model_resolutionfilecache');
+        $GLOBALS['TYPO3_DB']->sql_query('TRUNCATE resolutionfilecache');
         
         $cacheDirectoryRoot = $this->configurationBuilder->buildExtensionConfiguration()->getHashFilesystemRootAbsolute();
-        Tx_Yag_Domain_FileSystem_Div::rRMDir($cacheDirectoryRoot);
+        Div::rRMDir($cacheDirectoryRoot);
     }
     
     
@@ -246,6 +254,6 @@ class Tx_Yag_Domain_FileSystem_ResolutionFileCache
     public function getCacheSize()
     {
         $cacheDirectoryRoot = $this->configurationBuilder->buildExtensionConfiguration()->getHashFilesystemRootAbsolute();
-        return Tx_Yag_Domain_FileSystem_Div::getDirSize($cacheDirectoryRoot);
+        return Div::getDirSize($cacheDirectoryRoot);
     }
 }

@@ -22,6 +22,9 @@
 *
 * This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\Utility\Flexform;
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -30,7 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Utility
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Utility_Flexform_AbstractFlexformUtility
+class AbstractFlexformUtility
 {
     const EXTENSION_NAME = 'Yag';
     const PLUGIN_NAME = 'web_YagTxYagM1';

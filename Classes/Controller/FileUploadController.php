@@ -23,6 +23,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\Import\FileImporter\ImporterBuilder;
+use DL\Yag\Domain\Model\Album;
+use DL\Yag\Utility\Encoding;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -31,7 +36,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Controller
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Controller_FileUploadController extends Tx_Yag_Controller_AbstractController
+class FileUploadController extends AbstractController
 {
     /**
      * Renders an upload form for multifile-uploading
@@ -50,10 +55,10 @@ class Tx_Yag_Controller_FileUploadController extends Tx_Yag_Controller_AbstractC
      * @rbacObject album
      * @rbacAction edit
      *
-     * @param Tx_Yag_Domain_Model_Album $album Album to add uploaded images to
+     * @param Album $album Album to add uploaded images to
      * @return void Nothing, as we are called in AJAX mode from flash uploader
      */
-    public function uploadAction(Tx_Yag_Domain_Model_Album $album = null)
+    public function uploadAction(Album $album = null)
     {
         if (!is_array($_FILES) || !isset($_FILES['Filedata'])) {
             $this->handleError('No file found in upload data!');
@@ -67,13 +72,13 @@ class Tx_Yag_Controller_FileUploadController extends Tx_Yag_Controller_AbstractC
 
         try {
             $rawFileName = $_FILES['Filedata']['name'];
-            $fileName = Tx_Yag_Utility_Encoding::toUTF8($rawFileName);
+            $fileName = Encoding::toUTF8($rawFileName);
 
             if (TYPO3_DLOG) {
                 GeneralUtility::devLog('Converted filename: ' . $fileName, 'yag', 0, array('$_FILES' => $_FILES));
             }
 
-            $fileImporter = Tx_Yag_Domain_Import_FileImporter_ImporterBuilder::getInstance()->getImporterInstanceByAlbum($album);
+            $fileImporter = ImporterBuilder::getInstance()->getImporterInstanceByAlbum($album);
 
             $fileImporter->setFilePath($_FILES['Filedata']['tmp_name']);
             $fileImporter->setOriginalFileName($fileName);

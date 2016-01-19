@@ -24,6 +24,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Context;
+
 /**
  * Class implements context configuration object for YAG.
  *
@@ -33,7 +35,7 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Configuration_Context_ContextConfig extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class ContextConfig extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * Selected Item

@@ -23,25 +23,30 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Widget;
+
+use DL\Yag\ViewHelpers\Widget\Controller\ThemeSelectorController;
+use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
+
 /**
  * Class implements the navigation path
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  * @package ViewHelpers
  */
-class Tx_Yag_ViewHelpers_Widget_ThemeSelectorViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper
+class ThemeSelectorViewHelper extends AbstractWidgetViewHelper
 {
     /**
-     * @var Tx_Yag_ViewHelpers_Widget_Controller_ThemeSelectorController
+     * @var ThemeSelectorController
      */
     protected $controller;
 
     
     /**
-     * @param Tx_Yag_ViewHelpers_Widget_Controller_ThemeSelectorController $controller
+     * @param ThemeSelectorController $controller
      * @return void
      */
-    public function injectController(Tx_Yag_ViewHelpers_Widget_Controller_ThemeSelectorController $controller)
+    public function injectController(ThemeSelectorController $controller)
     {
         $this->controller = $controller;
     }

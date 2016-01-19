@@ -23,20 +23,26 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Link;
+
+use DL\Yag\Domain\Context\YagContextFactory;
+use DL\Yag\Domain\Model\Album;
+use DL\Yag\Domain\Model\Gallery;
+
 /**
  * Class implements a viewhelper for rendering a link for an album
  *
  * @package ViewHelpers
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_ViewHelpers_Link_AlbumViewHelper extends Tx_PtExtlist_ViewHelpers_Link_ActionViewHelper
+class AlbumViewHelper extends \Tx_PtExtlist_ViewHelpers_Link_ActionViewHelper
 {
     /**
      * Renders link for an album
      *
      * @param integer $albumUid UID of album to render link for
-     * @param Tx_Yag_Domain_Model_Album $album Album object to render link for
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery object to render link for
+     * @param Album $album Album object to render link for
+     * @param Gallery $gallery Gallery object to render link for
      * @param integer pageUid (Optional) ID of page to render link for. If null, current page is used
      * @param integer $pageType type of the target page. See typolink.parameter
      * @param integer $pageType type of the target page. See typolink.parameter
@@ -47,21 +53,21 @@ class Tx_Yag_ViewHelpers_Link_AlbumViewHelper extends Tx_PtExtlist_ViewHelpers_L
      * @return string Rendered link for album
      * @throws Exception
      */
-    public function render($albumUid = 0, Tx_Yag_Domain_Model_Album $album = null, Tx_Yag_Domain_Model_Gallery $gallery = null, $pageUid = null, $pageType = 0, $noCache = false, $noCacheHash = false, $section = '', $format = '')
+    public function render($albumUid = 0, Album $album = null, Gallery $gallery = null, $pageUid = null, $pageType = 0, $noCache = false, $noCacheHash = false, $section = '', $format = '')
     {
-        if ($albumUid == 0 && $album === null) {
+        if ($albumUid === 0 && $album === null) {
             throw new Exception('You have to set "albumUid" or "album" as parameter. Both parameters can not be empty when using albumLinkViewHelper', 1295575454);
         }
 
-        if ($albumUid == 0) {
+        if ($albumUid === 0) {
             $albumUid = $album->getUid();
         }
 
-        $baseNamespace = Tx_Yag_Domain_Context_YagContextFactory::getInstance()->getObjectNamespace();
-        $arguments = Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($baseNamespace . '.albumUid', array(), $albumUid);
+        $baseNamespace = YagContextFactory::getInstance()->getObjectNamespace();
+        $arguments = \Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($baseNamespace . '.albumUid', array(), $albumUid);
 
         if ($gallery !== null) {
-            $arguments = Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($baseNamespace . '.galleryUid', $arguments, $gallery->getUid());
+            $arguments = \Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($baseNamespace . '.galleryUid', $arguments, $gallery->getUid());
         }
 
         return parent::render('submitFilter', $arguments, 'ItemList', null, null, $pageUid, $pageType, $noCache, $noCacheHash, $section, $format);

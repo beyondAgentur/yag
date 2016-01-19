@@ -22,7 +22,14 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Model\Item;
+use DL\Yag\Domain\Repository\ItemRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 /**
  * Class implements a controller for YAG ajax requests
@@ -30,12 +37,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Controller
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractController
+class AjaxController extends AbstractController
 {
     /**
      * Holds an instance of item repository
      *
-     * @var Tx_Yag_Domain_Repository_ItemRepository
+     * @var ItemRepository
      */
     protected $itemRepository;
 
@@ -43,7 +50,7 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Holds an instance of album repository
      *
-     * @var Tx_Yag_Domain_Repository_AlbumRepository
+     * @var AlbumRepository
      */
     protected $albumRepository;
 
@@ -51,7 +58,7 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Holds an instance of gallery repository
      *
-     * @var Tx_Yag_Domain_Repository_GalleryRepository
+     * @var GalleryRepository
      */
     protected $galleryRepository;
 
@@ -65,36 +72,36 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_ItemRepository $itemRepository
+     * @param ItemRepository $itemRepository
      */
-    public function injectItemRepository(Tx_Yag_Domain_Repository_ItemRepository $itemRepository)
+    public function injectItemRepository(ItemRepository $itemRepository)
     {
         $this->itemRepository = $itemRepository;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_AlbumRepository $albumRepository
+     * @param AlbumRepository $albumRepository
      */
-    public function injectAlbumRepository(Tx_Yag_Domain_Repository_AlbumRepository $albumRepository)
+    public function injectAlbumRepository(AlbumRepository $albumRepository)
     {
         $this->albumRepository = $albumRepository;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_GalleryRepository $galleryRepository
+     * @param GalleryRepository $galleryRepository
      */
-    public function injectGalleryRepository(Tx_Yag_Domain_Repository_GalleryRepository $galleryRepository)
+    public function injectGalleryRepository(GalleryRepository $galleryRepository)
     {
         $this->galleryRepository = $galleryRepository;
     }
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface $persistence_Manager
+     * @param PersistenceManagerInterface $persistence_Manager
      */
-    public function injectPersistenceManager(\TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface $persistence_Manager)
+    public function injectPersistenceManager( PersistenceManagerInterface $persistence_Manager)
     {
         $this->persistenceManager = $persistence_Manager;
     }
@@ -111,11 +118,11 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
         $directoryStartsWith = urldecode($directoryStartsWith);
         $baseDir = 'fileadmin/';
         $subDir = '';
-        if (substr($directoryStartsWith, -1) == '/' && is_dir(Tx_Yag_Domain_FileSystem_Div::getT3BasePath() . $baseDir . '/' . $directoryStartsWith)) {
+        if (substr($directoryStartsWith, -1) == '/' && is_dir(Div::getT3BasePath() . $baseDir . '/' . $directoryStartsWith)) {
             $subDir = $directoryStartsWith;
         }
 
-        $directories = scandir(Tx_Yag_Domain_FileSystem_Div::getT3BasePath() . $baseDir . $subDir);
+        $directories = scandir(Div::getT3BasePath() . $baseDir . $subDir);
 
         $returnArray = array(
             array('directoryStartsWith' => $directoryStartsWith),
@@ -126,7 +133,7 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
         );
 
         foreach ($directories as $directory) {
-            if (is_dir(Tx_Yag_Domain_FileSystem_Div::getT3BasePath() . $baseDir . $subDir . $directory)
+            if (is_dir(Div::getT3BasePath() . $baseDir . $subDir . $directory)
                 && !($directory == '.') && !($directory == '..')
             ) {
                 $returnArray[] = array('value' => $subDir . $directory);
@@ -143,12 +150,12 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Deletes an item
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item to be deleted
+     * @param Item $item Item to be deleted
      * @rbacNeedsAccess
      * @rbacObject Item
      * @rbacAction delete
      */
-    public function deleteItemAction(Tx_Yag_Domain_Model_Item $item)
+    public function deleteItemAction(Item $item)
     {
         $item->delete();
         $this->itemRepository->syncTranslatedItems();
@@ -159,13 +166,13 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Updates title of a given item
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item to update title
+     * @param Item $item Item to update title
      * @param string $itemTitle New title of item
      * @rbacNeedsAccess
      * @rbacObject Item
      * @rbacAction edit
      */
-    public function updateItemTitleAction(Tx_Yag_Domain_Model_Item $item, $itemTitle)
+    public function updateItemTitleAction(Item $item, $itemTitle)
     {
         $item->setTitle(utf8_encode($itemTitle));
 
@@ -178,12 +185,12 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Sets an item as thumb file for album
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item to be used as thumb for album
+     * @param Item $item Item to be used as thumb for album
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction edit
      */
-    public function setItemAsAlbumThumbAction(Tx_Yag_Domain_Model_Item $item)
+    public function setItemAsAlbumThumbAction(Item $item)
     {
         $item->getAlbum()->setThumb($item);
         $this->albumRepository->update($item->getAlbum());
@@ -194,7 +201,7 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Updates description for a given item
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item to be updated
+     * @param Item $item Item to be updated
      * @param string $itemDescription Description of item
      * @rbacNeedsAccess
      * @rbacObject Item
@@ -241,18 +248,18 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Updates sorting of albums in gallery
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery to set order of albums for
+     * @param Gallery $gallery Gallery to set order of albums for
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction update
      */
-    public function updateAlbumSortingAction(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function updateAlbumSortingAction(Gallery $gallery)
     {
         $order = GeneralUtility::_POST('albumUid');
 
         foreach ($order as $index => $albumUid) {
             $album = $this->albumRepository->findByUid($albumUid);
-            /** @var Tx_Yag_Domain_Model_Album $album */
+            /** @var Album $album */
             $album->setSorting($index);
             $this->albumRepository->update($album);
         }
@@ -275,7 +282,7 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
 
         foreach ($order as $index => $galleryUid) {
             $gallery = $this->galleryRepository->findByUid($galleryUid);
-            /* @var $gallery Tx_Yag_Domain_Model_Gallery */
+            /* @var $gallery Gallery */
             $gallery->setSorting($index);
             $this->galleryRepository->update($gallery);
         }
@@ -289,12 +296,12 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Sets hidden property of gallery to 1.
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery to set hidden property for
+     * @param Gallery $gallery Gallery to set hidden property for
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction edit
      */
-    public function hideGalleryAction(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function hideGalleryAction(Gallery $gallery)
     {
         $gallery->setHidden(1);
         $this->galleryRepository->update($gallery);
@@ -305,12 +312,12 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Sets hidden property of gallery to 0.
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery to set hidden property for
+     * @param Gallery $gallery Gallery to set hidden property for
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction edit
      */
-    public function unhideGalleryAction(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function unhideGalleryAction(Gallery $gallery)
     {
         $gallery->setHidden(0);
         $this->galleryRepository->update($gallery);
@@ -359,12 +366,12 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Sets album as gallery thumb for each gallery associated with given album
      *
-     * @param Tx_Yag_Domain_Model_Album $album Album to set as thumb for all galleries associated with this album
+     * @param Album $album Album to set as thumb for all galleries associated with this album
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction edit
      */
-    public function setAlbumAsGalleryThumbAction(Tx_Yag_Domain_Model_Album $album)
+    public function setAlbumAsGalleryThumbAction(Album $album)
     {
         $album->getGallery()->setThumbAlbum($album);
         $this->galleryRepository->update($album->getGallery());
@@ -375,12 +382,12 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Sets hidden property of album to 1.
      *
-     * @param Tx_Yag_Domain_Model_Album $album Album to set hidden property for
+     * @param Album $album Album to set hidden property for
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction edit
      */
-    public function hideAlbumAction(Tx_Yag_Domain_Model_Album $album)
+    public function hideAlbumAction(Album $album)
     {
         $album->setHidden(1);
         $this->albumRepository->update($album);
@@ -391,12 +398,12 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Sets hidden property of album to 0.
      *
-     * @param Tx_Yag_Domain_Model_Album $album Album to set hidden property for
+     * @param Album $album Album to set hidden property for
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction edit
      */
-    public function unhideAlbumAction(Tx_Yag_Domain_Model_Album $album)
+    public function unhideAlbumAction(Album $album)
     {
         $album->setHidden(0);
         $this->albumRepository->update($album);
@@ -407,12 +414,12 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Deletes given gallery
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery
+     * @param Gallery $gallery
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction delete
      */
-    public function deleteGalleryAction(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function deleteGalleryAction(Gallery $gallery)
     {
         $gallery->delete();
         $this->galleryRepository->syncTranslatedGalleries();
@@ -423,12 +430,12 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     /**
      * Deletes given album
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction delete
      */
-    public function deleteAlbumAction(Tx_Yag_Domain_Model_Album $album)
+    public function deleteAlbumAction(Album $album)
     {
         $album->delete();
         $this->albumRepository->syncTranslatedAlbums();
@@ -444,10 +451,10 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     public function getSubDirsAction()
     {
         $encodedFiles = '';
-        $fileSystemDiv = $this->objectManager->get('Tx_Yag_Domain_FileSystem_Div');
-        /** @var Tx_Yag_Domain_FileSystem_Div $fileSystemDiv */
+        $fileSystemDiv = $this->objectManager->get('Div');
+        /** @var Div $fileSystemDiv */
 
-        $t3basePath = Tx_Yag_Domain_FileSystem_Div::getT3BasePath();
+        $t3basePath = Div::getT3BasePath();
         $submittedPath = urldecode(GeneralUtility::_POST('dir'));
 
         if ($submittedPath) {
@@ -498,7 +505,7 @@ class Tx_Yag_Controller_AjaxController extends Tx_Yag_Controller_AbstractControl
     protected function returnDataAndShutDown($content = 'OK')
     {
         $this->persistenceManager->persistAll();
-        $this->lifecycleManager->updateState(Tx_PtExtbase_Lifecycle_Manager::END);
+        $this->lifecycleManager->updateState(\Tx_PtExtbase_Lifecycle_Manager::END);
         GeneralUtility::cleanOutputBuffers();
         echo $content;
         exit();

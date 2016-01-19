@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Image;
+
 /**
  * collection of resolution configs
  *
@@ -31,31 +33,32 @@
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection extends Tx_PtExtbase_Collection_ObjectCollection
+class ResolutionConfigCollection extends \Tx_PtExtbase_Collection_ObjectCollection
 {
     /**
      * @var string
      */
-    protected $restrictedClassName = 'Tx_Yag_Domain_Configuration_Image_ResolutionConfig';
+    protected $restrictedClassName = 'ResolutionConfig';
     
     
     
     /**
      * Add a resolution config to the colection
      * 
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfig
+     * @param ResolutionConfig $resolutionConfig
      * @param string $resolutionName
      */
-    public function addResolutionConfig(Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfig, $resolutionName)
+    public function addResolutionConfig(ResolutionConfig $resolutionConfig, $resolutionName)
     {
         $this->addItem($resolutionConfig, $resolutionName);
     }
-    
-    
-    
-    /** 
+
+
+    /**
      * @param string $resolutionName
-     * @return Tx_Yag_Domain_Configuration_Image_ResolutionConfig
+     *
+     * @return ResolutionConfig
+     * @throws Exception
      */
     public function getResolutionConfig($resolutionName)
     {
@@ -72,7 +75,7 @@ class Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection extends Tx_Pt
      * get part of the collection with entrys selected by the array
      *
      * @param array $themeIdentifierList
-     * @return Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection;
+     * @return ResolutionConfigCollection;
      */
     public function extractCollectionByThemeList(array $themeIdentifierList)
     {
@@ -80,7 +83,7 @@ class Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection extends Tx_Pt
             return $this;
         }
 
-        $collection = new Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection();
+        $collection = new ResolutionConfigCollection();
 
         foreach ($themeIdentifierList as $themeIdentifier) {
             foreach ($this->itemsArr as $itemName => $item) {

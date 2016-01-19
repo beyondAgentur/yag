@@ -23,16 +23,24 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Context\YagContextFactory;
+use DL\Yag\Domain\FileSystem\ResolutionFileCacheFactory;
+use DL\Yag\Extlist\DataBackend\YagDataBackend;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /**
  * Class provides image viewHelper
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  * @package ViewHelpers
  */
-class Tx_Yag_ViewHelpers_OffPageItemListViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class OffPageItemListViewHelper extends AbstractViewHelper
 {
     /**
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
 
@@ -51,7 +59,7 @@ class Tx_Yag_ViewHelpers_OffPageItemListViewHelper extends \TYPO3\CMS\Fluid\Core
     public function initialize()
     {
         parent::initialize();
-        $this->configurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+        $this->configurationBuilder = ConfigurationBuilderFactory::getInstance();
     }
 
 
@@ -67,7 +75,7 @@ class Tx_Yag_ViewHelpers_OffPageItemListViewHelper extends \TYPO3\CMS\Fluid\Core
 
         $content = '';
 
-        foreach ($listData as $listRow) { /** @var Tx_PtExtlist_Domain_Model_List_Row $listRow */
+        foreach ($listData as $listRow) { /** @var \Tx_PtExtlist_Domain_Model_List_Row $listRow */
             
             $this->templateVariableContainer->add('image', $listRow['image']->getValue());
             $this->templateVariableContainer->add('listRow', $listRow);
@@ -82,7 +90,7 @@ class Tx_Yag_ViewHelpers_OffPageItemListViewHelper extends \TYPO3\CMS\Fluid\Core
 
     /**
      * @throws Exception
-     * @return Tx_PtExtlist_Domain_Model_List_ListData
+     * @return \Tx_PtExtlist_Domain_Model_List_ListData
      */
     protected function buildListData()
     {
@@ -91,10 +99,10 @@ class Tx_Yag_ViewHelpers_OffPageItemListViewHelper extends \TYPO3\CMS\Fluid\Core
             throw new Exception('The Type should either be pre or post', 1320933448);
         }
 
-        $yagContext = Tx_Yag_Domain_Context_YagContextFactory::getInstance();
+        $yagContext = YagContextFactory::getInstance();
         $itemList = $yagContext->getItemlistContext();
 
-        $dataBackend = $itemList->getDataBackend(); /** @var Tx_Yag_Extlist_DataBackend_YagDataBackend $dataBackend */
+        $dataBackend = $itemList->getDataBackend(); /** @var YagDataBackend $dataBackend */
 
         if ($type == 'pre') {
             return $dataBackend->getPrePageListData();
@@ -109,7 +117,7 @@ class Tx_Yag_ViewHelpers_OffPageItemListViewHelper extends \TYPO3\CMS\Fluid\Core
      */
     protected function preloadResolutionCache($listData)
     {
-        Tx_Yag_Domain_FileSystem_ResolutionFileCacheFactory::getInstance()->preloadCacheForItemsAndTheme(
+        ResolutionFileCacheFactory::getInstance()->preloadCacheForItemsAndTheme(
             $listData,
             $this->configurationBuilder->buildThemeConfiguration()
         );

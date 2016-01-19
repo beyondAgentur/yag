@@ -23,17 +23,23 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\ImageProcessing;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use DL\Yag\Domain\FileSystem\HashFileSystemFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * @package Domain
  * @subpackage ImageProcessing
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_ImageProcessing_ProcessorFactory
+class ProcessorFactory
 {
     /**
      * Holds an instance of the image processor
      *
-     * @var Tx_Yag_Domain_ImageProcessing_AbstractProcessor
+     * @var AbstractProcessor
      */
     protected static $instance = null;
 
@@ -41,18 +47,18 @@ class Tx_Yag_Domain_ImageProcessing_ProcessorFactory
     /**
      * Factory method for file repository
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return null|Tx_Yag_Domain_ImageProcessing_AbstractProcessor
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return null|AbstractProcessor
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         if (self::$instance == null) {
-            $processorClass = 'Tx_Yag_Domain_ImageProcessing_Typo3Processor';
-            $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+            $processorClass = 'Typo3Processor';
+            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
 
             self::$instance = $objectManager->get($processorClass);
             self::$instance->_injectProcessorConfiguration($configurationBuilder->buildImageProcessorConfiguration());
-            self::$instance->_injectHashFileSystem(Tx_Yag_Domain_FileSystem_HashFileSystemFactory::getInstance());
+            self::$instance->_injectHashFileSystem(HashFileSystemFactory::getInstance());
             self::$instance->init();
         }
 

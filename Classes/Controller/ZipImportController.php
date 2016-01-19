@@ -22,7 +22,13 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\Import\ZipImporter\ImporterBuilder;
+use DL\Yag\Domain\Model\Album;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -31,11 +37,11 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * @package Controller
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Controller_ZipImportController extends Tx_Yag_Controller_AbstractController
+class ZipImportController extends AbstractController
 {
     /**
      * @inject
-     * @var Tx_PtExtlist_Domain_StateAdapter_GetPostVarAdapterFactory
+     * @var \Tx_PtExtlist_Domain_StateAdapter_GetPostVarAdapterFactory
      */
     protected $getPostVarAdapterFactory;
 
@@ -58,10 +64,10 @@ class Tx_Yag_Controller_ZipImportController extends Tx_Yag_Controller_AbstractCo
     /**
      * Shows results for importing images from zip
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      * @return string The rendered import from zip action
      */
-    public function importFromZipAction(Tx_Yag_Domain_Model_Album $album)
+    public function importFromZipAction(Album $album)
     {
         $getPostVarAdapter = $this->getPostVarAdapterFactory->getInstance();
         // Be careful: Path to file is in $_FILES which we don't get from "standard" GP vars!
@@ -76,7 +82,7 @@ class Tx_Yag_Controller_ZipImportController extends Tx_Yag_Controller_AbstractCo
             return;
         }
         
-        $importer = Tx_Yag_Domain_Import_ZipImporter_ImporterBuilder::getInstance()->getZipImporterInstanceForAlbumAndFilePath($album, $filePath);
+        $importer = ImporterBuilder::getInstance()->getZipImporterInstanceForAlbumAndFilePath($album, $filePath);
         $importer->runImport();
         $this->yagContext->setAlbum($album);
         
@@ -95,26 +101,26 @@ class Tx_Yag_Controller_ZipImportController extends Tx_Yag_Controller_AbstractCo
      *
      * TODO this method is not yet used and hence not tested!
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery to add album to
+     * @param Gallery $gallery Gallery to add album to
      * @param string $albumName Name of album to be created
      * @throws Exception
      */
-    public function createNewAlbumAndImportFromZipAction(Tx_Yag_Domain_Model_Gallery $gallery, $albumName)
+    public function createNewAlbumAndImportFromZipAction(Gallery $gallery, $albumName)
     {
-        $album = new Tx_Yag_Domain_Model_Album();
+        $album = new Album();
         $album->setName($albumName);
         $album->addGallery($gallery);
         $gallery->addAlbum($album);
         $this->albumRepository->add($album);
         
-        $persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+        $persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
         $persistenceManager->persistAll();
         
         if (!$album->getUid() > 0) {
             throw new Exception('Album hat keine UID!');
         }
         
-        $importer = Tx_Yag_Domain_Import_ZipImporter_ImporterBuilder::getInstance()->getZipImporterInstanceForAlbum($album);
+        $importer = ImporterBuilder::getInstance()->getZipImporterInstanceForAlbum($album);
         $importer->runImport();
 
         $this->view->assign('album', $album);

@@ -23,6 +23,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Image;
+use DL\Yag\Domain\FileSystem\Div;
+
 /**
  * Configuration for image resolution
  *
@@ -30,7 +33,7 @@
  * @subpackage Configuration\Image
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Image_SysImageConfig extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class SysImageConfig extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * Source Uri of the system image
@@ -63,8 +66,8 @@ class Tx_Yag_Domain_Configuration_Image_SysImageConfig extends Tx_PtExtbase_Conf
     protected function init()
     {
         $this->setRequiredValue('sourceUri', 'Source Uri of this system image not set! 1298831563');
-        if (!file_exists(Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($this->getSourceUri()))) {
-            throw new Exception('Imagesource ' . Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($this->getSourceUri()) . ' defined by system image not found. 1298833321');
+        if (!file_exists(Div::makePathAbsolute($this->getSourceUri()))) {
+            throw new Exception('Imagesource ' . Div::makePathAbsolute($this->getSourceUri()) . ' defined by system image not found. 1298833321');
         }
 
         $this->setValueIfExistsAndNotNothing('title');

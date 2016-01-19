@@ -25,6 +25,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\FileSystem\ResolutionFileCacheFactory;
+use DL\Yag\Service\ZipPackingService;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+
 /**
  * Controller for the itemList
  *
@@ -32,7 +38,7 @@
  * @author Michael Knoll <mimi@kaktusteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractController
+class ItemListController extends AbstractController
 {
     /**
      * @var string
@@ -42,7 +48,7 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
 
     /**
      * (non-PHPdoc)
-     * @see Classes/Controller/Tx_Yag_Controller_AbstractController::initializeAction()
+     * @see Classes/Controller/AbstractController::initializeAction()
      */
     public function postInitializeAction()
     {
@@ -54,7 +60,10 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
     }
 
 
-    protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view)
+	/**
+     * @param ViewInterface $view
+     */
+    protected function initializeView( ViewInterface $view)
     {
         parent::initializeView($view);
         $this->view->assign('listAction', $this->listActionName);
@@ -109,8 +118,8 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
 
         $selectedAlbum = $this->yagContext->getAlbum();
 
-        $selectableGalleries = $this->objectManager->get('Tx_Yag_Domain_Repository_GalleryRepository')->findAll();
-        $albums = $this->objectManager->get('Tx_Yag_Domain_Repository_AlbumRepository')->findAll();
+        $selectableGalleries = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository')->findAll();
+        $albums = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository')->findAll();
 
         $this->view->assign('selectableGalleries', $selectableGalleries);
         $this->view->assign('albums', $albums);
@@ -121,7 +130,7 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
         $this->view->assign('pagerCollection', $this->extListContext->getPagerCollection());
         $this->view->assign('pager', $this->extListContext->getPager($this->configurationBuilder->buildItemListConfiguration()->getPagerIdentifier()));
 
-        Tx_Yag_Domain_FileSystem_ResolutionFileCacheFactory::getInstance()->preloadCacheForItemsAndTheme(
+        ResolutionFileCacheFactory::getInstance()->preloadCacheForItemsAndTheme(
             $this->extListContext->getRenderedListData(),
             $this->configurationBuilder->buildThemeConfiguration()
         );
@@ -143,7 +152,7 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
         $this->view->assign('pagerCollection', $this->extListContext->getPagerCollection());
         $this->view->assign('pager', $this->extListContext->getPager($this->configurationBuilder->buildItemListConfiguration()->getPagerIdentifier()));
 
-        Tx_Yag_Domain_FileSystem_ResolutionFileCacheFactory::getInstance()->preloadCacheForItemsAndTheme(
+        ResolutionFileCacheFactory::getInstance()->preloadCacheForItemsAndTheme(
             $this->extListContext->getRenderedListData(),
             $this->configurationBuilder->buildThemeConfiguration()
         );
@@ -163,7 +172,7 @@ class Tx_Yag_Controller_ItemListController extends Tx_Yag_Controller_AbstractCon
 
         $this->extListContext->getPagerCollection()->setItemsPerPage(0);
 
-        $zipPackingService = $this->objectManager->get('Tx_Yag_Service_ZipPackingService'); /** @var Tx_Yag_Service_ZipPackingService $zipPackingService */
+        $zipPackingService = $this->objectManager->get('DL\\Yag\\Service\\ZipPackingService'); /** @var ZipPackingService $zipPackingService */
         $zipPackingService->_injectConfigurationBuilder($this->configurationBuilder);
         $zipPackingService->setItemListData($this->extListContext->getRenderedListData());
         $zipPackage = $zipPackingService->buildPackage();

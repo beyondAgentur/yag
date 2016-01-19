@@ -23,13 +23,15 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Controller;
+
 /**
  * Controller for showing error pages
  *
  * @package Controller
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Controller_ErrorController extends Tx_Yag_Controller_AbstractController
+class ErrorController extends AbstractController
 {
     /**
      * Renders an error page

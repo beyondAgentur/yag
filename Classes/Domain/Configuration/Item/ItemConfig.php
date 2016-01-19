@@ -24,6 +24,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Item;
+
 /**
  * Class implements item configuration object for YAG.
  *
@@ -32,7 +34,7 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Configuration_Item_ItemConfig extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class ItemConfig extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * Holds partial name used for rendering item meta information

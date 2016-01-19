@@ -22,6 +22,13 @@
 *
 * This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\Utility;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use DL\Yag\Domain\Configuration\Theme\ThemeConfiguration;
+use DL\Yag\Domain\FileSystem\Div;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -31,7 +38,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 * @package Utility
 * @author Daniel Lienert <typo3@lienert.cc>
 */
-class Tx_Yag_Utility_HeaderInclusion implements \TYPO3\CMS\Core\SingletonInterface
+class HeaderInclusion implements SingletonInterface
 {
     /**
     * @var \TYPO3\CMS\Core\Page\PageRenderer
@@ -40,21 +47,21 @@ class Tx_Yag_Utility_HeaderInclusion implements \TYPO3\CMS\Core\SingletonInterfa
 
 
     /**
-    * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+    * @var ConfigurationBuilder
     */
     protected $configurationBuilder;
 
 
     /**
-     * @var Tx_Yag_Domain_FileSystem_Div
+     * @var Div
      */
     protected $fileSystemDiv;
 
 
     /**
-     * @param Tx_Yag_Domain_FileSystem_Div $fileSystemDiv
+     * @param Div $fileSystemDiv
      */
-    public function injectFileSystemDiv(Tx_Yag_Domain_FileSystem_Div $fileSystemDiv)
+    public function injectFileSystemDiv(Div $fileSystemDiv)
     {
         $this->fileSystemDiv = $fileSystemDiv;
     }
@@ -74,12 +81,12 @@ class Tx_Yag_Utility_HeaderInclusion implements \TYPO3\CMS\Core\SingletonInterfa
 
 
     /**
-     * @return Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @return ConfigurationBuilder
      */
     protected function getConfigurationBuilder()
     {
-        if (!$this->configurationBuilder instanceof Tx_Yag_Domain_Configuration_ConfigurationBuilder) {
-            $this->configurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+        if (!$this->configurationBuilder instanceof ConfigurationBuilder) {
+            $this->configurationBuilder = ConfigurationBuilderFactory::getInstance();
         }
 
         return $this->configurationBuilder;
@@ -228,7 +235,7 @@ class Tx_Yag_Utility_HeaderInclusion implements \TYPO3\CMS\Core\SingletonInterfa
      * 
      * @param string $filename
      * @return string
-     * @deprecated Use Tx_Yag_Domain_FileSystem_Div::getFileRelFileName instead
+     * @deprecated Use Div::getFileRelFileName instead
      */
     public function getFileRelFileName($filename)
     {
@@ -239,9 +246,9 @@ class Tx_Yag_Utility_HeaderInclusion implements \TYPO3\CMS\Core\SingletonInterfa
 
     /**
      * Add theme defined CSS / JS to the header
-     * @var Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration $themeConfiguration
+     * @var ThemeConfiguration $themeConfiguration
      */
-    public function includeThemeDefinedHeader(Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration $themeConfiguration)
+    public function includeThemeDefinedHeader(ThemeConfiguration $themeConfiguration)
     {
         $jsPosition = $themeConfiguration->getJsPosition();
 

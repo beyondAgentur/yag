@@ -23,6 +23,14 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import;
+
+use DL\Yag\Domain\AlbumContentManager;
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\ImageProcessing\ProcessorFactory;
+use DL\Yag\Domain\Model\Album;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Factory for building importers
  *
@@ -31,12 +39,12 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Import_ImporterBuilder
+class ImporterBuilder
 {
     /**
      * Holds an instance of importer builder as singleton instance of class
      *
-     * @var Tx_Yag_Domain_Import_ImporterBuilder
+     * @var Import_ImporterBuilder
      */
     protected static $instance = null;
     
@@ -45,7 +53,7 @@ class Tx_Yag_Domain_Import_ImporterBuilder
     /**
      * Holds an instance of configuration builder
      *
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
     
@@ -54,12 +62,12 @@ class Tx_Yag_Domain_Import_ImporterBuilder
     /**
      * Factory method for getting an instance of importer builder (singleton)
      *
-     * @return Tx_Yag_Domain_Import_ImporterBuilder Singleton instance of importer builder
+     * @return Import_ImporterBuilder Singleton instance of importer builder
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
-            $configurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+            $configurationBuilder = ConfigurationBuilderFactory::getInstance();
             self::$instance = new self($configurationBuilder);
         }
         return self::$instance;
@@ -70,9 +78,9 @@ class Tx_Yag_Domain_Import_ImporterBuilder
     /**
      * Constructor for importer builder
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
+     * @param ConfigurationBuilder $configurationBuilder
      */
-    protected function __construct(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    protected function __construct(ConfigurationBuilder $configurationBuilder)
     {
         $this->configurationBuilder = $configurationBuilder;
     }
@@ -83,16 +91,16 @@ class Tx_Yag_Domain_Import_ImporterBuilder
      * Creates an instance of an importer
      *
      * @param string $importerClassName Class name of importer
-     * @return Tx_Yag_Domain_Import_AbstractImporter Instance of importer class
+     * @return AbstractImporter Instance of importer class
      */
     public function createImporter($importerClassName)
     {
-        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager'); /** @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager'); /** @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
 
-        $importer = $objectManager->get($importerClassName); /* @var $importer Tx_Yag_Domain_Import_AbstractImporter */
+        $importer = $objectManager->get($importerClassName); /* @var $importer Import_AbstractImporter */
         $importer->setConfigurationBuilder($this->configurationBuilder);
         $importer->setImporterConfiguration($this->configurationBuilder->buildImporterConfiguration());
-        $importer->setImageProcessor(Tx_Yag_Domain_ImageProcessing_ProcessorFactory::getInstance($this->configurationBuilder));
+        $importer->setImageProcessor(ProcessorFactory::getInstance($this->configurationBuilder));
 
         return $importer;
     }
@@ -103,13 +111,13 @@ class Tx_Yag_Domain_Import_ImporterBuilder
      * Creates an instance of an importer for a given album
      *
      * @param string $importerClassName Class name of importer
-     * @param Tx_Yag_Domain_Model_Album $album
-     * @return Tx_Yag_Domain_Import_AbstractImporter Instance of importer class
+     * @param Album $album
+     * @return Import_AbstractImporter Instance of importer class
      */
-    public function createImporterForAlbum($importerClassName, Tx_Yag_Domain_Model_Album $album)
+    public function createImporterForAlbum($importerClassName, Album $album)
     {
         $importer = $this->createImporter($importerClassName);
-        $importer->setAlbumManager(new Tx_Yag_Domain_AlbumContentManager($album));
+        $importer->setAlbumManager(new AlbumContentManager($album));
         $importer->setAlbum($album);
         return $importer;
     }

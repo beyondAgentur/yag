@@ -23,6 +23,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Tests;
+
+use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -32,7 +35,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Tests
  * @author Michael Knoll <mimi@kaktsuteam.de>
  */
-abstract class Tx_Yag_Tests_BaseTestCase extends \TYPO3\CMS\Core\Tests\UnitTestCase
+abstract class BaseTestCase extends UnitTestCase
 {
     /**
      * @var string

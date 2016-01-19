@@ -23,13 +23,21 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\Model\Item;
+use DL\Yag\Domain\Repository\ItemRepository;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+
 /**
  * Class provides image viewHelper
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  * @package ViewHelpers
  */
-class Tx_Yag_ViewHelpers_ImageViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
+class ImageViewHelper extends AbstractTagBasedViewHelper
 {
     /**
      * @var string
@@ -38,16 +46,16 @@ class Tx_Yag_ViewHelpers_ImageViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelpe
 
 
     /**
-     * @var Tx_Yag_Domain_Repository_ItemRepository
+     * @var ItemRepository
      */
     protected $itemRepository;
 
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_ItemRepository $itemRepository
+     * @param ItemRepository $itemRepository
      */
-    public function injectItemRepository(Tx_Yag_Domain_Repository_ItemRepository $itemRepository)
+    public function injectItemRepository(ItemRepository $itemRepository)
     {
         $this->itemRepository = $itemRepository;
     }
@@ -73,13 +81,13 @@ class Tx_Yag_ViewHelpers_ImageViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelpe
     /**
      * Render the image
      * 
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      * @return string
      * @throws Tx_Fluid_Core_ViewHelper_Exception
      */
-    public function render(Tx_Yag_Domain_Model_Item $item = null)
+    public function render(Item $item = null)
     {
-        if (!($item instanceof Tx_Yag_Domain_Model_Item)) {
+        if (!($item instanceof Item)) {
             $item = $this->itemRepository->getSystemImage('imageNotFound');
         }
 
@@ -108,12 +116,12 @@ class Tx_Yag_ViewHelpers_ImageViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelpe
     }
 
     /**
-     * @return null|Tx_Yag_Domain_Configuration_Image_ResolutionConfig
+     * @return null|ResolutionConfig
      */
     protected function getResolutionConfig()
     {
         if ($this->hasArgument('resolutionName')) {
-            $resolutionConfig = $this->resolutionConfigCollection = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance()
+            $resolutionConfig = $this->resolutionConfigCollection = ConfigurationBuilderFactory::getInstance()
                 ->buildThemeConfiguration()
                 ->getResolutionConfigCollection()
                 ->getResolutionConfig(trim($this->arguments['resolutionName']));
@@ -124,7 +132,7 @@ class Tx_Yag_ViewHelpers_ImageViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelpe
                 'quality' => $this->arguments['quality'],
                 'name' => implode('_', array('custom', $this->arguments['width'], $this->arguments['height'], $this->arguments['quality']))
             );
-            $resolutionConfig = new Tx_Yag_Domain_Configuration_Image_ResolutionConfig(Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance(), $resolutionSettings);
+            $resolutionConfig = new ResolutionConfig(ConfigurationBuilderFactory::getInstance(), $resolutionSettings);
         } else {
             $resolutionConfig = null;
         }

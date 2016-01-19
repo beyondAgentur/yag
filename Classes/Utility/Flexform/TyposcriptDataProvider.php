@@ -23,7 +23,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag').'Classes/Utility/Flexform/AbstractFlexformUtility.php'; // pt_tools div class
+namespace DL\Yag\Utility\Flexform;
+
+//require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/AbstractFlexformUtility.php'; // pt_tools div class
 
 /**
  * Utilitty to get selectable options from typoscript
@@ -31,7 +33,7 @@ require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag').
  * @package Utility
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class user_Tx_Yag_Utility_Flexform_TyposcriptDataProvider extends Tx_Yag_Utility_Flexform_AbstractFlexformUtility
+class TyposcriptDataProvider extends AbstractFlexformUtility
 {
     /**
      * Current pid
@@ -98,7 +100,7 @@ class user_Tx_Yag_Utility_Flexform_TyposcriptDataProvider extends Tx_Yag_Utility
     protected function loadYagTyposcriptArray()
     {
         if (is_null($this->yagTypoScript)) {
-            $extListTS = Tx_PtExtbase_Div::typoscriptRegistry('plugin.tx_yag.', $this->currentPid);
+            $extListTS = \Tx_PtExtbase_Div::typoscriptRegistry('plugin.tx_yag.', $this->currentPid);
             $this->yagTypoScript =  \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService')->convertTypoScriptArrayToPlainArray($extListTS);
         }
     }

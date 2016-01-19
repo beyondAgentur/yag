@@ -23,6 +23,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain;
+use DL\Yag\Domain\Model\Album;
+
 /**
  * Class implements a manager that handles album content
  *
@@ -31,12 +34,12 @@
  * @package Domain
  * @author Michael Knoll <mimi@kaktsuteam.de>
  */
-class Tx_Yag_Domain_AlbumContentManager
+class AlbumContentManager
 {
     /**
      * Holds instance of an album to operate on
      *
-     * @var Tx_Yag_Domain_Model_Album
+     * @var Album
      */
     protected $album;
     
@@ -45,9 +48,9 @@ class Tx_Yag_Domain_AlbumContentManager
     /**
      * Constructor for album manager.
      *
-     * @param Tx_Yag_Domain_Model_Album $album Album to operate on
+     * @param Album $album Album to operate on
      */
-    public function __construct(Tx_Yag_Domain_Model_Album $album)
+    public function __construct(Album $album)
     {
         $this->album = $album;
     }
@@ -57,7 +60,7 @@ class Tx_Yag_Domain_AlbumContentManager
     /**
      * Returns album on which content manager operates on
      *
-     * @return Tx_Yag_Domain_Model_Album
+     * @return Album
      */
     public function getAlbum()
     {
@@ -69,9 +72,9 @@ class Tx_Yag_Domain_AlbumContentManager
     /**
      * Adds an image to album
      *
-     * @param Tx_Yag_Domain_Model_Item $item Item to be added to album
+     * @param Item $item Item to be added to album
      */
-    public function addItem(Tx_Yag_Domain_Model_Item $item)
+    public function addItem(Item $item)
     {
         $this->album->addItem($item);
         

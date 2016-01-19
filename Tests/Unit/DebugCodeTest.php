@@ -25,6 +25,10 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+namespace DL\Yag\Tests;
+
+use TYPO3\CMS\Core\Tests\UnitTestCase;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Testcase to find debug code in the extension
@@ -32,7 +36,7 @@
  * @author Daniel Lienert 
  * @package Tests
  */
-class Tx_Yag_Tests_DebugCodeTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
+class DebugCodeTest extends UnitTestCase
 {
     /**
      * @var string Put the extension name here
@@ -59,7 +63,7 @@ class Tx_Yag_Tests_DebugCodeTest extends \TYPO3\CMS\Core\Tests\UnitTestCase
      */
     public function checkForForgottenDebugCode($debugCommand)
     {
-        $searchPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($this->extensionName);
+        $searchPath = ExtensionManagementUtility::extPath($this->extensionName);
 
         $result = `fgrep -i -r "$debugCommand" "$searchPath" | grep ".php"`;
         $lines = explode("\n", trim($result));

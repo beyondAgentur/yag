@@ -23,19 +23,23 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Link;
+
+use DL\Yag\Domain\Context\YagContextFactory;
+
 /**
  * Class implements a viewhelper for rendering a link for an album
  *
  * @package ViewHelpers
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_ViewHelpers_Link_ItemViewHelper extends Tx_PtExtlist_ViewHelpers_Link_ActionViewHelper
+class ItemViewHelper extends \Tx_PtExtlist_ViewHelpers_Link_ActionViewHelper
 {
     public function initializeArguments()
     {
-        $this->registerArgument('gallery', 'Tx_Yag_Domain_Model_Gallery', 'Set a gallery for filtering the item list', false, null);
-        $this->registerArgument('album', 'Tx_Yag_Domain_Model_Album', 'Set an album for filtering the item list', false, null);
-        //  $this->registerArgument('item', 'Tx_Yag_Domain_Model_Item', 'Set an item for filtering the item list', FALSE, NULL); // TODO: Calculate the offset to the given item in the resulting list
+        $this->registerArgument('gallery', 'DL\\Yag\\Domain\\Model\\Gallery', 'Set a gallery for filtering the item list', false, null);
+        $this->registerArgument('album', 'DL\\Yag\\Domain\\Model\\Album', 'Set an album for filtering the item list', false, null);
+        //  $this->registerArgument('item', 'DL\\Yag\\Domain\\Model\\Item', 'Set an item for filtering the item list', FALSE, NULL); // TODO: Calculate the offset to the given item in the resulting list
         $this->registerArgument('itemListOffset', 'integer', 'Choose an item via offset from the resulting item list', false, null);
     }
 
@@ -59,21 +63,21 @@ class Tx_Yag_ViewHelpers_Link_ItemViewHelper extends Tx_PtExtlist_ViewHelpers_Li
      */
     public function render($pageUid = null, $pageType = 0, array $arguments = array(), $noCache = false, $noCacheHash = false, $section = '', $format = '', $linkAccessRestrictedPages = false, array $additionalParams = array(), $absolute = false, $addQueryString = false, array $argumentsToBeExcludedFromQueryString = array())
     {
-        $objectNameSpace = $namespace = Tx_Yag_Domain_Context_YagContextFactory::getInstance()->getObjectNamespace();
+        $objectNameSpace = $namespace = YagContextFactory::getInstance()->getObjectNamespace();
         $arguments = array();
 
         if (isset($this->arguments['album'])) {
             $albumUid = $this->arguments['album']->getUid();
-            $arguments = Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($objectNameSpace. '.albumUid', $arguments, $albumUid);
+            $arguments = \Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($objectNameSpace. '.albumUid', $arguments, $albumUid);
         }
 
         if (isset($this->arguments['gallery'])) {
             $galleryUid = $this->arguments['gallery']->getUid();
-            $arguments = Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($objectNameSpace. '.galleryUid', $arguments, $galleryUid);
+            $arguments = \Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($objectNameSpace. '.galleryUid', $arguments, $galleryUid);
         }
 
 
-        Tx_PtExtbase_State_Session_SessionPersistenceManagerFactory::getInstance()->addSessionRelatedArguments($arguments);
+        \Tx_PtExtbase_State_Session_SessionPersistenceManagerFactory::getInstance()->addSessionRelatedArguments($arguments);
 
         return parent::render('show', $arguments, 'Item', null, null, $pageUid, $pageType, $noCache, $noCacheHash, $section, $format, $linkAccessRestrictedPages, $additionalParams, $absolute, $addQueryString, $argumentsToBeExcludedFromQueryString);
     }

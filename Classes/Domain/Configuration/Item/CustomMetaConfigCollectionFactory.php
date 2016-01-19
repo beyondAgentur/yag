@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Item;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Class implementing factory for collection of meta configurations
  * 
@@ -30,20 +34,20 @@
  * @package Domain
  * @subpackage Configuration\Item
  */
-class Tx_Yag_Domain_Configuration_Item_CustomMetaConfigCollectionFactory
+class CustomMetaConfigCollectionFactory
 {
     /**
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_Item_CustomMetaConfigCollection
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return CustomMetaConfigCollection
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         $customMetaSettings = $configurationBuilder->getSettingsForConfigObject('customMetaData');
-        $customMetaCollection = new Tx_Yag_Domain_Configuration_Item_CustomMetaConfigCollection();
+        $customMetaCollection = new CustomMetaConfigCollection();
 
         foreach ($customMetaSettings as $customMetaKey => $customMetaSetting) {
             $customMetaSetting['key'] = $customMetaKey;
-            $customMetaConfig = new Tx_Yag_Domain_Configuration_Item_CustomMetaConfig($configurationBuilder, $customMetaSetting);
+            $customMetaConfig = new CustomMetaConfig($configurationBuilder, $customMetaSetting);
             $customMetaCollection->addCustomMetaConfig($customMetaConfig, $customMetaKey);
         }
         

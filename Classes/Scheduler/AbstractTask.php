@@ -1,6 +1,4 @@
 <?php
-namespace YAG\Yag\Scheduler;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -24,6 +22,9 @@ namespace YAG\Yag\Scheduler;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\Scheduler;
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**

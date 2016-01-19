@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Image;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Class implementing factory for system image configurations
  * 
@@ -30,21 +34,22 @@
  * @package Domain
  * @subpackage Configuration\Image
  */
-class Tx_Yag_Domain_Configuration_Image_SysImageConfigCollectionFactory
+class SysImageConfigCollectionFactory
 {
     /**
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @param $sysImageSettings
-     * @return Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection
+     * @param ConfigurationBuilder $configurationBuilder
+     *
+     * @return ResolutionConfigCollection
+     * @internal param $sysImageSettings
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         $sysImageSettings = $configurationBuilder->getSettingsForConfigObject('sysImages');
-        $sysImageConfigCollection = new Tx_Yag_Domain_Configuration_Image_SysImageConfigCollection();
+        $sysImageConfigCollection = new SysImageConfigCollection();
 
         foreach ($sysImageSettings as $sysImageConfigName => $sysImageSetting) {
             $sysImageSetting['name'] = $sysImageConfigName;
-            $sysImageConfig = new Tx_Yag_Domain_Configuration_Image_SysImageConfig($configurationBuilder, $sysImageSetting);
+            $sysImageConfig = new SysImageConfig($configurationBuilder, $sysImageSetting);
             $sysImageConfigCollection->addSysImageConfig($sysImageConfig, $sysImageConfigName);
         }
         

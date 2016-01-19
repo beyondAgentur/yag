@@ -1,4 +1,35 @@
 <?php
+/***************************************************************
+ *  Copyright notice
+ *
+ *  (c) 2009 Michael Knoll <mimi@kaktusteam.de>, MKLV GbR
+ *
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+namespace DL\Yag\ViewHelpers\TceForms;
+
+use TYPO3\CMS\Core\TimeTracker\TimeTracker;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;
+
 /**
  * RTE view helper.
  * The value of the text area needs to be set via the "value" attribute, as with all other form ViewHelpers.
@@ -11,8 +42,8 @@
  * </code>
  *
  * Output:
- * The form output is wrapped with some script tags including javascript from rte (tx_rtehtmlarea)  
- * and is modified: Among other things the onsubmit atrribute of the form is set or modified. 
+ * The form output is wrapped with some script tags including javascript from rte (tx_rtehtmlarea)
+ * and is modified: Among other things the onsubmit atrribute of the form is set or modified.
  * <textarea id="RTEareatx_myext_pi1[myRteTextArea]_1" name="tx_myext_pi1[myRteTextArea]" style="position:relative; left:0px; top:0px; height:380px; width:460px; border: 1px solid black;">This is shown inside the textarea</textarea>
  *
  * @package Fluid
@@ -21,10 +52,7 @@
  * @api
  * @scope prototype
  */
-
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
-class Tx_Yag_ViewHelpers_TceForms_RteViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper
+class RteViewHelper extends AbstractFormFieldViewHelper
 {
     /**
      * The width of the RTE will be expanded, if $docLarge is set to TRUE
@@ -158,7 +186,7 @@ class Tx_Yag_ViewHelpers_TceForms_RteViewHelper extends \TYPO3\CMS\Fluid\ViewHel
      */
     public function render()
     {
-        $GLOBALS['TT'] = new \TYPO3\CMS\Core\TimeTracker\TimeTracker;
+        $GLOBALS['TT'] = new TimeTracker;
 
         // ***********************************
         // Creating a fake $TSFE object

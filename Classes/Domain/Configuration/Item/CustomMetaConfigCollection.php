@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Item;
+
 /**
  * Collection of custom item meta configs
  *
@@ -31,22 +33,22 @@
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Item_CustomMetaConfigCollection extends Tx_PtExtbase_Collection_ObjectCollection
+class CustomMetaConfigCollection extends \Tx_PtExtbase_Collection_ObjectCollection
 {
     /**
      * @var string
      */
-    protected $restrictedClassName = 'Tx_Yag_Domain_Configuration_Item_CustomMetaConfig';
+    protected $restrictedClassName = 'CustomMetaConfig';
     
     
     
     /**
      * Add a config to the collection
      * 
-     * @param Tx_Yag_Domain_Configuration_Item_CustomMetaConfig $customMetaConfig
+     * @param CustomMetaConfig $customMetaConfig
      * @param string $metaConfigKey
      */
-    public function addCustomMetaConfig(Tx_Yag_Domain_Configuration_Item_CustomMetaConfig $customMetaConfig, $metaConfigKey)
+    public function addCustomMetaConfig(CustomMetaConfig $customMetaConfig, $metaConfigKey)
     {
         $this->addItem($customMetaConfig, $metaConfigKey);
     }

@@ -23,6 +23,8 @@
 * This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Extbase;
+
 /**
 * Holds the extbaseContext of the current plugin instance
 *
@@ -31,7 +33,7 @@
 * @author Michael Knoll
 */
 
-class Tx_Yag_Extbase_ExtbaseContext extends Tx_PtExtbase_Extbase_AbstractExtbaseContext
+class ExtbaseContext extends \Tx_PtExtbase_Extbase_AbstractExtbaseContext
 {
     // This class is empty, we extend abstract base class to still have singleton
 }

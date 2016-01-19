@@ -23,8 +23,11 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Report;
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Reports\Status;
+use TYPO3\CMS\Reports\StatusProviderInterface;
 
 /**
  * Class implements a status report checking filesystem for required directories and settings
@@ -32,7 +35,7 @@ use TYPO3\CMS\Reports\Status;
  * @author Michael Knoll
  * @package Report
  */
-class Tx_Yag_Report_Filesystem implements \TYPO3\CMS\Reports\StatusProviderInterface
+class Filesystem implements StatusProviderInterface
 {
     protected $reports = array();
 

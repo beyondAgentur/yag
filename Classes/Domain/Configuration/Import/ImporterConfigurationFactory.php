@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Import;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Factory for importer configuration
  *
@@ -32,12 +36,12 @@
  * @author Michael Knoll <mimi@kaktsuteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Import_ImporterConfigurationFactory
+class ImporterConfigurationFactory
 {
     /**
      * Holds an instance of importer configuration
      *
-     * @var Tx_Yag_Domain_Configuration_Import_ImporterConfiguration
+     * @var ImporterConfiguration
      */
     protected static $instance = null;
     
@@ -46,14 +50,14 @@ class Tx_Yag_Domain_Configuration_Import_ImporterConfigurationFactory
     /**
      * Returns an instance of importer configuration
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_Import_ImporterConfiguration
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return ImporterConfiguration
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         if (self::$instance === null) {
             $importerSettings = $configurationBuilder->getSettingsForConfigObject('importer');
-            self::$instance = new Tx_Yag_Domain_Configuration_Import_ImporterConfiguration($configurationBuilder, $importerSettings);
+            self::$instance = new ImporterConfiguration($configurationBuilder, $importerSettings);
         }
         return self::$instance;
     }

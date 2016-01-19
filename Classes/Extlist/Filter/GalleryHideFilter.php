@@ -23,6 +23,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Extlist\Filter;
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+
 /**
  * Class implements filter to hide galleries set to "hide == 1" in frontend
  *
@@ -31,11 +34,11 @@
  * @package Extlist
  * @subpackage Filter
  */
-class Tx_Yag_Extlist_Filter_GalleryHideFilter extends Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
+class GalleryHideFilter extends \Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
 {
     /**
      * YAG ConfigurationBuilder
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $yagConfigurationBuilder;
 
@@ -47,7 +50,7 @@ class Tx_Yag_Extlist_Filter_GalleryHideFilter extends Tx_PtExtlist_Domain_Model_
     public function __construct()
     {
         parent::__construct();
-        $this->yagConfigurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+        $this->yagConfigurationBuilder = ConfigurationBuilderFactory::getInstance();
     }
 
 
@@ -70,14 +73,14 @@ class Tx_Yag_Extlist_Filter_GalleryHideFilter extends Tx_PtExtlist_Domain_Model_
     public function getFilterValueForBreadCrumb()
     {
     }
-    public function buildFilterCriteria(Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
+    public function buildFilterCriteria(\Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
     {
     }
 
 
 
     /**
-     * @see Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
+     * @see \Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
      *
      */
     public function reset()
@@ -93,7 +96,7 @@ class Tx_Yag_Extlist_Filter_GalleryHideFilter extends Tx_PtExtlist_Domain_Model_
 
     /**
      * (non-PHPdoc)
-     * @see Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
+     * @see \Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
      */
     public function setActiveState()
     {
@@ -105,11 +108,11 @@ class Tx_Yag_Extlist_Filter_GalleryHideFilter extends Tx_PtExtlist_Domain_Model_
     /**
      * Build the filterCriteria for filter
      *
-     * @return Tx_PtExtlist_Domain_QueryObject_Criteria
+     * @return \Tx_PtExtlist_Domain_QueryObject_Criteria
      */
     protected function buildFilterCriteriaForAllFields()
     {
-        $criteria = Tx_PtExtlist_Domain_QueryObject_Criteria::equals('hidden', 0);
+        $criteria = \Tx_PtExtlist_Domain_QueryObject_Criteria::equals('hidden', 0);
 
         return $criteria;
     }

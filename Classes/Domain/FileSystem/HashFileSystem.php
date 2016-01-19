@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\FileSystem;
+
 /**
  * Class implements hash-file system for storing files in an hierarchical 
  * directory. Each Directory contains at most MAX_FILES files and MAX_FILES
@@ -38,7 +40,7 @@
  * @subpackage FileSystem
  * @author Michael Knoll <mimi@kaktsuteam.de>
  */
-class Tx_Yag_Domain_FileSystem_HashFileSystem
+class HashFileSystem
 {
     /**
      * Defines number of files to be stored in a directory before 
@@ -64,7 +66,7 @@ class Tx_Yag_Domain_FileSystem_HashFileSystem
      */
     public function __construct($rootDirectory)
     {
-        $absoluteRootDirectory = Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($rootDirectory);
+        $absoluteRootDirectory = Div::makePathAbsolute($rootDirectory);
         if (!file_exists($absoluteRootDirectory)) {
             throw new Exception('Directory ' . $absoluteRootDirectory . ' does not exist!', 1287524902);
         }
@@ -120,7 +122,7 @@ class Tx_Yag_Domain_FileSystem_HashFileSystem
     public function createAndGetAbsolutePathById($fileId)
     {
         $path = $this->getAbsolutePathById($fileId);
-        Tx_Yag_Domain_FileSystem_Div::checkDirAndCreateIfMissing(PATH_site . $path);
+        Div::checkDirAndCreateIfMissing(PATH_site . $path);
         return $path;
     }
 }

@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Image;
+
 /**
  * collection of resolution configs
  *
@@ -31,33 +33,34 @@
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Image_SysImageConfigCollection extends Tx_PtExtbase_Collection_ObjectCollection
+class SysImageConfigCollection extends \Tx_PtExtbase_Collection_ObjectCollection
 {
     /**
      * @var string
      */
-    protected $restrictedClassName = 'Tx_Yag_Domain_Configuration_Image_SysImageConfig';
+    protected $restrictedClassName = 'SysImageConfig';
     
     
     
     /**
      * Add a system image config to the colection
      * 
-     * @param Tx_Yag_Domain_Configuration_Image_SysImageConfig $sysImageConfig
+     * @param SysImageConfig $sysImageConfig
      * @param string $sysImageConfigName
      */
-    public function addSysImageConfig(Tx_Yag_Domain_Configuration_Image_SysImageConfig $sysImageConfig, $sysImageConfigName)
+    public function addSysImageConfig(SysImageConfig $sysImageConfig, $sysImageConfigName)
     {
         $this->addItem($sysImageConfig, $sysImageConfigName);
     }
-    
-    
-    
-    /** 
+
+
+    /**
      * Get a system image config
-     * 
+     *
      * @param string $sysImageConfigName
-     * @return Tx_Yag_Domain_Configuration_Image_SysImageConfig
+     *
+     * @return SysImageConfig
+     * @throws Exception
      */
     public function getSysImageConfig($sysImageConfigName)
     {

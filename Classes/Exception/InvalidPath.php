@@ -23,10 +23,14 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Exception;
+
+use TYPO3\CMS\Fluid\Exception;
+
 /**
  * @package Exception
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Exception_InvalidPath extends Exception
+class InvalidPath extends Exception
 {
 }

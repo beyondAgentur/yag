@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration;
+
 /**
  * Class implements factory for configuration builder
  *
@@ -31,12 +33,12 @@
  * @author Michael Knoll <mimi@kaktsuteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory
+class ConfigurationBuilderFactory
 {
     /**
      * Holds instance of configuration builder as singleton
      *
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected static $instances = array();
     
@@ -74,7 +76,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory
      * @param string $contextIdentifier
      * @param string $theme
      * @param boolean $resetContext
-     * @return Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @return ConfigurationBuilder
      * @throws Exception
      */
     public static function getInstance($contextIdentifier = null, $theme = null, $resetContext = false)
@@ -98,7 +100,7 @@ class Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory
                 throw new Exception('No theme with name '.$theme.' could be found in settings!', 1298920754);
             }
         
-            $configurationBuilder = new Tx_Yag_Domain_Configuration_ConfigurationBuilder(self::$settings, $contextIdentifier, $theme);
+            $configurationBuilder = new ConfigurationBuilder(self::$settings, $contextIdentifier, $theme);
             self::$instances[$contextIdentifier] = $configurationBuilder;
         }
         

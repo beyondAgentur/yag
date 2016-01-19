@@ -24,6 +24,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Javascript;
+
+use DL\Yag\Utility\HeaderInclusion;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /**
  * Class implements a fake viewhelper to add a javascript file to the header
  *
@@ -32,11 +37,11 @@
  * @subpackage Javascript
  * 
  */
-class Tx_Yag_ViewHelpers_Javascript_IncludeViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class IncludeViewHelper extends AbstractViewHelper
 {
     /**
      * @inject
-     * @var Tx_Yag_Utility_HeaderInclusion
+     * @var HeaderInclusion
      */
     protected $inclusionUtility;
 

@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\GalleryList;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Factory for album configuration
  *
@@ -31,17 +35,17 @@
  
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_GalleryList_GalleryListConfigFactory
+class GalleryListConfigFactory
 {
     /**
      * Returns an instance of gallerList configuration
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_GalleryList_GalleryListConfig
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return GalleryListConfig
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         $galleryListSettings = $configurationBuilder->getSettingsForConfigObject('galleryList');
-        return new Tx_Yag_Domain_Configuration_GalleryList_GalleryListConfig($configurationBuilder, $galleryListSettings);
+        return new GalleryListConfig($configurationBuilder, $galleryListSettings);
     }
 }

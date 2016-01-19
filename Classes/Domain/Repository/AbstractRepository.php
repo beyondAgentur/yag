@@ -23,6 +23,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Repository;
+
+use DL\Yag\Utility\PidDetector;
+use TYPO3\CMS\Extbase\Persistence\Repository;
+
 /**
  * Abstract repository, updates pageCacheManager for automatic cache clearing
  *
@@ -30,7 +35,7 @@
  * @subpackage Repository
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Repository_AbstractRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class AbstractRepository extends Repository
 {
     /**
      * If set to true, pid detected by pid detector is used for storage
@@ -46,7 +51,7 @@ class Tx_Yag_Domain_Repository_AbstractRepository extends \TYPO3\CMS\Extbase\Per
     /**
      * Holds instance of pid detector
      *
-     * @var Tx_Yag_Utility_PidDetector
+     * @var PidDetector
      */
     protected $pidDetector;
 
@@ -55,9 +60,9 @@ class Tx_Yag_Domain_Repository_AbstractRepository extends \TYPO3\CMS\Extbase\Per
     /**
      * Injects pid detector
      *
-     * @param Tx_Yag_Utility_PidDetector $pidDetector
+     * @param PidDetector $pidDetector
      */
-    public function injectPidDetector(Tx_Yag_Utility_PidDetector $pidDetector)
+    public function injectPidDetector(PidDetector $pidDetector)
     {
         $this->pidDetector = $pidDetector;
     }
@@ -98,40 +103,49 @@ class Tx_Yag_Domain_Repository_AbstractRepository extends \TYPO3\CMS\Extbase\Per
     }
 
 
-    
     /**
      * (non-PHPdoc)
      *
      * @see \TYPO3\CMS\Extbase\Persistence\Repository::add()
+     *
+     * @param object $object
+     *
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function add($object)
     {
         parent::add($object);
-        $this->objectManager->get('Tx_Yag_PageCache_PageCacheManager')->markObjectUpdated($object);
+        $this->objectManager->get('DL\\Yag\\PageCache\\PageCacheManager')->markObjectUpdated($object);
     }
-    
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see \TYPO3\CMS\Extbase\Persistence\Repository::remove()
+     *
+     * @param object $object
+     *
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function remove($object)
     {
         parent::remove($object);
-        $this->objectManager->get('Tx_Yag_PageCache_PageCacheManager')->markObjectUpdated($object);
+        $this->objectManager->get('DL\\Yag\\PageCache\\PageCacheManager')->markObjectUpdated($object);
     }
-    
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see \TYPO3\CMS\Extbase\Persistence\Repository::update()
+     *
+     * @param object $modifiedObject
+     *
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function update($modifiedObject)
     {
         parent::update($modifiedObject);
-        $this->objectManager->get('Tx_Yag_PageCache_PageCacheManager')->markObjectUpdated($modifiedObject);
+        $this->objectManager->get('DL\\Yag\\PageCache\\PageCacheManager')->markObjectUpdated($modifiedObject);
     }
 
 
@@ -149,7 +163,7 @@ class Tx_Yag_Domain_Repository_AbstractRepository extends \TYPO3\CMS\Extbase\Per
 
         foreach ($typo3Tables as $typo3Table) {
             if (is_array($GLOBALS['TCA'][$typo3Table])) {
-                $specialFieldsWhereClause .= Tx_PtExtbase_Div::getCobj()->enableFields($typo3Table);
+                $specialFieldsWhereClause .= \Tx_PtExtbase_Div::getCobj()->enableFields($typo3Table);
             }
         }
 

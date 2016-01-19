@@ -23,7 +23,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag').'Classes/Utility/Flexform/AbstractFlexformUtility.php';
+namespace DL\Yag\Utility\Flexform;
+
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
+//require_once ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/AbstractFlexformUtility.php';
 
 /**
  * Class provides a general utility for generating flexform
@@ -32,15 +37,20 @@ require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag').
  * @author Daniel Lienert <typo3@lienert.cc>
  * @package Utility
  */
-class user_Tx_Yag_Utility_Flexform_Div
+class Div
 {
     public static $localLangCache = null;
 
+	/**
+     * @param $args
+     *
+     * @return string
+     */
     public function startSection($args)
     {
         $header = $args['fieldConf']['config']['header'];
 
-        $translatedHeader = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($header, 'yag');
+        $translatedHeader = LocalizationUtility::translate($header, 'yag');
 
         return sprintf('<strong>%s</strong><hr style="border: 0;">', $translatedHeader ? $translatedHeader : $header);
     }

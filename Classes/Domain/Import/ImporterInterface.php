@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import;
+
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+
 /**
  * Interface for importers
  *
@@ -30,7 +34,7 @@
  * @subpackage Import
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-interface Tx_Yag_Domain_Import_ImporterInterface
+interface ImporterInterface
 {
     /**
      * Runs import implemented by importer
@@ -45,7 +49,7 @@ interface Tx_Yag_Domain_Import_ImporterInterface
      * Setter for fe_user object
      *
      * @abstract
-     * @param  \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser
+     * @param  FrontendUser $feUser
      */
-    public function setFeUser(\TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser);
+    public function setFeUser( FrontendUser $feUser );
 }

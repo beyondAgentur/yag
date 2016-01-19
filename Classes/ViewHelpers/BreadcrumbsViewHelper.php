@@ -23,25 +23,30 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers;
+
+use DL\Yag\ViewHelpers\Widget\Controller\BreadcrumbsController;
+use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
+
 /**
  * Class implements the navigation path
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  * @package ViewHelpers
  */
-class Tx_Yag_ViewHelpers_BreadcrumbsViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper
+class BreadcrumbsViewHelper extends AbstractWidgetViewHelper
 {
     /**
-     * @var Tx_Yag_ViewHelpers_Widget_Controller_BreadcrumbsController
+     * @var BreadcrumbsController
      */
     protected $controller;
 
     
     /**
-     * @param Tx_Yag_ViewHelpers_Widget_Controller_BreadcrumbsController $controller
+     * @param BreadcrumbsController $controller
      * @return void
      */
-    public function injectController(Tx_Yag_ViewHelpers_Widget_Controller_BreadcrumbsController $controller)
+    public function injectController(BreadcrumbsController $controller)
     {
         $this->controller = $controller;
     }

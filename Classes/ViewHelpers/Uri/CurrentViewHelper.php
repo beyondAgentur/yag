@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,12 +24,16 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Uri;
+
+use TYPO3\CMS\Fluid\ViewHelpers\Uri\ActionViewHelper;
+
 /**
  * @author Daniel Lienert
  * @package Viewhelpers
  * @subpackage Uri
  */
-class Tx_Yag_ViewHelpers_Uri_CurrentViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Uri\ActionViewHelper
+class CurrentViewHelper extends ActionViewHelper
 {
     /**
      * @param string $action Target action

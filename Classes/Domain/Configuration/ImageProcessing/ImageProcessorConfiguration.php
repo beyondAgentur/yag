@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\ImageProcessing;
+
 /**
  * Configuration for image processor
  *
@@ -31,7 +33,7 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktsuteam.de>
  */
-class Tx_Yag_Domain_Configuration_ImageProcessing_ImageProcessorConfiguration extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class ImageProcessorConfiguration extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * Holds path for temporary storing image files

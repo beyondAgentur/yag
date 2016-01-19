@@ -23,24 +23,30 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Extlist\Renderer;
 
-class Tx_Yag_Extlist_Renderer_ImageObjectRenderer extends Tx_PtExtlist_Domain_Renderer_AbstractRenderer
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use DL\Yag\Domain\Context\YagContextFactory;
+use DL\Yag\Domain\Model\Item;
+use DL\Yag\Domain\Repository\ItemRepository;
+
+class mageObjectRenderer extends \Tx_PtExtlist_Domain_Renderer_AbstractRenderer
 {
     /**
-     * @var Tx_Yag_Domain_Repository_ItemRepository
+     * @var ItemRepository
      */
     protected $itemRepository;
 
     /**
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $yagConfigurationBuilder;
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_ItemRepository $itemRepository
+     * @param ItemRepository $itemRepository
      */
-    public function injectItemRepository(Tx_Yag_Domain_Repository_ItemRepository $itemRepository)
+    public function injectItemRepository(ItemRepository $itemRepository)
     {
         $this->itemRepository = $itemRepository;
     }
@@ -52,7 +58,7 @@ class Tx_Yag_Extlist_Renderer_ImageObjectRenderer extends Tx_PtExtlist_Domain_Re
      */
     public function initRenderer()
     {
-        $this->yagConfigurationBuilder = Tx_Yag_Domain_Context_YagContextFactory::getInstance();
+        $this->yagConfigurationBuilder = YagContextFactory::getInstance();
     }
 
 
@@ -61,29 +67,29 @@ class Tx_Yag_Extlist_Renderer_ImageObjectRenderer extends Tx_PtExtlist_Domain_Re
      * Renders the given list through TypoScript.
      * Also uses the column definitions.
      *
-     * @param Tx_PtExtlist_Domain_Model_List_ListData $listData
-     * @return Tx_PtExtlist_Domain_Model_List_ListData
+     * @param \Tx_PtExtlist_Domain_Model_List_ListData $listData
+     * @return \Tx_PtExtlist_Domain_Model_List_ListData
      */
-    public function renderList(Tx_PtExtlist_Domain_Model_List_ListData $listData)
+    public function renderList(\Tx_PtExtlist_Domain_Model_List_ListData $listData)
     {
         $itemUIds = array();
         $indexedArray = array();
 
-        foreach ($listData as $listRow) { /** @var $listRow Tx_PtExtlist_Domain_Model_List_Row */
+        foreach ($listData as $listRow) { /** @var $listRow \Tx_PtExtlist_Domain_Model_List_Row */
             $itemUIds[] = $listRow->getCell('itemUid')->getValue();
             $indexedArray[$listRow->getCell('itemUid')->getValue()] = $listRow;
         }
 
-        $renderedListData = new Tx_PtExtlist_Domain_Model_List_ListData();
+        $renderedListData = new \Tx_PtExtlist_Domain_Model_List_ListData();
 
         if (!empty($itemUIds)) {
             $items = $this->itemRepository->getItemsByUids($itemUIds);
 
             foreach ($items as $item) {
-                if ($item instanceof Tx_Yag_Domain_Model_Item) {
+                if ($item instanceof Item) {
                     $itemUid = $item->getUid();
                     if (array_key_exists($itemUid, $indexedArray)) {
-                        $indexedArray[$itemUid]->addCell(new Tx_PtExtlist_Domain_Model_List_Cell($item), 'image');
+                        $indexedArray[$itemUid]->addCell(new \Tx_PtExtlist_Domain_Model_List_Cell($item), 'image');
                     }
                     $renderedListData->addItem($indexedArray[$itemUid]);
                 }

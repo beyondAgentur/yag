@@ -23,6 +23,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\MetaData;
+
+use DL\Yag\Domain\Model\ItemMeta;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
+
 /**
  * Factory for item meta objects.
  * 
@@ -33,70 +39,70 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Import_MetaData_ItemMetaFactory
+class ItemMetaFactory
 {
     /**
-     * @var Tx_Yag_Domain_Import_MetaData_CoreDataParser
+     * @var CoreDataParser
      */
     protected $coreDataParser;
 
 
     /**
-     * @var Tx_Yag_Domain_Import_MetaData_ExifParser
+     * @var ExifParser
      */
     protected $exifParser;
 
 
     /**
-     * @var Tx_Yag_Domain_Import_MetaData_IptcParser
+     * @var IptcParser
      */
     protected $iptcParser;
 
 
     /**
-     * @var Tx_Yag_Domain_Import_MetaData_XmpParser
+     * @var XmpParser
      */
     protected $xmpParser;
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
+     * @var Dispatcher
      */
     protected $signalSlotDispatcher;
 
 
 
     /**
-     * @param Tx_Yag_Domain_Import_MetaData_CoreDataParser $coreDataParser
+     * @param CoreDataParser $coreDataParser
      */
-    public function injectCoreDataParser(Tx_Yag_Domain_Import_MetaData_CoreDataParser $coreDataParser)
+    public function injectCoreDataParser(CoreDataParser $coreDataParser)
     {
         $this->coreDataParser = $coreDataParser;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Import_MetaData_ExifParser $exifParser
+     * @param ExifParser $exifParser
      */
-    public function injectExifParser(Tx_Yag_Domain_Import_MetaData_ExifParser $exifParser)
+    public function injectExifParser(ExifParser $exifParser)
     {
         $this->exifParser = $exifParser;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Import_MetaData_IptcParser $iptcParser
+     * @param IptcParser $iptcParser
      */
-    public function injectIptcParser(Tx_Yag_Domain_Import_MetaData_IptcParser $iptcParser)
+    public function injectIptcParser(IptcParser $iptcParser)
     {
         $this->iptcParser = $iptcParser;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Import_MetaData_XmpParser $xmpParser
+     * @param XmpParser $xmpParser
      */
-    public function injectXmpParser(Tx_Yag_Domain_Import_MetaData_XmpParser $xmpParser)
+    public function injectXmpParser(XmpParser $xmpParser)
     {
         $this->xmpParser = $xmpParser;
     }
@@ -104,9 +110,9 @@ class Tx_Yag_Domain_Import_MetaData_ItemMetaFactory
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher
+     * @param Dispatcher $signalSlotDispatcher
      */
-    public function injectSignalSlotDispatcher(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher)
+    public function injectSignalSlotDispatcher( Dispatcher $signalSlotDispatcher)
     {
         $this->signalSlotDispatcher = $signalSlotDispatcher;
     }
@@ -117,11 +123,11 @@ class Tx_Yag_Domain_Import_MetaData_ItemMetaFactory
      * Create meta data object for given fileName
      *
      * @param string $fileName Path to file
-     * @return Tx_Yag_Domain_Model_ItemMeta Meta Data object for file
+     * @return ItemMeta Meta Data object for file
      */
     public function createItemMetaForFile($fileName)
     {
-        $itemMeta = new Tx_Yag_Domain_Model_ItemMeta();
+        $itemMeta = new ItemMeta();
 
         $this->setDefaults($itemMeta);
         $this->processCoreData($fileName, $itemMeta);
@@ -137,20 +143,20 @@ class Tx_Yag_Domain_Import_MetaData_ItemMetaFactory
 
 
     /**
-     * @param Tx_Yag_Domain_Model_ItemMeta $itemMeta
+     * @param ItemMeta $itemMeta
      */
-    protected function setDefaults(Tx_Yag_Domain_Model_ItemMeta $itemMeta)
+    protected function setDefaults(ItemMeta $itemMeta)
     {
-        $itemMeta->setCaptureDate(new DateTime('01.01.0000 0:0:0'));
+        $itemMeta->setCaptureDate(new \DateTime('01.01.0000 0:0:0'));
     }
 
 
 
     /**
      * @param $fileName
-     * @param Tx_Yag_Domain_Model_ItemMeta $itemMeta
+     * @param ItemMeta $itemMeta
      */
-    protected function processCoreData($fileName, Tx_Yag_Domain_Model_ItemMeta $itemMeta)
+    protected function processCoreData($fileName, ItemMeta $itemMeta)
     {
         $coreData = $this->coreDataParser->parseCoreData($fileName);
         $itemMeta->setDpi($coreData['dpi']);
@@ -161,9 +167,9 @@ class Tx_Yag_Domain_Import_MetaData_ItemMetaFactory
 
     /**
      * @param $fileName
-     * @param Tx_Yag_Domain_Model_ItemMeta $itemMeta
+     * @param ItemMeta $itemMeta
      */
-    protected function processExifData($fileName, Tx_Yag_Domain_Model_ItemMeta $itemMeta)
+    protected function processExifData($fileName, ItemMeta $itemMeta)
     {
         $exifData = $this->exifParser->parseExifData($fileName);
         $itemMeta->setExif(serialize($exifData));
@@ -182,7 +188,7 @@ class Tx_Yag_Domain_Import_MetaData_ItemMetaFactory
         try {
             $itemMeta->setCaptureDate(new DateTime('@' . $exifData['CaptureTimeStamp']));
         } catch (Exception $e) {
-            \TYPO3\CMS\Core\Utility\GeneralUtility::sysLog('Error while extracting EXIF CaptureTimeStamp from "' . $fileName . '". Error was: ' . $e->getMessage(), 'yag', 2);
+            GeneralUtility::sysLog('Error while extracting EXIF CaptureTimeStamp from "' . $fileName . '". Error was: ' . $e->getMessage(), 'yag', 2);
         }
     }
 
@@ -190,9 +196,9 @@ class Tx_Yag_Domain_Import_MetaData_ItemMetaFactory
 
     /**
      * @param $fileName
-     * @param Tx_Yag_Domain_Model_ItemMeta $itemMeta
+     * @param ItemMeta $itemMeta
      */
-    protected function processIPTCData($fileName, Tx_Yag_Domain_Model_ItemMeta $itemMeta)
+    protected function processIPTCData($fileName, ItemMeta $itemMeta)
     {
         $iptcData = $this->iptcParser->parseIptcData($fileName);
         $itemMeta->setIptc(serialize($iptcData));
@@ -213,9 +219,9 @@ class Tx_Yag_Domain_Import_MetaData_ItemMetaFactory
 
     /**
      * @param $fileName
-     * @param Tx_Yag_Domain_Model_ItemMeta $itemMeta
+     * @param ItemMeta $itemMeta
      */
-    protected function processXMPData($fileName, Tx_Yag_Domain_Model_ItemMeta $itemMeta)
+    protected function processXMPData($fileName, ItemMeta $itemMeta)
     {
         $xmpData = $this->xmpParser->parseXmpData($fileName);
 

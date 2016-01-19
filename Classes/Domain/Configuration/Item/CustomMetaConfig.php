@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Item;
+
 /**
  * Configuration for custom item meta data
  *
@@ -30,7 +32,7 @@
  * @subpackage Configuration\Item
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Item_CustomMetaConfig extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class CustomMetaConfig extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * Name of this named resolution

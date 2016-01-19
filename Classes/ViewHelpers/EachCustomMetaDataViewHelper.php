@@ -23,13 +23,19 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Model\Item;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+
 /**
  * Class provides viewHelper to iterate through the custom meta data
  * 
  * @author Daniel Lienert <typo3@lienert.cc>
  * @package ViewHelpers
  */
-class Tx_Yag_ViewHelpers_EachCustomMetaDataViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
+class EachCustomMetaDataViewHelper extends AbstractTagBasedViewHelper
 {
     /**
      * Initialize arguments.
@@ -43,7 +49,7 @@ class Tx_Yag_ViewHelpers_EachCustomMetaDataViewHelper extends \TYPO3\CMS\Fluid\C
 
 
     /**
-     * @var Tx_Yag_Domain_Configuration_Item_CustomMetaConfigCollection
+     * @var Item_CustomMetaConfigCollection
      */
     protected $definedCustomMetaDataConfigCollection;
 
@@ -53,15 +59,15 @@ class Tx_Yag_ViewHelpers_EachCustomMetaDataViewHelper extends \TYPO3\CMS\Fluid\C
     {
         parent::initialize();
 
-        $this->definedCustomMetaDataConfigCollection = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance()->buildCustomMetaDataConfiguration();
+        $this->definedCustomMetaDataConfigCollection = ConfigurationBuilderFactory::getInstance()->buildCustomMetaDataConfiguration();
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      * @return string
      */
-    public function render(Tx_Yag_Domain_Model_Item $item)
+    public function render(Item $item)
     {
         $customMetaDataArray = $item->getItemMeta()->getCustomMetaDataArray();
 

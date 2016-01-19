@@ -26,6 +26,11 @@
       "Classes/"
     ]
   },
+  "autoload-dev": {
+    "psr-4": {
+      "DL\\Yag\\Tests\\": "Tests"
+    }
+  },
   "replace": {
     "yag": "self.version",
     "typo3-ter/yag": "self.version"

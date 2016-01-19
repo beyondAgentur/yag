@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Extlist\Filter;
+
+use DL\Yag\Domain\Context\YagContextFactory;
+
 /**
  * Class implements the pid filter
  * 
@@ -30,10 +34,10 @@
  * @package Extlist
  * @subpackage Filter
  */
-class Tx_Yag_Extlist_Filter_PidFilter extends Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
+class PidFilter extends \Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
 {
     /**
-     * @var Tx_Yag_Domain_Context_YagContext
+     * @var YagContext
      */
     protected $yagContext;
 
@@ -42,24 +46,24 @@ class Tx_Yag_Extlist_Filter_PidFilter extends Tx_PtExtlist_Domain_Model_Filter_A
     public function __construct()
     {
         parent::__construct();
-        $this->yagContext = Tx_Yag_Domain_Context_YagContextFactory::getInstance();
+        $this->yagContext = YagContextFactory::getInstance();
     }
 
 
     /**
      * Build the criteria for a single field
      *
-     * @param Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier
-     * @return Tx_PtExtlist_Domain_QueryObject_SimpleCriteria
+     * @param \Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier
+     * @return \Tx_PtExtlist_Domain_QueryObject_SimpleCriteria
      */
-    protected function buildFilterCriteria(Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
+    protected function buildFilterCriteria(\Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
     {
-        $fieldName = Tx_PtExtlist_Utility_DbUtils::getSelectPartByFieldConfig($fieldIdentifier);
+        $fieldName = \Tx_PtExtlist_Utility_DbUtils::getSelectPartByFieldConfig($fieldIdentifier);
         $singleCriteria = null;
 
         $selectedPid = $this->yagContext->getSelectedPid();
 
-        $singleCriteria = Tx_PtExtlist_Domain_QueryObject_Criteria::equals($fieldName, $selectedPid);
+        $singleCriteria = \Tx_PtExtlist_Domain_QueryObject_Criteria::equals($fieldName, $selectedPid);
 
         return $singleCriteria;
     }
@@ -83,12 +87,12 @@ class Tx_Yag_Extlist_Filter_PidFilter extends Tx_PtExtlist_Domain_Model_Filter_A
     
     
     /**
-     * @see Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
+     * @see \Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
      *
      */
     public function reset()
     {
-        $this->filterQuery = new Tx_PtExtlist_Domain_QueryObject_Query();
+        $this->filterQuery = new \Tx_PtExtlist_Domain_QueryObject_Query();
         $this->init();
     }
     
@@ -96,7 +100,7 @@ class Tx_Yag_Extlist_Filter_PidFilter extends Tx_PtExtlist_Domain_Model_Filter_A
     
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/Model/Filter/Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::initFilter()
+     * @see Classes/Domain/Model/Filter/\Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::initFilter()
      */
     public function initFilter()
     {
@@ -109,7 +113,7 @@ class Tx_Yag_Extlist_Filter_PidFilter extends Tx_PtExtlist_Domain_Model_Filter_A
 
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/Model/Filter/Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
+     * @see Classes/Domain/Model/Filter/\Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
      */
     public function setActiveState()
     {

@@ -22,28 +22,36 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\Domain\Repository;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Configuration\Image\SysImageConfig;
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Model\Item;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
- * Repository for Tx_Yag_Domain_Model_Item
+ * Repository for Item
  *
  * @package Domain
  * @subpackage Repository
  * @author Michael Knoll
  * @author Daniel Lienert
  */
-class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_AbstractRepository
+class ItemRepository extends AbstractRepository
 {
     /**
      * Get the "image not found" default image
      *
      * @param $sysImageConfigName
-     * @return Tx_Yag_Domain_Model_Item
+     * @return Item
      * @throws Exception
      */
     public function getSystemImage($sysImageConfigName)
     {
-        $configurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+        $configurationBuilder = ConfigurationBuilderFactory::getInstance();
         $sysImageConfigCollection = $configurationBuilder->buildSysImageConfiguration();
 
         if (!$sysImageConfigCollection->hasItem($sysImageConfigName)) {
@@ -66,18 +74,18 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
      * Create and return a new System Image
      * This image is persisted in the image database
      *
-     * @param Tx_Yag_Domain_Configuration_Image_SysImageConfig $sysImageConfig
-     * @return Tx_Yag_Domain_Model_Item
+     * @param SysImageConfig $sysImageConfig
+     * @return Item
      */
-    protected function createNewSystemImage(Tx_Yag_Domain_Configuration_Image_SysImageConfig $sysImageConfig)
+    protected function createNewSystemImage(SysImageConfig $sysImageConfig)
     {
-        $sysImage = GeneralUtility::makeInstance('Tx_Yag_Domain_Model_Item');
+        $sysImage = GeneralUtility::makeInstance('Item');
         $sysImage->setSourceuri($sysImageConfig->getSourceUri());
         $sysImage->setFilename(basename($sysImageConfig->getSourceUri()));
         $sysImage->setTitle($sysImageConfig->getTitle());
         $sysImage->setDescription($sysImageConfig->getDescription());
 
-        list($width, $height, $type, $attr) = getimagesize(Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($sysImageConfig->getSourceUri()));
+        list($width, $height, $type, $attr) = getimagesize( Div::makePathAbsolute($sysImageConfig->getSourceUri()));
         $sysImage->setWidth($width);
         $sysImage->setHeight($height);
 
@@ -87,11 +95,11 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
 
 
     /**
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection $resolutionConfigCollection
+     * @param ResolutionConfigCollection $resolutionConfigCollection
      * @param $count
      * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function findImagesWithUnRenderedResolutions(Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection $resolutionConfigCollection, $count)
+    public function findImagesWithUnRenderedResolutions(ResolutionConfigCollection $resolutionConfigCollection, $count)
     {
         $statement = $this->buildQueryStatementForImagesWithUnRenderedResolutions($resolutionConfigCollection, $count);
         return $this->createQuery()->statement($statement)->execute();
@@ -99,10 +107,10 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
 
 
     /**
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection $resolutionConfigCollection
+     * @param ResolutionConfigCollection $resolutionConfigCollection
      * @return integer
      */
-    public function countImagesWithUnRenderedResolutions(Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection $resolutionConfigCollection)
+    public function countImagesWithUnRenderedResolutions(ResolutionConfigCollection $resolutionConfigCollection)
     {
         $statement = $this->buildQueryStatementForImagesWithUnRenderedResolutions($resolutionConfigCollection);
         $result = $this->createQuery()->statement(str_replace('SELECT item.*', 'SELECT count(*) as c', $statement))->execute(true);
@@ -111,27 +119,27 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
 
 
     /**
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection $resolutionConfigCollection
+     * @param ResolutionConfigCollection $resolutionConfigCollection
      * @param $count
      * @return string
      */
-    protected function buildQueryStatementForImagesWithUnRenderedResolutions(Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollection $resolutionConfigCollection, $count = 0)
+    protected function buildQueryStatementForImagesWithUnRenderedResolutions(ResolutionConfigCollection $resolutionConfigCollection, $count = 0)
     {
         $resolutionCount = $resolutionConfigCollection->count();
         $resolutionParamHashArray = array();
 
         foreach ($resolutionConfigCollection as $resolutionConfig) {
-            /** @var Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfig */
+            /** @var ResolutionConfig $resolutionConfig */
             $resolutionParamHashArray[] = $resolutionConfig->getParameterHash();
         }
 
         $resolutionParamHashCSV = "'" . implode("','", $resolutionParamHashArray) . "'";
-        $statementTemplate = "SELECT item.*, rescache.rescount FROM tx_yag_domain_model_item item
+        $statementTemplate = "SELECT item.*, rescache.rescount FROM item item
 								LEFT JOIN
-								(SELECT tx_yag_domain_model_resolutionfilecache.item, count(*) rescount
-								FROM `tx_yag_domain_model_resolutionfilecache`
-								WHERE tx_yag_domain_model_resolutionfilecache.paramhash IN (%s)
-								GROUP BY tx_yag_domain_model_resolutionfilecache.item) as rescache
+								(SELECT resolutionfilecache.item, count(*) rescount
+								FROM `resolutionfilecache`
+								WHERE resolutionfilecache.paramhash IN (%s)
+								GROUP BY resolutionfilecache.item) as rescache
 								ON rescache.item = item.uid
 								WHERE rescount < %s OR isnull(rescount)";
 
@@ -144,11 +152,11 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
     /**
      * Get the item which is in the database after the given item
      *
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      * @param int $limit of items to return
-     * @return Tx_Yag_Domain_Model_Item $item
+     * @return Item $item
      */
-    public function getItemsAfterThisItem(Tx_Yag_Domain_Model_Item $item = null, $limit = 1)
+    public function getItemsAfterThisItem(Item $item = null, $limit = 1)
     {
         $itemUid = $item ? $item->getUid() : 0;
 
@@ -180,7 +188,7 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
     {
         $query = $this->createQuery();
         $result = $query->statement('SELECT sum(filesize) as sumFileSize 
-									FROM tx_yag_domain_model_item
+									FROM item
 									WHERE deleted = 0')->execute(true);
         return $result[0]['sumFileSize'];
     }
@@ -189,15 +197,15 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
     /**
      * Count all items that belong to a gallery
      *
-     * @param Tx_Yag_Domain_Model_Gallery $gallery
+     * @param Gallery $gallery
      * @return int
      */
-    public function countItemsInGallery(Tx_Yag_Domain_Model_Gallery $gallery)
+    public function countItemsInGallery(Gallery $gallery)
     {
         $query = $this->createQuery();
 
-        $statement = 'SELECT count(*) as sumItems FROM `tx_yag_domain_model_item` item
-									INNER JOIN `tx_yag_domain_model_album` album ON item.album = album.uid
+        $statement = 'SELECT count(*) as sumItems FROM `item` item
+									INNER JOIN `album` album ON item.album = album.uid
 									WHERE album.gallery = %s
 									AND album.deleted = 0 AND album.hidden = 0 
 									AND item.deleted = 0 AND item.hidden = 0 AND item.l18n_parent = 0';
@@ -211,12 +219,12 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
      *
      * Sorting of item is set on returned collection of items!
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      * @param string $sortingField
      * @param string $sortingDirection
      * @return array
      */
-    public function getSortedItemsByAlbumFieldAndDirection(Tx_Yag_Domain_Model_Album $album, $sortingField, $sortingDirection)
+    public function getSortedItemsByAlbumFieldAndDirection(Album $album, $sortingField, $sortingDirection)
     {
         $sortings = array($sortingField => $sortingDirection);
         $query = $this->createQuery();
@@ -226,7 +234,7 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
 
         $sortingNumber = 0;
         foreach ($items as $item) {
-            /* @var $item Tx_Yag_Domain_Model_Item */
+            /* @var $item Item */
             $item->setSorting($sortingNumber);
             $sortingNumber++;
         }
@@ -238,14 +246,14 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
     /**
      * Returns item with highest sorting for given album
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      * @return array|Tx_Extbase_Persistence_QueryResultInterface
      */
-    public function getItemWithMaxSortingForAlbum(Tx_Yag_Domain_Model_Album $album)
+    public function getItemWithMaxSortingForAlbum(Album $album)
     {
         $query = $this->createQuery();
         $query->matching($query->equals('album', $album));
-        $query->setOrderings(array('sorting' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
+        $query->setOrderings(array('sorting' => QueryInterface::ORDER_DESCENDING));
         $query->setLimit(1);
         return $query->execute();
     }
@@ -264,7 +272,7 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
         $sortedResult = array();
 
         foreach ($result as $item) {
-            /** @var Tx_Yag_Domain_Model_Item $item */
+            /** @var Item $item */
             $position = array_search($item->getUid(), $uidArray);
             $sortedResult[$position] = $item;
         }
@@ -284,8 +292,8 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
         $this->persistenceManager->persistAll();
 
         $this->createQuery()->statement(
-            'UPDATE tx_yag_domain_model_item translatedItem
-			INNER JOIN tx_yag_domain_model_item parentItem ON translatedItem.l18n_parent = parentItem.uid
+            'UPDATE item translatedItem
+			INNER JOIN item parentItem ON translatedItem.l18n_parent = parentItem.uid
 			SET translatedItem.sorting = parentItem.sorting, translatedItem.deleted = parentItem.deleted
 			WHERE translatedItem.l18n_parent != 0
 			AND (translatedItem.sorting != parentItem.sorting OR translatedItem.deleted != parentItem.deleted);
@@ -299,7 +307,7 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
      * @param $numberOfItems Sets number of items to be returned
      * @param int $galleryUid Gallery UID to take images from
      * @param int $albumUid Album UID to take images from
-     * @return array<Tx_Yag_Domain_Model_Item>
+     * @return array<Item>
      */
     public function getRandomItems($numberOfItems, $galleryUid = 0, $albumUid = 0)
     {
@@ -326,22 +334,22 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
          */
         $additionalJoins = '';
 
-        $additionalWhere = ' tx_yag_domain_model_item.album > 0 '; // Only show images with connection to an album (itemNotFoundEntries have non)
-        $additionalWhere .= $this->getTypo3SpecialFieldsWhereClause(array('tx_yag_domain_model_item')) . ' ';
+        $additionalWhere = ' item.album > 0 '; // Only show images with connection to an album (itemNotFoundEntries have non)
+        $additionalWhere .= $this->getTypo3SpecialFieldsWhereClause(array('item')) . ' ';
 
         if ($albumUid || $galleryUid) {
-            $additionalJoins .= ' INNER JOIN tx_yag_domain_model_album ON tx_yag_domain_model_item.album = tx_yag_domain_model_album.uid ';
+            $additionalJoins .= ' INNER JOIN album ON item.album = album.uid ';
         }
 
         if ($albumUid) {
-            $additionalWhere .= ' AND tx_yag_domain_model_album.uid = ' . $albumUid . ' ';
-            $additionalWhere .= $this->getTypo3SpecialFieldsWhereClause(array('tx_yag_domain_model_album')) . ' ';
+            $additionalWhere .= ' AND album.uid = ' . $albumUid . ' ';
+            $additionalWhere .= $this->getTypo3SpecialFieldsWhereClause(array('album')) . ' ';
         }
 
         if ($galleryUid) {
-            $additionalJoins .= ' INNER JOIN tx_yag_domain_model_gallery ON tx_yag_domain_model_gallery.uid = tx_yag_domain_model_album.gallery ';
-            $additionalWhere .= ' AND tx_yag_domain_model_album.gallery = ' . $galleryUid . ' ';
-            $additionalWhere .= $this->getTypo3SpecialFieldsWhereClause(array('tx_yag_domain_model_gallery')) . ' ';
+            $additionalJoins .= ' INNER JOIN gallery ON gallery.uid = album.gallery ';
+            $additionalWhere .= ' AND album.gallery = ' . $galleryUid . ' ';
+            $additionalWhere .= $this->getTypo3SpecialFieldsWhereClause(array('gallery')) . ' ';
         }
 
 
@@ -349,7 +357,7 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
          * Get the overall itemCount
          */
         $countStatement = "SELECT count(*) as itemCount
-							FROM tx_yag_domain_model_item
+							FROM item
 							%s
 							WHERE %s";
         $countStatement = sprintf($countStatement, $additionalJoins, $additionalWhere);
@@ -367,8 +375,8 @@ class Tx_Yag_Domain_Repository_ItemRepository extends Tx_Yag_Domain_Repository_A
         /**
          * Select the items
          */
-        $selectStatementTemplate = "SELECT tx_yag_domain_model_item.uid as itemUid
-							FROM tx_yag_domain_model_item
+        $selectStatementTemplate = "SELECT item.uid as itemUid
+							FROM item
 							%s
 							WHERE %s
 							LIMIT %s, 1";

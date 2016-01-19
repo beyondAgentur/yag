@@ -23,6 +23,11 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\FileImporter;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Model\Album;
+
 /**
  * Importer Builder for File Importer
  *
@@ -30,12 +35,12 @@
  * @subpackage Import\FileImporter
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Import_FileImporter_ImporterBuilder extends Tx_Yag_Domain_Import_ImporterBuilder
+class ImporterBuilder extends \DL\Yag\Domain\Import\ImporterBuilder
 {
     /**
      * Holds a singleton instance of this class
      *
-     * @var Tx_Yag_Domain_Import_FileImporter_ImporterBuilder
+     * @var ImporterBuilder
      */
     protected static $instance = null;
 
@@ -43,12 +48,12 @@ class Tx_Yag_Domain_Import_FileImporter_ImporterBuilder extends Tx_Yag_Domain_Im
     /**
      * Factory method for getting an instance of this class as a singleton
      *
-     * @return Tx_Yag_Domain_Import_FileImporter_ImporterBuilder Singleton instance of file importer builder
+     * @return ImporterBuilder Singleton instance of file importer builder
      */
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new self(Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance());
+            self::$instance = new self(ConfigurationBuilderFactory::getInstance());
         }
         return self::$instance;
     }
@@ -57,13 +62,13 @@ class Tx_Yag_Domain_Import_FileImporter_ImporterBuilder extends Tx_Yag_Domain_Im
     /**
      * Returns an instance of file importer
      *
-     * @param Tx_Yag_Domain_Model_Album $album Album to add imported images to
-     * @return Tx_Yag_Domain_Import_FileImporter_Importer
+     * @param Album $album Album to add imported images to
+     * @return Importer
      */
-    public function getImporterInstanceByAlbum(Tx_Yag_Domain_Model_Album $album)
+    public function getImporterInstanceByAlbum(Album $album)
     {
-        $importer = parent::createImporterForAlbum('Tx_Yag_Domain_Import_FileImporter_Importer', $album);
-        /* @var $importer Tx_Yag_Domain_Import_FileImporter_Importer */
+        $importer = parent::createImporterForAlbum('Importer', $album);
+        /* @var $importer Importer */
         // As we get the uploaded file in temp dir, we have to move it to origs
         $importer->setMoveFilesToOrigsDirectoryToTrue();
         return $importer;

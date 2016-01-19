@@ -22,8 +22,17 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\Domain\ImageProcessing;
+
+use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Model\Item;
+use DL\Yag\Domain\Model\ResolutionFileCache;
+use DL\Yag\Exception\InvalidPath;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * Class implements image processor
@@ -33,7 +42,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Michael Knoll <mimi@kaktsuteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_ImageProcessing_Typo3Processor extends Tx_Yag_Domain_ImageProcessing_AbstractProcessor
+class Typo3Processor extends AbstractProcessor
 {
     /**
      * @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController contains a backup of the current $GLOBALS['TSFE'] if used in BE mode
@@ -49,9 +58,17 @@ class Tx_Yag_Domain_ImageProcessing_Typo3Processor extends Tx_Yag_Domain_ImagePr
 
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/ImageProcessing/Tx_Yag_Domain_ImageProcessing_AbstractProcessor::processFile()
+     * @see AbstractProcessor::processFile()
+     *
+     * @param ResolutionConfig    $resolutionConfiguration
+     * @param Item                $origFile
+     * @param ResolutionFileCache $resolutionFile
+     *
+     * @return TYPO3\CMS\Core\Resource\ProcessedFile
+     * @throws Exception
+     * @throws InvalidPath
      */
-    protected function processFile(Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration, Tx_Yag_Domain_Model_Item $origFile, Tx_Yag_Domain_Model_ResolutionFileCache $resolutionFile)
+    protected function processFile(ResolutionConfig $resolutionConfiguration, Item $origFile, ResolutionFileCache $resolutionFile)
     {
         if (TYPO3_MODE === 'BE') {
             $this->simulateFrontendEnvironment();
@@ -59,10 +76,10 @@ class Tx_Yag_Domain_ImageProcessing_Typo3Processor extends Tx_Yag_Domain_ImagePr
 
         // check if the item has a source uri set
         if (trim($origFile->getSourceuri()) == '') {
-            throw new Tx_Yag_Exception_InvalidPath('No Source URI set for Item ' . $origFile->getUid(), 1357896895);
+            throw new InvalidPath('No Source URI set for Item ' . $origFile->getUid(), 1357896895);
         }
 
-        $expectedDirectoryForOrigImage = Tx_Yag_Domain_FileSystem_Div::makePathAbsolute(Tx_Yag_Domain_FileSystem_Div::getPathFromFilePath($origFile->getSourceuri()));
+        $expectedDirectoryForOrigImage = Div::makePathAbsolute(Div::getPathFromFilePath($origFile->getSourceuri()));
         $sourcePathAndFileName = $origFile->getSourceuri();
 
         // check for source directory to be existing
@@ -76,7 +93,7 @@ class Tx_Yag_Domain_ImageProcessing_Typo3Processor extends Tx_Yag_Domain_ImagePr
         }
 
         // check for source file to be existing
-        if (!file_exists(Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($sourcePathAndFileName)) || !is_readable(Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($sourcePathAndFileName))) {
+        if (!file_exists(Div::makePathAbsolute($sourcePathAndFileName)) || !is_readable(Div::makePathAbsolute($sourcePathAndFileName))) {
             // if the original image for processed image is missing, we use the file-not-found file as source
             $sourcePathAndFileName = $this->processorConfiguration->getConfigurationBuilder()->buildSysImageConfiguration()->getSysImageConfig('imageNotFound')->getSourceUri();
         }
@@ -92,7 +109,7 @@ class Tx_Yag_Domain_ImageProcessing_Typo3Processor extends Tx_Yag_Domain_ImagePr
 				TYPO3 image processor was not able to create an output image.
 				SourceImagePath: %s,
 				ResultImagePath: %s",
-            Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($sourcePathAndFileName), $resultImagePathAbsolute), 1300205628);
+            Div::makePathAbsolute($sourcePathAndFileName), $resultImagePathAbsolute), 1300205628);
         }
 
         if ($resultImagePathAbsolute == $processedFile->getOriginalFile()->getForLocalProcessing()) {
@@ -104,7 +121,7 @@ class Tx_Yag_Domain_ImageProcessing_Typo3Processor extends Tx_Yag_Domain_ImagePr
 
         // Make sure, that expected image exists
         if (!file_exists($imageTarget)) {
-            throw new Exception(sprintf('The result image of the image processing was not moved from the creation path %s to the expected target path %s', $resultImagePathAbsolute, Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($imageTarget)), 1393382624);
+            throw new Exception(sprintf('The result image of the image processing was not moved from the creation path %s to the expected target path %s', $resultImagePathAbsolute, Div::makePathAbsolute($imageTarget)), 1393382624);
         }
 
         // set resolutionFileObject
@@ -124,12 +141,12 @@ class Tx_Yag_Domain_ImageProcessing_Typo3Processor extends Tx_Yag_Domain_ImagePr
     /**
      * Wrapper for cObj->getImageResource in FE and BE
      *
-     * @param Tx_Yag_Domain_Model_Item $origFile The original image
+     * @param Item $origFile The original image
      * @param string $sourcePathAndFileName Must be used to access the file, as it may be overwritten if the original file was not found
-     * @param Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration
+     * @param ResolutionConfig $resolutionConfiguration
      * @return TYPO3\CMS\Core\Resource\ProcessedFile
      */
-    protected function getImageResource(Tx_Yag_Domain_Model_Item $origFile, $sourcePathAndFileName, Tx_Yag_Domain_Configuration_Image_ResolutionConfig $resolutionConfiguration)
+    protected function getImageResource(Item $origFile, $sourcePathAndFileName, ResolutionConfig $resolutionConfiguration)
     {
         $typoScriptSettings = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService')->convertPlainArrayToTypoScriptArray($resolutionConfiguration->getSettings());
 
@@ -195,9 +212,9 @@ class Tx_Yag_Domain_ImageProcessing_Typo3Processor extends Tx_Yag_Domain_ImagePr
         chdir(PATH_site);
 
         $currentPid = (int) current($this->pidDetector->getPids());
-        GeneralUtility::makeInstance(Tx_PtExtbase_Utility_FakeFrontendFactory::class)->createFakeFrontEnd($currentPid);
+        GeneralUtility::makeInstance(\Tx_PtExtbase_Utility_FakeFrontendFactory::class)->createFakeFrontEnd($currentPid);
 
-        $typoScriptSetup = $this->configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+        $typoScriptSetup = $this->configurationManager->getConfiguration( ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
         $GLOBALS['TSFE']->tmpl->setup = $typoScriptSetup;
         $GLOBALS['TSFE']->config = $typoScriptSetup;
         $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');

@@ -23,16 +23,25 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Controller;
+
+use DL\Yag\Domain\Configuration\Image\ResolutionConfigCollectionFactory;
+use DL\Yag\Domain\FileSystem\ResolutionFileCacheFactory;
+use DL\Yag\Domain\Model\Item;
+use DL\Yag\Domain\Repository\ItemRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
 /**
  * Controller for Resolution File Cache
  *
  * @package Controller
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Controller_ResolutionFileCacheController extends Tx_Yag_Controller_AbstractController
+class ResolutionFileCacheController extends AbstractController
 {
     /**
-     * @var Tx_Yag_Domain_FileSystem_ResolutionFileCache
+     * @var ResolutionFileCache
      */
     protected $resolutionFileCache;
 
@@ -43,7 +52,7 @@ class Tx_Yag_Controller_ResolutionFileCacheController extends Tx_Yag_Controller_
      */
     public function postInitializeAction()
     {
-        $this->resolutionFileCache = Tx_Yag_Domain_FileSystem_ResolutionFileCacheFactory::getInstance();
+        $this->resolutionFileCache = ResolutionFileCacheFactory::getInstance();
     }
 
 
@@ -59,7 +68,7 @@ class Tx_Yag_Controller_ResolutionFileCacheController extends Tx_Yag_Controller_
     public function clearResolutionFileCacheAction()
     {
         $this->resolutionFileCache->clear();
-        $this->addFlashMessage(\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('tx_yag_controller_resolutionFileCache.cacheSuccessfullyCleared', $this->extensionName));
+        $this->addFlashMessage( LocalizationUtility::translate('tx_yag_controller_resolutionFileCache.cacheSuccessfullyCleared', $this->extensionName));
         
         $this->forward('maintenanceOverview', 'Backend');
     }
@@ -71,7 +80,7 @@ class Tx_Yag_Controller_ResolutionFileCacheController extends Tx_Yag_Controller_
      */
     public function buildAllItemResolutionsAction()
     {
-        $itemRepository = $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository'); /* @var $itemRepository Tx_Yag_Domain_Repository_ItemRepository */
+        $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository'); /* @var $itemRepository ItemRepository */
         $items = $itemRepository->findAll();
         
         foreach ($items as $item) {
@@ -82,12 +91,12 @@ class Tx_Yag_Controller_ResolutionFileCacheController extends Tx_Yag_Controller_
 
 
     /**
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      * @return void
      */
-    public function buildResolutionByConfigurationAction(Tx_Yag_Domain_Model_Item $item = null)
+    public function buildResolutionByConfigurationAction(Item $item = null)
     {
-        $selectedThemes = Tx_Yag_Domain_Configuration_Image_ResolutionConfigCollectionFactory::getInstanceOfRegistrySelectedThemes($this->configurationBuilder);
+        $selectedThemes = ResolutionConfigCollectionFactory::getInstanceOfRegistrySelectedThemes($this->configurationBuilder);
 
         if ($item != null) {
             $this->resolutionFileCache->buildResolutionFilesForItem($item,    $selectedThemes);
@@ -98,7 +107,8 @@ class Tx_Yag_Controller_ResolutionFileCacheController extends Tx_Yag_Controller_
             $returnArray = array('nextItemUid' => 0);
         }
 
-        \TYPO3\CMS\Core\Utility\GeneralUtility::cleanOutputBuffers();
+        ob_clean();
+
         echo json_encode($returnArray);
         exit();
     }
@@ -106,10 +116,10 @@ class Tx_Yag_Controller_ResolutionFileCacheController extends Tx_Yag_Controller_
 
 
     /**
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      * @return array
      */
-    protected function buildReturnArray(Tx_Yag_Domain_Model_Item $item)
+    protected function buildReturnArray(Item $item)
     {
 
         // The backend thumb
@@ -117,7 +127,7 @@ class Tx_Yag_Controller_ResolutionFileCacheController extends Tx_Yag_Controller_
         $itemFileResolution = $this->resolutionFileCache->getItemFileResolutionPathByConfiguration($item, $resolutionConfig);
 
         // The next image uid
-        $nextItem = $this->objectManager->get('Tx_Yag_Domain_Repository_ItemRepository')->getItemsAfterThisItem($item);
+        $nextItem = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository')->getItemsAfterThisItem($item);
         $nextItemUid = 0;
         if ($nextItem) {
             $nextItemUid = $nextItem->getUid();

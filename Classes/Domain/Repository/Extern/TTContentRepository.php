@@ -23,14 +23,18 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Repository\Extern;
+
+use TYPO3\CMS\Extbase\Persistence\Repository;
+
 /**
- * Repository for Tx_Yag_Domain_Model_Extern_TTContent
+ * Repository for TTContent
  *
  * @package Domain
  * @subpackage Repository
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Repository_Extern_TTContentRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class TTContentRepository extends Repository
 {
     protected $yagInstanceIdentifier = 'yag_pi1';
     

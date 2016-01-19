@@ -24,6 +24,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Domain\UserManagement;
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Class implements some static methods for user management
  *
@@ -31,7 +35,7 @@
  * @package Domain
  * @subpackage UserManagement
  */
-class Tx_Yag_Domain_UserManagement_Div
+class Div
 {
     /**
      * Returns a fe user domain object for a currently logged in user
@@ -43,9 +47,9 @@ class Tx_Yag_Domain_UserManagement_Div
     {
         $feUserUid = $GLOBALS['TSFE']->fe_user->user['uid'];
         if ($feUserUid > 0) {
-            $feUserRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_Extbase_Domain_Repository_FrontendUserRepository');
+            $feUserRepository = GeneralUtility::makeInstance('Tx_Extbase_Domain_Repository_FrontendUserRepository');
             /* @var $feUserRepository Tx_Extbase_Domain_Repository_FrontendUserRepository */
-            return $feUserRepository->findByUid(intval($feUserUid));
+            return $feUserRepository->findByUid((int) $feUserUid);
         } else {
             return null;
         }

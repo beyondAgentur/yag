@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\MetaData;
+
 /**
  * Class for XMP meta data parsing
  *
@@ -31,7 +33,7 @@
  * @author Michael Knoll <mimi@kaktusteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Import_MetaData_XmpParser extends Tx_Yag_Domain_Import_MetaData_AbstractParser
+class XmpParser extends AbstractParser
 {
     /**
      * Parses given file for xmp data

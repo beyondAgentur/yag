@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\AlbumList;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+
 /**
  * Factory for album configuration
  *
@@ -31,17 +35,17 @@
  
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_AlbumList_AlbumListConfigFactory
+class AlbumListConfigFactory
 {
     /**
      * Returns an instance of general configuration
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
-     * @return Tx_Yag_Domain_Configuration_AlbumList_AlbumListConfig
+     * @param ConfigurationBuilder $configurationBuilder
+     * @return AlbumListConfig
      */
-    public static function getInstance(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public static function getInstance(ConfigurationBuilder $configurationBuilder)
     {
         $albumListSettings = $configurationBuilder->getSettingsForConfigObject('albumList');
-        return new Tx_Yag_Domain_Configuration_AlbumList_AlbumListConfig($configurationBuilder, $albumListSettings);
+        return new AlbumListConfig($configurationBuilder, $albumListSettings);
     }
 }

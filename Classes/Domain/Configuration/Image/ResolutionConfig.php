@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Image;
+
 /**
  * Configuration for image resolution
  *
@@ -30,7 +32,7 @@
  * @subpackage Configuration\Image
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Image_ResolutionConfig extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class ResolutionConfig extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * The mode is the _typoScriptNodeValue of the Resolutionconfig typoscript branch

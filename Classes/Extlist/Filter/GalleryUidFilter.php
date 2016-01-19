@@ -22,6 +22,10 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\Extlist\Filter;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -31,11 +35,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Extlist
  * @subpackage Filter
  */
-class Tx_Yag_Extlist_Filter_GalleryUidFilter extends Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
+class GalleryUidFilter extends \Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
 {
     /**
      * YAG ConfigurationBuilder
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $yagConfigurationBuilder;
 
@@ -47,7 +51,7 @@ class Tx_Yag_Extlist_Filter_GalleryUidFilter extends Tx_PtExtlist_Domain_Model_F
     public function __construct()
     {
         parent::__construct();
-        $this->yagConfigurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+        $this->yagConfigurationBuilder = ConfigurationBuilderFactory::getInstance();
     }
 
 
@@ -70,14 +74,14 @@ class Tx_Yag_Extlist_Filter_GalleryUidFilter extends Tx_PtExtlist_Domain_Model_F
     public function getFilterValueForBreadCrumb()
     {
     }
-    public function buildFilterCriteria(Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
+    public function buildFilterCriteria(\Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
     {
     }
 
 
 
     /**
-     * @see Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
+     * @see \Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
      *
      */
     public function reset()
@@ -93,7 +97,7 @@ class Tx_Yag_Extlist_Filter_GalleryUidFilter extends Tx_PtExtlist_Domain_Model_F
 
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/Model/Filter/Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
+     * @see Classes/Domain/Model/Filter/\Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
      */
     public function setActiveState()
     {
@@ -105,7 +109,7 @@ class Tx_Yag_Extlist_Filter_GalleryUidFilter extends Tx_PtExtlist_Domain_Model_F
     /**
      * Build the filterCriteria for filter
      *
-     * @return Tx_PtExtlist_Domain_QueryObject_Criteria
+     * @return \Tx_PtExtlist_Domain_QueryObject_Criteria
      */
     protected function buildFilterCriteriaForAllFields()
     {
@@ -113,7 +117,7 @@ class Tx_Yag_Extlist_Filter_GalleryUidFilter extends Tx_PtExtlist_Domain_Model_F
         if (!is_array($onlyInUidSettings)) { // getSettings gives us array() if there are no settings with this key
             $onlyInUids = GeneralUtility::trimExplode(',', $onlyInUidSettings, true);
             if (is_array($onlyInUids) && count($onlyInUids)) {
-                $filterCriteriaFromSettings = Tx_PtExtlist_Domain_QueryObject_Criteria::in('uid', $onlyInUids);
+                $filterCriteriaFromSettings = \Tx_PtExtlist_Domain_QueryObject_Criteria::in('uid', $onlyInUids);
                 return $filterCriteriaFromSettings;
             }
         }
@@ -122,8 +126,8 @@ class Tx_Yag_Extlist_Filter_GalleryUidFilter extends Tx_PtExtlist_Domain_Model_F
         if (!is_array($notInUidSettings)) { // getSettings gives us array() if there are no settings with this key
             $notInUids = GeneralUtility::trimExplode(',', $this->filterConfig->getSettings('notInUids'), true);
             if (is_array($notInUids) && count($notInUids) > 0) {
-                $filterCriteriaFromSettings = Tx_PtExtlist_Domain_QueryObject_Criteria::notOp(
-                    Tx_PtExtlist_Domain_QueryObject_Criteria::in('uid', $notInUids)
+                $filterCriteriaFromSettings = \Tx_PtExtlist_Domain_QueryObject_Criteria::notOp(
+                    \Tx_PtExtlist_Domain_QueryObject_Criteria::in('uid', $notInUids)
                 );
                 return $filterCriteriaFromSettings;
             }

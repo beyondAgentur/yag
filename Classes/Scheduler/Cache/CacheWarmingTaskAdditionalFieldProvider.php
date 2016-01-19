@@ -1,6 +1,4 @@
 <?php
-namespace YAG\Yag\Scheduler\Cache;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,6 +23,13 @@ namespace YAG\Yag\Scheduler\Cache;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Scheduler\Cache;
+
+use DL\Yag\Scheduler\AbstractAdditionalFieldProvider;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
  * SQL Runner Task Additional Fields
@@ -32,17 +37,17 @@ namespace YAG\Yag\Scheduler\Cache;
  * @package YAG
  * @subpackage Scheduler
  */
-class CacheWarmingTaskAdditionalFieldProvider extends \YAG\Yag\Scheduler\AbstractAdditionalFieldProvider
+class CacheWarmingTaskAdditionalFieldProvider extends AbstractAdditionalFieldProvider
 {
     /**
      * Gets additional fields to render in the form to add/edit a task
      *
      * @param array $taskInfo Values of the fields from the add/edit task form
-     * @param \YAG\Yag\Scheduler\Cache\CacheWarmingTask $task
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule Reference to the scheduler backend module
+     * @param CacheWarmingTask $task
+     * @param SchedulerModuleController $schedulerModule Reference to the scheduler backend module
      * @return array A two dimensional array, array('Identifier' => array('fieldId' => array('code' => '', 'label' => '', 'cshKey' => '', 'cshLabel' => ''))
      */
-    public function getAdditionalFields(array &$taskInfo, $task, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
+    public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule)
     {
         $typoScriptPageUid = 1;
         $selectedThemes = array();
@@ -77,10 +82,10 @@ class CacheWarmingTaskAdditionalFieldProvider extends \YAG\Yag\Scheduler\Abstrac
 
     protected function getSelectableThemes()
     {
-        $configurationManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
+        $configurationManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
             ->get('TYPO3\\CMS\\Extbase\\Configuration\\ConfigurationManagerInterface'); /** @var $configurationManager \TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager */
 
-        $settings = $configurationManager->getConfiguration(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Yag', 'pi1');
+        $settings = $configurationManager->getConfiguration( ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'Yag', 'pi1');
 
         $themes = \Tx_PtExtbase_Utility_NameSpace::getArrayContentByArrayAndNamespace($settings, 'themes');
 
@@ -99,10 +104,10 @@ class CacheWarmingTaskAdditionalFieldProvider extends \YAG\Yag\Scheduler\Abstrac
      * Validates the additional fields' values
      *
      * @param array $submittedData An array containing the data submitted by the add/edit task form
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule Reference to the scheduler backend module
+     * @param SchedulerModuleController $schedulerModule Reference to the scheduler backend module
      * @return boolean TRUE if validation was ok (or selected class is not relevant), FALSE otherwise
      */
-    public function validateAdditionalFields(array &$submittedData, \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule)
+    public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule)
     {
         if ((int) $submittedData['yagTypoScriptPageUid'] <= 0) {
             return false;
@@ -122,11 +127,11 @@ class CacheWarmingTaskAdditionalFieldProvider extends \YAG\Yag\Scheduler\Abstrac
      * Takes care of saving the additional fields' values in the task's object
      *
      * @param array $submittedData An array containing the data submitted by the add/edit task form
-     * @param \TYPO3\CMS\Scheduler\Task\AbstractTask $task Reference to the scheduler backend module
+     * @param AbstractTask $task Reference to the scheduler backend module
      * @throws \InvalidArgumentException
      * @return void
      */
-    public function saveAdditionalFields(array $submittedData, \TYPO3\CMS\Scheduler\Task\AbstractTask $task)
+    public function saveAdditionalFields(array $submittedData, AbstractTask $task)
     {
         if (!$task instanceof CacheWarmingTask) {
             throw new \InvalidArgumentException('Task not of type CacheWarmingTask', 1384275697);

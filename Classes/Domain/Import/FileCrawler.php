@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import;
+
+use DL\Yag\Domain\Configuration\Import\ImporterConfiguration;
+
 /**
  * Class implements File Crawler 
  *
@@ -30,12 +34,12 @@
  * @subpackage Import
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Import_FileCrawler
+class FileCrawler
 {
     /**
      * Holds an instance of the importer configuration
      *
-     * @var Tx_Yag_Domain_Configuration_Import_ImporterConfiguration
+     * @var ImporterConfiguration
      */
     protected $importerConfiguration;
     
@@ -44,9 +48,9 @@ class Tx_Yag_Domain_Import_FileCrawler
     /**
      * Constructor for file crawler
      *
-     * @param Tx_Yag_Domain_Configuration_Import_ImporterConfiguration $configuration
+     * @param ImporterConfiguration $configuration
      */
-    public function __construct(Tx_Yag_Domain_Configuration_Import_ImporterConfiguration $configuration)
+    public function __construct(ImporterConfiguration $configuration)
     {
         $this->importerConfiguration = $configuration;
     }

@@ -23,6 +23,12 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Import\MetaData;
+
+use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\CommandUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Class for parsing the images core data
  *
@@ -30,7 +36,7 @@
  * @subpackage Import\MetaData
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Import_MetaData_CoreDataParser extends Tx_Yag_Domain_Import_MetaData_AbstractParser implements \TYPO3\CMS\Core\SingletonInterface
+class CoreDataParser extends AbstractParser implements SingletonInterface
 {
     /**
      * @param $filePath
@@ -38,9 +44,9 @@ class Tx_Yag_Domain_Import_MetaData_CoreDataParser extends Tx_Yag_Domain_Import_
      */
     public function parseCoreData($filePath)
     {
-        $imageMagicCommand = \TYPO3\CMS\Core\Utility\GeneralUtility::imageMagickCommand('identify', '-verbose');
+        $imageMagicCommand = GeneralUtility::imageMagickCommand('identify', '-verbose');
         $imageMagicCommand .= ' ' . $filePath;
-        \TYPO3\CMS\Core\Utility\CommandUtility::exec($imageMagicCommand, $result);
+        CommandUtility::exec($imageMagicCommand, $result);
 
         $data = array();
         foreach ($result as $resultLine) {
@@ -81,12 +87,12 @@ class Tx_Yag_Domain_Import_MetaData_CoreDataParser extends Tx_Yag_Domain_Import_
                 $resEquationParts = explode('/', $data['X Resolution']);
                 return (int) $resEquationParts[0] / (int) $resEquationParts[1];
             } else {
-                return intval($data['X Resolution']);
+                return (int) $data['X Resolution'];
             }
         }
 
         if (array_key_exists('Resolution', $data)) {
-            return intval($data['Resolution']);
+            return (int) $data['Resolution'];
         }
     }
 }

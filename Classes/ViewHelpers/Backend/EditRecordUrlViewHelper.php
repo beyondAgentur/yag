@@ -1,6 +1,4 @@
 <?php
-namespace DL\Yag\ViewHelpers\Backend;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -24,6 +22,8 @@ namespace DL\Yag\ViewHelpers\Backend;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\ViewHelpers\Backend;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\FormProtection\FormProtectionFactory;
@@ -72,9 +72,9 @@ class EditRecordUrlViewHelper extends AbstractViewHelper
         $className = get_class($entity);
 
         $classToTableMap = [
-            'Tx_Yag_Domain_Model_Gallery' => 'tx_yag_domain_model_gallery',
-            'Tx_Yag_Domain_Model_Album' => 'tx_yag_domain_model_album',
-            'Tx_Yag_Domain_Model_Item' => 'tx_yag_domain_model_item',
+            'DL\\Yag\\Domain\\Model\\Gallery' => 'tx_yag_domain_model_gallery',
+            'DL\\Yag\\Domain\\Model\\Album' => 'tx_yag_domain_model_album',
+            'DL\\Yag\\Domain\\Model\\Item' => 'tx_yag_domain_model_item',
         ];
 
         $tableName = $classToTableMap[$className];

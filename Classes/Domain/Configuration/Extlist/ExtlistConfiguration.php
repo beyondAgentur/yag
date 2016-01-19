@@ -24,6 +24,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Extlist;
+
 /**
  * Class implements album configuration object Extlist configuration in YAG
  *
@@ -32,13 +34,15 @@
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_Configuration_Extlist_ExtlistConfiguration extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class ExtlistConfiguration extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * Returns list configuration for a given list identifier
      *
      * @param string $listIdentifier
+     *
      * @return array
+     * @throws Exception
      */
     public function getExtlistSettingsByListId($listIdentifier)
     {

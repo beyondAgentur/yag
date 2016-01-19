@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Configuration\Import;
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Class for importer configuration
  *
@@ -32,7 +36,7 @@
  * @author Michael Knoll <mimi@kaktsuteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Configuration_Import_ImporterConfiguration extends Tx_PtExtbase_Configuration_AbstractConfiguration
+class ImporterConfiguration extends \Tx_PtExtbase_Configuration_AbstractConfiguration
 {
     /**
      * Parse the metadata of the imported items
@@ -98,7 +102,7 @@ class Tx_Yag_Domain_Configuration_Import_ImporterConfiguration extends Tx_PtExtb
         if (!array_key_exists('supportedFileTypes', $this->settings)) {
             throw new \Exception('Required property "supportedFileTypes" is not set in importer configuration.', 1383131775);
         }
-        $this->supportedFileTypes = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->settings['supportedFileTypes']);
+        $this->supportedFileTypes = GeneralUtility::trimExplode(',', $this->settings['supportedFileTypes']);
 
         $this->setRequiredValue('importFileMask', 'The Import FileMask was not set. 1384269104');
     }

@@ -22,7 +22,18 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+namespace DL\Yag\Domain\Import;
+
+use DL\Yag\Domain\AlbumContentManager;
+use DL\Yag\Domain\FileSystem\FileManager;
+use DL\Yag\Domain\ImageProcessing\AbstractProcessor;
+use DL\Yag\Domain\Repository\ItemRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 
 /**
  * Base class for all YAG importers
@@ -32,12 +43,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Import_ImporterInterface
+abstract class AbstractImporter implements ImporterInterface
 {
     /**
      * Holds an instance of album content manager
      *
-     * @var Tx_Yag_Domain_AlbumContentManager
+     * @var AlbumContentManager
      */
     protected $albumContentManager;
 
@@ -46,7 +57,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Holds an instance of configuration builder
      *
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var Configuration_ConfigurationBuilder
      */
     protected $configurationBuilder;
 
@@ -55,7 +66,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Holds an instance of the importer configuraation
      *
-     * @var Tx_Yag_Domain_Configuration_Import_ImporterConfiguration
+     * @var Configuration_Import_ImporterConfiguration
      */
     protected $importerConfiguration;
 
@@ -64,7 +75,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Holds an instance of album to which items should be imported
      *
-     * @var Tx_Yag_Domain_Model_Album
+     * @var Model_Album
      */
     protected $album;
 
@@ -73,7 +84,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Holds an instance of persistence manager
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
+     * @var PersistenceManager
      */
     protected $persistenceManager;
 
@@ -82,7 +93,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Holds an instance of image processor
      *
-     * @var Tx_Yag_Domain_ImageProcessing_AbstractProcessor
+     * @var AbstractProcessor
      */
     protected $imageProcessor;
 
@@ -91,7 +102,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Holds an instance of item repository
      *
-     * @var Tx_Yag_Domain_Repository_ItemRepository
+     * @var ItemRepository
      */
     protected $itemRepository;
 
@@ -100,13 +111,13 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Holds an instance of item meta repository
      *
-     * @var Tx_Yag_Domain_Repository_ItemMetaRepository
+     * @var ItemMetaRepository
      */
     protected $itemMetaRepository;
 
 
     /**
-     * @var Tx_Yag_Domain_Import_MetaData_ItemMetaFactory
+     * @var MetaData_ItemMetaFactory
      */
     protected $itemMetaDataFactory;
 
@@ -122,7 +133,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
 
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -136,21 +147,21 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
 
 
     /**
-     * @var Tx_Yag_Domain_FileSystem_FileManager
+     * @var FileManager
      */
     protected $fileManager;
 
 
     /**
-     * @var Tx_Yag_Domain_FileSystem_Div
+     * @var Div
      */
     protected $fileSystemDiv;
 
 
     /**
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      */
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager)
+    public function injectObjectManager( ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }
@@ -159,18 +170,18 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Injector for persistence manager
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
+     * @param PersistenceManager $persistenceManager
      */
-    public function injectPersistenceManager(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager)
+    public function injectPersistenceManager( PersistenceManager $persistenceManager)
     {
         $this->persistenceManager = $persistenceManager;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_FileSystem_FileManager $fileManager
+     * @param FileManager $fileManager
      */
-    public function injectFileManager(Tx_Yag_Domain_FileSystem_FileManager $fileManager)
+    public function injectFileManager(FileManager $fileManager)
     {
         $this->fileManager = $fileManager;
     }
@@ -179,36 +190,36 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Injector for item repository
      *
-     * @param Tx_Yag_Domain_Repository_ItemRepository $itemRepository
+     * @param ItemRepository $itemRepository
      */
-    public function injectItemRepository(Tx_Yag_Domain_Repository_ItemRepository $itemRepository)
+    public function injectItemRepository(ItemRepository $itemRepository)
     {
         $this->itemRepository = $itemRepository;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Repository_ItemMetaRepository $itemMetaRepository
+     * @param ItemMetaRepository $itemMetaRepository
      */
-    public function injectItemMetaRepository(Tx_Yag_Domain_Repository_ItemMetaRepository $itemMetaRepository)
+    public function injectItemMetaRepository(ItemMetaRepository $itemMetaRepository)
     {
         $this->itemMetaRepository = $itemMetaRepository;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_FileSystem_Div $fileSystemDiv
+     * @param Div $fileSystemDiv
      */
-    public function injectResolutionFileSystemDiv(Tx_Yag_Domain_FileSystem_Div $fileSystemDiv)
+    public function injectResolutionFileSystemDiv(Div $fileSystemDiv)
     {
         $this->fileSystemDiv = $fileSystemDiv;
     }
 
 
     /**
-     * @param Tx_Yag_Domain_Import_MetaData_ItemMetaFactory $itemMetaDataFactory
+     * @param MetaData_ItemMetaFactory $itemMetaDataFactory
      */
-    public function injectItemMetaDataFactory(Tx_Yag_Domain_Import_MetaData_ItemMetaFactory $itemMetaDataFactory)
+    public function injectItemMetaDataFactory(MetaData_ItemMetaFactory $itemMetaDataFactory)
     {
         $this->itemMetaDataFactory = $itemMetaDataFactory;
     }
@@ -218,9 +229,9 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Injector for image processor
      *
-     * @param Tx_Yag_Domain_ImageProcessing_AbstractProcessor $imageProcessor
+     * @param AbstractProcessor $imageProcessor
      */
-    public function setImageProcessor(Tx_Yag_Domain_ImageProcessing_AbstractProcessor $imageProcessor)
+    public function setImageProcessor(AbstractProcessor $imageProcessor)
     {
         $this->imageProcessor = $imageProcessor;
     }
@@ -230,9 +241,9 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Injector for album content manager
      *
-     * @param Tx_Yag_Domain_AlbumContentManager $albumContentManager
+     * @param AlbumContentManager $albumContentManager
      */
-    public function setAlbumManager(Tx_Yag_Domain_AlbumContentManager $albumContentManager)
+    public function setAlbumManager(AlbumContentManager $albumContentManager)
     {
         $this->albumContentManager = $albumContentManager;
     }
@@ -242,9 +253,9 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Injector for configuration builder
      *
-     * @param Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder
+     * @param Configuration_ConfigurationBuilder $configurationBuilder
      */
-    public function setConfigurationBuilder(Tx_Yag_Domain_Configuration_ConfigurationBuilder $configurationBuilder)
+    public function setConfigurationBuilder(Configuration_ConfigurationBuilder $configurationBuilder)
     {
         $this->configurationBuilder = $configurationBuilder;
     }
@@ -256,7 +267,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
      *
      * @param $importerConfiguration
      */
-    public function setImporterConfiguration(Tx_Yag_Domain_Configuration_Import_ImporterConfiguration $importerConfiguration)
+    public function setImporterConfiguration(Configuration_Import_ImporterConfiguration $importerConfiguration)
     {
         $this->importerConfiguration = $importerConfiguration;
     }
@@ -266,9 +277,9 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
     /**
      * Sets album to which items should be imported
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Model_Album $album
      */
-    public function setAlbum(Tx_Yag_Domain_Model_Album $album)
+    public function setAlbum(Model_Album $album)
     {
         $this->album = $album;
     }
@@ -279,9 +290,9 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
      * Setter for fe_user object
      *
      * @abstract
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser
+     * @param FrontendUser $feUser
      */
-    public function setFeUser(\TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser)
+    public function setFeUser( FrontendUser $feUser)
     {
         $this->feUser = $feUser;
     }
@@ -293,15 +304,15 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
      * is given, this one is used. Otherwise a new one is created.
      *
      * @param string $filePath Absolute file path to file on server
-     * @param Tx_Yag_Domain_Model_Item $item Item to attach file to
-     * @return Tx_Yag_Domain_Model_Item Item created or used for import
+     * @param Model_Item $item Item to attach file to
+     * @return Model_Item Item created or used for import
      */
     protected function importFileByFilename($filePath, $item = null)
     {
 
         // Create new item if none is given
         if ($item === null) {
-            $item = $this->objectManager->get('Tx_Yag_Domain_Model_Item');
+            $item = $this->objectManager->get('Model_Item');
             $item->setFeUserUid($this->feUser->getUid());
         }
 
@@ -314,7 +325,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
         $relativeFilePath = $this->getRelativeFilePath($filePath);
 
         $item->setSourceuri($relativeFilePath);
-        $item->setFilename(Tx_Yag_Domain_FileSystem_Div::getFilenameFromFilePath($relativeFilePath));
+        $item->setFilename(Div::getFilenameFromFilePath($relativeFilePath));
 
         $item->setWidth($fileSizes[0]);
         $item->setHeight($fileSizes[1]);
@@ -328,7 +339,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
                 GeneralUtility::sysLog('Error while extracting MetaData from "' . $filePath . '". Error was: ' . $e->getMessage(), 'yag', 2);
             }
 
-            if ($this->importerConfiguration->getGenerateTagsFromMetaData() && is_a($item->getItemMeta(), 'Tx_Yag_Domain_Model_ItemMeta')) {
+            if ($this->importerConfiguration->getGenerateTagsFromMetaData() && is_a($item->getItemMeta(), 'Model_ItemMeta')) {
                 try {
                     $item->addTagsFromCSV($item->getItemMeta()->getKeywords());
                 } catch (Exception $e) {
@@ -357,14 +368,14 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
      * Replace the variables in the given format string with fileName or properties of the
      * itemMeta object.
      *
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Model_Item $item
      * @param string $format
      * @param array $additionalVars
-     * @return Tx_Yag_Domain_Model_Item $item;
+     * @return Model_Item $item;
      */
-    protected function processStringFromMetaData(Tx_Yag_Domain_Model_Item $item, $format, $additionalVars = array())
+    protected function processStringFromMetaData(Model_Item $item, $format, $additionalVars = array())
     {
-        if ($item->getItemMeta() instanceof Tx_Yag_Domain_Model_ItemMeta) {
+        if ($item->getItemMeta() instanceof Model_ItemMeta) {
             $vars = $item->getItemMeta()->getAttributeArray();
         } else {
             $vars = array();
@@ -373,8 +384,8 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
         $vars['origFileName'] = $item->getOriginalFilename();
         $vars['fileName'] = $this->processTitleFromFileName($item->getOriginalFilename());
 
-        $vars = \TYPO3\CMS\Extbase\Utility\ArrayUtility::arrayMergeRecursiveOverrule($vars, $additionalVars);
-        $formattedString = Tx_PtExtlist_Utility_RenderValue::renderDataByConfigArray($vars, $format);
+        $vars = ArrayUtility::arrayMergeRecursiveOverrule($vars, $additionalVars);
+        $formattedString = \Tx_PtExtlist_Utility_RenderValue::renderDataByConfigArray($vars, $format);
 
         return $formattedString;
     }
@@ -392,7 +403,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
      */
     protected function getRelativeFilePath($filePath)
     {
-        $basePath = Tx_Yag_Domain_FileSystem_Div::getT3BasePath();
+        $basePath = Div::getT3BasePath();
         if (substr($filePath, 0, strlen($basePath)) == $basePath) {
             $filePath = substr($filePath, strlen($basePath));
         }
@@ -405,11 +416,11 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
      * Creates a new item object and persists it
      * so that we have an UID for it.
      *
-     * @return Tx_Yag_Domain_Model_Item Persisted item
+     * @return Model_Item Persisted item
      */
     protected function getNewPersistedItem()
     {
-        $item = $this->objectManager->get('Tx_Yag_Domain_Model_Item');
+        $item = $this->objectManager->get('Model_Item');
 
         if ($this->feUser) {
             $item->setFeUserUid($this->feUser->getUid());
@@ -460,11 +471,11 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
      * If an item is given, UID of item is used as filename for item in original items directory
      *
      * @param string $filePath Full qualified filepath of file to move
-     * @param Tx_Yag_Domain_Model_Item $item Item that should hold file (not modified, make sure to set sourceuri manually!
+     * @param Model_Item $item Item that should hold file (not modified, make sure to set sourceuri manually!
      * @return string
      * @throws Exception
      */
-    protected function moveFileToOrigsDirectory($filePath, Tx_Yag_Domain_Model_Item $item = null)
+    protected function moveFileToOrigsDirectory($filePath, Model_Item $item = null)
     {
 
         // Create path to move file to
@@ -478,7 +489,7 @@ abstract class Tx_Yag_Domain_Import_AbstractImporter implements Tx_Yag_Domain_Im
                 $origsFilePath .= $item->getUid() . '.' . $fileSuffix; // if we get an item, we use UID of item as a part of the filename
             }
         } else {
-            $origsFilePath .= Tx_Yag_Domain_FileSystem_Div::getFilenameFromFilePath($filePath); // if we do not get one, we use filename of given filepart
+            $origsFilePath .= Div::getFilenameFromFilePath($filePath); // if we do not get one, we use filename of given filepart
         }
 
         if (!rename($filePath, $origsFilePath)) {

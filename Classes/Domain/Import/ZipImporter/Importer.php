@@ -23,6 +23,13 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Domain\Import\ZipImporter;
+
+use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\Import\AbstractImporter;
+use DL\Yag\Domain\Import\DirectoryImporter\ImporterBuilder;
+use TYPO3\CMS\Core\Utility\CommandUtility;
+
 /**
  * Zip Importer for YAG gallery. Enables importing images from ZIP files
  *
@@ -31,7 +38,7 @@
  * @author Michael Knoll <mimi@kaktusteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Import_ZipImporter_Importer extends Tx_Yag_Domain_Import_AbstractImporter
+class Importer extends AbstractImporter
 {
     /**
      * Holds path to zipFile
@@ -84,11 +91,11 @@ class Tx_Yag_Domain_Import_ZipImporter_Importer extends Tx_Yag_Domain_Import_Abs
     public function runImport()
     {
         // Unpack zip file
-        $tempDir = Tx_Yag_Domain_FileSystem_Div::tempdir(sys_get_temp_dir(), 'yag_zip_extraction');
+        $tempDir = Div::tempdir(sys_get_temp_dir(), 'yag_zip_extraction');
         $this->unzipArchive($this->zipFilename, $tempDir);
 
         // Initialize directory crawler on extracted file's directory and run import
-        $directoryImporter = Tx_Yag_Domain_Import_DirectoryImporter_ImporterBuilder::getInstance()->getInstanceByDirectoryAndAlbum($tempDir, $this->album);
+        $directoryImporter = ImporterBuilder::getInstance()->getInstanceByDirectoryAndAlbum($tempDir, $this->album);
         $directoryImporter->setMoveFilesToOrigsDirectoryToTrue(); // Files will be moved to origs directory before they are processed
         $directoryImporter->setCrawlRecursive(true);
         $directoryImporter->runImport();
@@ -122,7 +129,7 @@ class Tx_Yag_Domain_Import_ZipImporter_Importer extends Tx_Yag_Domain_Import_Abs
         // call the unzip executable if set
         if ($this->unzipExecutable && is_executable($this->unzipExecutable)) {
             $cmd = $this->unzipExecutable . ' -qq "' . $zipPathAndFileName . '" -d "' . $tempDir . '"';
-            \TYPO3\CMS\Core\Utility\CommandUtility::exec($cmd);
+            CommandUtility::exec($cmd);
         }
     }
 

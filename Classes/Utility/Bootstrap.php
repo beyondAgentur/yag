@@ -23,7 +23,14 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-class Tx_Yag_Utility_Bootstrap implements \TYPO3\CMS\Core\SingletonInterface
+namespace DL\Yag\Utility;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Context\YagContextFactory;
+use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+class Bootstrap implements SingletonInterface
 {
     /**
      * @var string
@@ -52,18 +59,18 @@ class Tx_Yag_Utility_Bootstrap implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function initConfigurationBuilder()
     {
-        $yagSettings = Tx_PtExtbase_Div::typoscriptRegistry('plugin.tx_yag.settings.');
-        $yagEBSettings = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService')->convertTypoScriptArrayToPlainArray($yagSettings);
+        $yagSettings = \Tx_PtExtbase_Div::typoscriptRegistry('plugin.tx_yag.settings.');
+        $yagEBSettings = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService')->convertTypoScriptArrayToPlainArray($yagSettings);
 
-        Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::injectSettings($yagEBSettings);
-        Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance($this->contextIdentifier, $this->theme);
-        Tx_Yag_Domain_Context_YagContextFactory::createInstance($this->contextIdentifier);
+        ConfigurationBuilderFactory::injectSettings($yagEBSettings);
+        ConfigurationBuilderFactory::getInstance($this->contextIdentifier, $this->theme);
+        YagContextFactory::createInstance($this->contextIdentifier);
     }
 
 
     /**
      * @param $theme
-     * @return Tx_Yag_Utility_Bootstrap
+     * @return Bootstrap
      */
     public function setTheme($theme)
     {
@@ -74,7 +81,7 @@ class Tx_Yag_Utility_Bootstrap implements \TYPO3\CMS\Core\SingletonInterface
 
     /**
      * @param $contextIdentifier
-     * @return Tx_Yag_Utility_Bootstrap
+     * @return Bootstrap
      */
     public function setContextIdentifier($contextIdentifier)
     {

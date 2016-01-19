@@ -23,19 +23,25 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Link;
+
+use DL\Yag\Domain\Context\YagContextFactory;
+use DL\Yag\Domain\Model\Album;
+use DL\Yag\Domain\Model\Gallery;
+
 /**
  * Class implements a viewhelper for rendering a link for an album
  *
  * @package ViewHelpers
  * @author Daniel Lienert
  */
-class Tx_Yag_ViewHelpers_Link_ZipDownloadViewHelper extends Tx_PtExtlist_ViewHelpers_Link_ActionViewHelper
+class ZipDownloadViewHelper extends \Tx_PtExtlist_ViewHelpers_Link_ActionViewHelper
 {
     /**
      * Renders link for an album
      *
-     * @param Tx_Yag_Domain_Model_Album $album Album object to render link for
-     * @param Tx_Yag_Domain_Model_Gallery $gallery Gallery object to render link for
+     * @param Album $album Album object to render link for
+     * @param Gallery $gallery Gallery object to render link for
      * @param integer $pageUid
      * @param integer $pageType type of the target page. See typolink.parameter
      * @param integer $pageType type of the target page. See typolink.parameter
@@ -46,17 +52,17 @@ class Tx_Yag_ViewHelpers_Link_ZipDownloadViewHelper extends Tx_PtExtlist_ViewHel
      * @return string Rendered link for album
      * @throws Exception
      */
-    public function render(Tx_Yag_Domain_Model_Album $album = null, Tx_Yag_Domain_Model_Gallery $gallery = null,  $pageUid = null, $pageType = 0, $noCache = false, $noCacheHash = false, $section = '', $format = '')
+    public function render(Album $album = null, Gallery $gallery = null,  $pageUid = null, $pageType = 0, $noCache = false, $noCacheHash = false, $section = '', $format = '')
     {
 
         // TODO implement gallery download
 
-        if ($album instanceof Tx_Yag_Domain_Model_Album) {
-            $namespace = Tx_Yag_Domain_Context_YagContextFactory::getInstance()->getObjectNamespace() . '.albumUid';
-            $arguments = Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($namespace, array(), $album->getUid());
+        if ($album instanceof Album) {
+            $namespace = YagContextFactory::getInstance()->getObjectNamespace() . '.albumUid';
+            $arguments = \Tx_PtExtbase_Utility_NameSpace::saveDataInNamespaceTree($namespace, array(), $album->getUid());
         }
 
-        Tx_PtExtbase_State_Session_SessionPersistenceManagerFactory::getInstance()->addSessionRelatedArguments($arguments);
+        \Tx_PtExtbase_State_Session_SessionPersistenceManagerFactory::getInstance()->addSessionRelatedArguments($arguments);
 
         return parent::render('downloadAsZip', $arguments, 'ItemList', null, null, $pageUid, $pageType, $noCache, $noCacheHash, $section, $format);
     }

@@ -1,7 +1,4 @@
 <?php
-
-namespace TYPO3\CMS\Yag\Fal\Driver;
-
 /***************************************************************
 *  Copyright notice
 *
@@ -26,6 +23,9 @@ namespace TYPO3\CMS\Yag\Fal\Driver;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace TYPO3\CMS\Yag\Fal\Driver;
+
+use DL\Yag\Domain\FileSystem\Div;
 
 class PathInfo
 {
@@ -259,13 +259,13 @@ class PathInfo
 
     public function getGalleryPath()
     {
-        return \Tx_Yag_Domain_FileSystem_Div::concatenatePaths(array($this->getPagePath(), $this->galleryName . '|' . $this->galleryUId));
+        return Div::concatenatePaths(array($this->getPagePath(), $this->galleryName . '|' . $this->galleryUId));
     }
 
 
     public function getAlbumPath()
     {
-        return \Tx_Yag_Domain_FileSystem_Div::concatenatePaths(array($this->getGalleryPath(), $this->albumName . '|' . $this->albumUid));
+        return Div::concatenatePaths(array($this->getGalleryPath(), $this->albumName . '|' . $this->albumUid));
     }
 
 
@@ -289,6 +289,8 @@ class PathInfo
 
     /**
      * @param int $galleryUId
+     *
+     * @return $this
      */
     public function setGalleryUId($galleryUId)
     {
@@ -306,6 +308,8 @@ class PathInfo
 
     /**
      * @param int $itemUid
+     *
+     * @return $this
      */
     public function setItemUid($itemUid)
     {
@@ -323,6 +327,8 @@ class PathInfo
 
     /**
      * @param int $pid
+     *
+     * @return $this
      */
     public function setPid($pid)
     {
@@ -357,6 +363,8 @@ class PathInfo
 
     /**
      * @param string $infoName
+     *
+     * @return $this
      */
     public function setDisplayName($infoName)
     {
@@ -374,6 +382,8 @@ class PathInfo
 
     /**
      * @param string $pathType
+     *
+     * @return $this
      */
     public function setPathType($pathType)
     {

@@ -23,6 +23,12 @@
 * This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\ViewHelpers\Resource;
+
+use DL\Yag\Domain\FileSystem\Div;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 /**
 * Generic Viewhelper for rendering an URL to a file using getFileAbsFileName
 * 
@@ -38,18 +44,18 @@
 * @author Michael Knoll <mimi@kaktusteam.de>
 */
 
-class Tx_Yag_ViewHelpers_Resource_FileViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class FileViewHelper extends AbstractViewHelper
 {
     /**
-     * @var Tx_Yag_Domain_FileSystem_Div
+     * @var Div
      */
     protected $fileSystemDiv;
 
 
     /**
-     * @param Tx_Yag_Domain_FileSystem_Div $fileSystemDiv
+     * @param Div $fileSystemDiv
      */
-    public function injectFileSystemDiv(Tx_Yag_Domain_FileSystem_Div $fileSystemDiv)
+    public function injectFileSystemDiv(Div $fileSystemDiv)
     {
         $this->fileSystemDiv = $fileSystemDiv;
     }
@@ -67,7 +73,7 @@ class Tx_Yag_ViewHelpers_Resource_FileViewHelper extends \TYPO3\CMS\Fluid\Core\V
             $path = $this->renderChildren();
         }
 
-        if (file_exists(\TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($path))) {
+        if (file_exists( GeneralUtility::getFileAbsFileName($path))) {
             return $this->fileSystemDiv->getFileRelFileName($path);
         } else {
             return sprintf('The given Path %s was not found', htmlspecialchars($path));

@@ -23,6 +23,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+namespace DL\Yag\Domain\FileSystem;
+
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -33,7 +36,7 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Daniel Lienert <typo3@lienert.cc>
  * @author Michael Knoll <mimi@kaktusteam.de>
  */
-class Tx_Yag_Domain_FileSystem_Div extends Tx_PtExtbase_Utility_Files
+class Div extends \Tx_PtExtbase_Utility_Files
 {
     /**
      * Returns installation base path of typo3 installation
@@ -185,13 +188,14 @@ class Tx_Yag_Domain_FileSystem_Div extends Tx_PtExtbase_Utility_Files
     }
 
 
-
     /**
      * Recursively remove all files and directorys
      *
      * @static
+     *
      * @param $dir
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public static function rRMDir($dir)
     {
@@ -264,11 +268,11 @@ class Tx_Yag_Domain_FileSystem_Div extends Tx_PtExtbase_Utility_Files
         if (substr($filename, 0, 4) == 'EXT:') { // extension
             list($extKey, $local) = explode('/', substr($filename, 4), 2);
             $filename = '';
-            if (strcmp($extKey, '') && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded($extKey) && strcmp($local, '')) {
+            if (strcmp($extKey, '') && ExtensionManagementUtility::isLoaded($extKey) && strcmp($local, '')) {
                 if (TYPO3_MODE === 'FE') {
-                    $filename = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($extKey) . $local;
+                    $filename = ExtensionManagementUtility::siteRelPath($extKey) . $local;
                 } else {
-                    $filename = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($extKey) . $local;
+                    $filename = ExtensionManagementUtility::extRelPath($extKey) . $local;
                 }
             }
         }
@@ -335,7 +339,7 @@ class Tx_Yag_Domain_FileSystem_Div extends Tx_PtExtbase_Utility_Files
      */
     protected function getVersionIndependableFileMounts()
     {
-        if (Tx_PtExtbase_Div::isMinTypo3Version('6.0')) {
+        if (\Tx_PtExtbase_Div::isMinTypo3Version('6.0')) {
             $fileMounts = array();
 
             if ($GLOBALS['BE_USER']->user['admin'] == 1) {

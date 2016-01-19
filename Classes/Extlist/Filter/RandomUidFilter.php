@@ -23,6 +23,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Extlist\Filter;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Context\YagContextFactory;
+use DL\Yag\Domain\Repository\ItemRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Class implements the album->image filter
  * 
@@ -30,17 +37,17 @@
  * @package Extlist
  * @subpackage Filter
  */
-class Tx_Yag_Extlist_Filter_RandomUidFilter extends Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
+class RandomUidFilter extends \Tx_PtExtlist_Domain_Model_Filter_AbstractFilter
 {
     /**
      * YAG ConfigurationBuilder
-     * @var Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $yagConfigurationBuilder;
 
 
     /**
-     * @var Tx_Yag_Domain_Context_YagContext
+     * @var YagContext
      */
     protected $yagContext;
 
@@ -50,8 +57,8 @@ class Tx_Yag_Extlist_Filter_RandomUidFilter extends Tx_PtExtlist_Domain_Model_Fi
     {
         parent::__construct();
 
-        $this->yagContext = Tx_Yag_Domain_Context_YagContextFactory::getInstance();
-        $this->yagConfigurationBuilder = Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance();
+        $this->yagContext = YagContextFactory::getInstance();
+        $this->yagConfigurationBuilder = ConfigurationBuilderFactory::getInstance();
     }
     
 
@@ -73,12 +80,12 @@ class Tx_Yag_Extlist_Filter_RandomUidFilter extends Tx_PtExtlist_Domain_Model_Fi
     
     
     /**
-     * @see Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
+     * @see \Tx_PtExtlist_Domain_Model_Filter_FilterInterface::reset()
      *
      */
     public function reset()
     {
-        $this->filterQuery = new Tx_PtExtlist_Domain_QueryObject_Query();
+        $this->filterQuery = new \Tx_PtExtlist_Domain_QueryObject_Query();
         $this->init();
     }
     
@@ -86,7 +93,7 @@ class Tx_Yag_Extlist_Filter_RandomUidFilter extends Tx_PtExtlist_Domain_Model_Fi
     
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/Model/Filter/Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::initFilter()
+     * @see Classes/Domain/Model/Filter/\Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::initFilter()
      */
     public function initFilter()
     {
@@ -97,7 +104,7 @@ class Tx_Yag_Extlist_Filter_RandomUidFilter extends Tx_PtExtlist_Domain_Model_Fi
     public function getFilterValueForBreadCrumb()
     {
     }
-    public function buildFilterCriteria(Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
+    public function buildFilterCriteria(\Tx_PtExtlist_Domain_Configuration_Data_Fields_FieldConfig $fieldIdentifier)
     {
     }
     
@@ -105,7 +112,7 @@ class Tx_Yag_Extlist_Filter_RandomUidFilter extends Tx_PtExtlist_Domain_Model_Fi
     
     /**
      * (non-PHPdoc)
-     * @see Classes/Domain/Model/Filter/Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
+     * @see Classes/Domain/Model/Filter/\Tx_PtExtlist_Domain_Model_Filter_AbstractFilter::setActiveState()
      */
     public function setActiveState()
     {
@@ -116,13 +123,13 @@ class Tx_Yag_Extlist_Filter_RandomUidFilter extends Tx_PtExtlist_Domain_Model_Fi
     /**
      * Build the filterCriteria for filter 
      * 
-     * @return Tx_PtExtlist_Domain_QueryObject_Criteria
+     * @return \Tx_PtExtlist_Domain_QueryObject_Criteria
      */
     protected function buildFilterCriteriaForAllFields()
     {
         $uidField = $this->fieldIdentifierCollection->getFieldConfigByIdentifier('uid');
-        $fieldName = Tx_PtExtlist_Utility_DbUtils::getSelectPartByFieldConfig($uidField);
-        $criteria = Tx_PtExtlist_Domain_QueryObject_Criteria::in($fieldName, $this->getRandomUIDs());
+        $fieldName = \Tx_PtExtlist_Utility_DbUtils::getSelectPartByFieldConfig($uidField);
+        $criteria = \Tx_PtExtlist_Domain_QueryObject_Criteria::in($fieldName, $this->getRandomUIDs());
 
         return $criteria;
     }
@@ -133,7 +140,7 @@ class Tx_Yag_Extlist_Filter_RandomUidFilter extends Tx_PtExtlist_Domain_Model_Fi
      */
     protected function getRandomUIDs()
     {
-        $itemRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')->get('Tx_Yag_Domain_Repository_ItemRepository'); /** @var $itemRepository Tx_Yag_Domain_Repository_ItemRepository */
+        $itemRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')->get('DL\\Yag\\Domain\\Repository\\ItemRepository'); /** @var $itemRepository ItemRepository */
         $randomItemCount = $this->yagConfigurationBuilder->buildItemListConfiguration()->getItemsPerPage();
         return $itemRepository->getRandomItemUIDs($randomItemCount, $this->yagContext->getGalleryUid(), $this->yagContext->getAlbumUid());
     }

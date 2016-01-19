@@ -23,6 +23,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Utility;
+
+use TYPO3\CMS\Core\SingletonInterface;
+
 /**
  * TCA Manager
  *
@@ -30,7 +34,7 @@
  * @subpackage Domain\Utility
  */
 
-class Tx_Yag_Utility_TCAUtility implements \TYPO3\CMS\Core\SingletonInterface
+class TCAUtility implements SingletonInterface
 {
     /**
      * @return void

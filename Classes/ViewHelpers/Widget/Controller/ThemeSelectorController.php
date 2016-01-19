@@ -22,6 +22,10 @@
 *
 * This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+
+namespace DL\Yag\ViewHelpers\Widget\Controller;
+
+use DL\Yag\Domain\Configuration\Theme\ThemeConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -31,7 +35,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 * @author Daniel Lienert <typo3@lienert.cc>
 */
 
-class Tx_Yag_ViewHelpers_Widget_Controller_ThemeSelectorController extends Tx_Yag_ViewHelpers_Widget_Controller_AbstractWidgetController
+class ThemeSelectorController extends AbstractWidgetController
 {
     /**
      * @var t3lib_Registry
@@ -61,7 +65,7 @@ class Tx_Yag_ViewHelpers_Widget_Controller_ThemeSelectorController extends Tx_Ya
         $themes = array();
 
         $themeCollection = $this->configurationBuilder->buildThemeConfigurationCollection();
-        foreach ($themeCollection as $theme) { /** @var $theme Tx_Yag_Domain_Configuration_Theme_ThemeConfiguration */
+        foreach ($themeCollection as $theme) { /** @var $theme ThemeConfiguration */
             $themes[$theme->getName()] = array(
                 'title' => $theme->getTitle(),
                 'description' => $theme->getDescription(),

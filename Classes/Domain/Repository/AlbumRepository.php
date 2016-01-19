@@ -23,20 +23,24 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\Repository;
+
+use DL\Yag\Domain\Model\Album;
+
 /**
- * Repository for Tx_Yag_Domain_Model_Album
+ * Repository for Album
  *
  * @package Domain
  * @subpackage Repository
  * @author Michael Knoll <mimi@kaktusteam.de>
  * @author Daniel Lienert <typo3@lienert.cc>
  */
-class Tx_Yag_Domain_Repository_AlbumRepository extends Tx_Yag_Domain_Repository_AbstractRepository
+class AlbumRepository extends AbstractRepository
 {
     /**
      * Adds a new album to repository
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      */
     public function add($album)
     {
@@ -77,11 +81,11 @@ class Tx_Yag_Domain_Repository_AlbumRepository extends Tx_Yag_Domain_Repository_
      *
      * @param int $identifier
      * @param bool $ignoreEnableFields
-     * @return Tx_Yag_Domain_Model_Album
+     * @return Album
      */
     public function findByUid($identifier, $ignoreEnableFields = false)
     {
-        if (Tx_PtExtbase_Div::isMinTypo3Version(7)) {
+        if (\Tx_PtExtbase_Div::isMinTypo3Version(7)) {
             return parent::findByUid($identifier);
         }
 

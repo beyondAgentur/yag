@@ -23,6 +23,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace DL\Yag\Domain\FileSystem;
+
+use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\Model\Item;
+use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Class implements a file manager for handling file system operations in yag g
  *
@@ -30,19 +37,19 @@
  * @package Domain
  * @subpackage FileSystem
  */
-class Tx_Yag_Domain_FileSystem_FileManager implements \TYPO3\CMS\Core\SingletonInterface
+class FileManager implements SingletonInterface
 {
     /**
      * Remove the file if it is located within its album path.
      * That means, it does not remove files located in an other directory (like files imported by the directory importer)
      *
-     * @param Tx_Yag_Domain_Model_Item $item
+     * @param Item $item
      */
-    public function removeImageFileFromAlbumDirectory(Tx_Yag_Domain_Model_Item $item)
+    public function removeImageFileFromAlbumDirectory(Item $item)
     {
         $albumPath = $this->getOrigFileDirectoryPathForAlbum($item->getAlbum());
-        $imageFilePath = Tx_Yag_Domain_FileSystem_Div::makePathAbsolute($item->getSourceuri());
-        if (\TYPO3\CMS\Core\Utility\GeneralUtility::isFirstPartOfStr($imageFilePath, $albumPath) && file_exists($imageFilePath)) {
+        $imageFilePath = Div::makePathAbsolute($item->getSourceuri());
+        if ( GeneralUtility::isFirstPartOfStr($imageFilePath, $albumPath) && file_exists($imageFilePath)) {
             unlink($imageFilePath);
         }
     }
@@ -50,12 +57,12 @@ class Tx_Yag_Domain_FileSystem_FileManager implements \TYPO3\CMS\Core\SingletonI
 
 
     /**
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      */
-    public function removeAlbumDirectory(Tx_Yag_Domain_Model_Album $album)
+    public function removeAlbumDirectory(Album $album)
     {
         $albumPath = $this->getOrigFileDirectoryPathForAlbum($album);
-        Tx_Yag_Domain_FileSystem_Div::rRMDir($albumPath);
+        Div::rRMDir($albumPath);
     }
 
 
@@ -64,17 +71,17 @@ class Tx_Yag_Domain_FileSystem_FileManager implements \TYPO3\CMS\Core\SingletonI
      * Creates path for original files on server.
      * If path does not exist, it will be created if given parameter is true.
      *
-     * @param Tx_Yag_Domain_Model_Album $album
+     * @param Album $album
      * @param bool $createIfNotExists If set to true, directory will be created if it does not exist
      * @return string Path for original images (absolute)
      * @throws Exception
      */
-    public function getOrigFileDirectoryPathForAlbum(Tx_Yag_Domain_Model_Album $album, $createIfNotExists = true)
+    public function getOrigFileDirectoryPathForAlbum(Album $album, $createIfNotExists = true)
     {
-        $path =  Tx_Yag_Domain_Configuration_ConfigurationBuilderFactory::getInstance()->buildExtensionConfiguration()->getOrigFilesRootAbsolute() . '/' . $album->getUid() . '/';
+        $path =  ConfigurationBuilderFactory::getInstance()->buildExtensionConfiguration()->getOrigFilesRootAbsolute() . '/' . $album->getUid() . '/';
 
         if ($createIfNotExists) {
-            $success = Tx_Yag_Domain_FileSystem_Div::checkDirAndCreateIfMissing($path);
+            $success = Div::checkDirAndCreateIfMissing($path);
             if (!$success) {
                 throw new Exception(sprintf('The original file path %s  for album %s could not be created!', $path, $album->getUid()), 1404452464);
             }
