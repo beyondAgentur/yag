@@ -41,7 +41,7 @@ class FileCrawlerTest extends BaseTestCase
     /**
      * Holds an instance of file crawler to be tested
      *
-     * @var Tx_Yag_Domain_Import_FileCrawler
+     * @var FileCrawler
      */
     protected $fixture;
 

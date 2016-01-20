@@ -40,7 +40,7 @@ class AlbumContentManagerTest extends BaseTestCase
     /**
      * Holds an instance of album content manager for testing
      *
-     * @var Tx_Yag_Domain_AlbumContentManager
+     * @var AlbumContentManager
      */
     protected $fixture;
 

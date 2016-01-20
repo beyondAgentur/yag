@@ -69,14 +69,14 @@ class DefaultTsConfig {
     /**
      * Holds an instance of this class
      *
-     * @var Tx_Yag_Tests_DefaultTsConfig
+     * @var DefaultTsConfig
      */
     protected static $instance = null;
 
     /**
      * Returns an instance of this class as singleton
      *
-     * @return Tx_Yag_Tests_DefaultTsConfig
+     * @return DefaultTsConfig
      */
     public static function getInstance() {
         if ( self::$instance === null ) {
@@ -106,7 +106,7 @@ class DefaultTsConfig {
     /**
      * Returns configuration builder for default TS settings
      *
-     * @return Tx_Yag_Domain_Configuration_ConfigurationBuilder
+     * @return ConfigurationBuilder
      */
     public function getDefaultConfigurationBuilder() {
         return new ConfigurationBuilder( $this->tsConfigArray['plugin']['tx_yag']['settings'], 'test', 'test' );

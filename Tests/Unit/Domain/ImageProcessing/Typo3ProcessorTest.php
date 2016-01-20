@@ -27,6 +27,7 @@ namespace DL\Yag\Tests\Unit\Domain\ImageProcessing;
 
 use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
 use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\ImageProcessing\Typo3Processor;
 use DL\Yag\Domain\Model\ResolutionFileCache;
 use DL\Yag\Tests\Unit\BaseTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -171,7 +172,7 @@ class Typo3ProcessorTest extends BaseTestCase
 
     /**
      * @param string $testImageName
-     * @return Tx_Yag_Domain_ImageProcessing_Typo3Processor
+     * @return Typo3Processor
      */
     protected function getTypo3ProcessorMock($testImageName = 'test.jpg')
     {

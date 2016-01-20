@@ -1,5 +1,5 @@
 <phpunit bootstrap="Tests/bootstrap.php"
-         backupGlobals="false"
+         backupGlobals="true"
          backupStaticAttributes="false"
          colors="true"
          convertErrorsToExceptions="true"
@@ -10,7 +10,7 @@
          stopOnFailure="false"
          stopOnIncomplete="false"
          stopOnSkipped="false"
-         verbose="false">
+         verbose="true">
 
     <testsuites>
         <testsuite name="EXT:yag">
