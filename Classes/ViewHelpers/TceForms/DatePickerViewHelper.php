@@ -99,10 +99,10 @@ class DatePickerViewHelper extends TextfieldViewHelper
             $this->tag->addAttribute('placeholder', $placeholder);
         }
 
-        if (!$value instanceof DateTime) {
+        if (!$value instanceof \DateTime) {
             try {
-                $value = new DateTime($value);
-            } catch (Exception $exception) {
+                $value = new \DateTime($value);
+            } catch (\Exception $exception) {
                 throw new Exception('"' . $value . '" could not be parsed by DateTime constructor.', 1241722579);
             }
         }

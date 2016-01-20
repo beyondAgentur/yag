@@ -77,7 +77,7 @@ abstract class BaseTestCase extends UnitTestCase {
         $album->setGallery( $gallery );
         $item->setAlbum( $album );
 
-        $item->setSourceuri( substr( $this->sourceDirectory . 'Tests/Unit/TestImages/', strlen( PATH_site ) ) . 'testImage.jpg' );
+        $item->setSourceuri( $this->sourceDirectory . 'Tests/Unit/TestImages/' . 'testImage.jpg' );
 
         return $item;
     }

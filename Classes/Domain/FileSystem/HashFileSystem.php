@@ -25,6 +25,8 @@
 
 namespace DL\Yag\Domain\FileSystem;
 
+use TYPO3\CMS\Core\Exception;
+
 /**
  * Class implements hash-file system for storing files in an hierarchical 
  * directory. Each Directory contains at most MAX_FILES files and MAX_FILES

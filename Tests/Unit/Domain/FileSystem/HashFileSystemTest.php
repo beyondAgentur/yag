@@ -98,6 +98,9 @@ class HashFileSystemTest extends BaseTestCase
      */
     public function getAbsolutePathByIdReturnsCorrectPathForGivenId()
     {
+        print_r($this->fixture->getAbsolutePathById(1));
+        exit;
+
         $this->assertEquals(PATH_site . $this->fixture->getAbsolutePathById(1), PATH_site . 'fileadmin/00');
     }
 }

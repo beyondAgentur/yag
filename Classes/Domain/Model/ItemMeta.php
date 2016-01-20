@@ -219,7 +219,7 @@ class ItemMeta extends AbstractEntity implements DomainModelInterface
     /**
      * Date, when item has been taken
      *
-     * @var DateTime $captureDate
+     * @var \DateTime $captureDate
      */
     protected $captureDate;
 
@@ -701,10 +701,10 @@ class ItemMeta extends AbstractEntity implements DomainModelInterface
     /**
      * Setter for captureDate
      *
-     * @param DateTime $captureDate Date, when item has been taken
+     * @param \DateTime $captureDate Date, when item has been taken
      * @return void
      */
-    public function setCaptureDate(DateTime $captureDate)
+    public function setCaptureDate(\DateTime $captureDate)
     {
         $this->captureDate = $captureDate;
     }
@@ -714,7 +714,7 @@ class ItemMeta extends AbstractEntity implements DomainModelInterface
     /**
      * Getter for captureDate
      *
-     * @return DateTime Date, when item has been taken
+     * @return \DateTime Date, when item has been taken
      */
     public function getCaptureDate()
     {

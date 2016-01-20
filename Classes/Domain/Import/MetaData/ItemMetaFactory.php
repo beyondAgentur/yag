@@ -26,6 +26,7 @@
 namespace DL\Yag\Domain\Import\MetaData;
 
 use DL\Yag\Domain\Model\ItemMeta;
+use Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
@@ -186,7 +187,7 @@ class ItemMetaFactory
         $itemMeta->setGpsLongitude($exifData['GPSLat']);
 
         try {
-            $itemMeta->setCaptureDate(new DateTime('@' . $exifData['CaptureTimeStamp']));
+            $itemMeta->setCaptureDate(new \DateTime('@' . $exifData['CaptureTimeStamp']));
         } catch (Exception $e) {
             GeneralUtility::sysLog('Error while extracting EXIF CaptureTimeStamp from "' . $fileName . '". Error was: ' . $e->getMessage(), 'yag', 2);
         }

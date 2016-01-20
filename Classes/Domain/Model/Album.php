@@ -59,7 +59,7 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * Date for album
      *
-     * @var DateTime $date
+     * @var \DateTime $date
      */
     protected $date;
 
@@ -233,10 +233,10 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * Setter for date
      *
-     * @param DateTime $date Date for album
+     * @param \DateTime $date Date for album
      * @return void
      */
-    public function setDate(DateTime $date)
+    public function setDate(\DateTime $date)
     {
         $this->date = $date;
     }
@@ -245,7 +245,7 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * Getter for date
      *
-     * @return DateTime Date for album
+     * @return \DateTime Date for album
      */
     public function getDate()
     {

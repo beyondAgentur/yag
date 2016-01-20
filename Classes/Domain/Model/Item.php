@@ -80,7 +80,7 @@ class Item extends AbstractEntity implements DomainModelInterface
     /**
      * Date of item
      *
-     * @var DateTime $date
+     * @var \DateTime $date
      */
     protected $date;
     
@@ -353,7 +353,7 @@ class Item extends AbstractEntity implements DomainModelInterface
     /**
      * Setter for date
      *
-     * @param DateTime $date Date of item
+     * @param \DateTime $date Date of item
      * @return void
      */
     public function setDate($date)
@@ -366,7 +366,7 @@ class Item extends AbstractEntity implements DomainModelInterface
     /**
      * Getter for date
      *
-     * @return DateTime Date of item
+     * @return \DateTime Date of item
      */
     public function getDate()
     {

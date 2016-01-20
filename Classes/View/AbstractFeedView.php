@@ -73,7 +73,7 @@ abstract class AbstractFeedView extends \Tx_PtExtbase_View_BaseView
     protected function buildFeedInfo()
     {
         return array(
-            'creationDate' => new DateTime(),
+            'creationDate' => new \DateTime(),
         );
     }
 }

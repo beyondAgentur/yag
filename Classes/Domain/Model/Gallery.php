@@ -69,7 +69,7 @@ class Gallery extends AbstractEntity implements DomainModelInterface
     /**
      * Date of gallery
      *
-     * @var DateTime $date
+     * @var \DateTime $date
      */
     protected $date;
 
@@ -230,7 +230,7 @@ class Gallery extends AbstractEntity implements DomainModelInterface
     /**
      * Getter for date
      *
-     * @return DateTime Date of gallery
+     * @return \DateTime Date of gallery
      */
     public function getDate()
     {

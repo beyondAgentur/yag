@@ -44,17 +44,13 @@ class PidDetectorTest extends BaseTestCase
         $this->assertEquals($pidDetector->getMode(), PidDetector::FE_MODE);
     }
 
-
-
     /** @test */
     public function constructCreatesInstanceForCorrectModeIfCalledWithoutMode()
     {
         $pidDetector = new PidDetector();
         $this->assertEquals($pidDetector->getMode(), PidDetector::BE_YAG_MODULE_MODE);
     }
-
-
-
+    
     /**
      * Where do we get PIDs from
      *
@@ -75,8 +71,6 @@ class PidDetectorTest extends BaseTestCase
         $this->markTestIncomplete();
     }
 
-
-
     /** @test */
     public function getPidsReturnsCorrectPidsForYagModule()
     {
@@ -84,16 +78,12 @@ class PidDetectorTest extends BaseTestCase
         $this->markTestIncomplete();
     }
 
-
-
     /** @test */
     public function getPidsReturnsCorrectPidsForContentModule()
     {
         $this->fakeContentElementFormEnvironment();
         $this->markTestIncomplete();
     }
-
-
 
     /** @test */
     public function getPidsReturnsCorrectPidsForManualMode()
@@ -104,8 +94,6 @@ class PidDetectorTest extends BaseTestCase
         $this->assertEquals($testArray, $pidDetector->getPids());
     }
 
-
-
     /** @test */
     public function getCurrentPageIsYagPageThrowsExceptionIfNotInBeMode()
     {
@@ -115,10 +103,9 @@ class PidDetectorTest extends BaseTestCase
         } catch (\Exception $e) {
             return;
         }
+
         $this->fail("No exception has been thrown when trying to call PidDetector::getCurrentPageIsYagPage in non-backend mode.");
     }
-
-
 
     /** @test */
     public function getCurrentPageIsYagPageReturnsTrueIfCurrentPageIsYagPage()
@@ -133,13 +120,10 @@ class PidDetectorTest extends BaseTestCase
                     )
                 )
         );
-        $tmpId = $_GET['id'];
+
         $_GET['id'] = 1;
         $this->assertTrue($pidDetector->getCurrentPageIsYagPage());
-        $_GET['id'] = $tmpId;
     }
-
-
 
     /** @test */
     public function getCurrentPageIsYagPageReturnsFalseIfCurrentPageIsNoYagPage()
@@ -154,13 +138,10 @@ class PidDetectorTest extends BaseTestCase
                     )
                 )
         );
-        $tmpId = $_GET['id'];
+
         $_GET['id'] = 5;
         $this->assertFalse($pidDetector->getCurrentPageIsYagPage());
-        $_GET['id'] = $tmpId;
     }
-
-
 
     /**
      * Fakes settings for FE environment
@@ -174,13 +155,9 @@ class PidDetectorTest extends BaseTestCase
     {
     }
 
-
-
     protected function fakeYagModuleEnvironment()
     {
     }
-
-
 
     protected function fakeContentElementFormEnvironment()
     {

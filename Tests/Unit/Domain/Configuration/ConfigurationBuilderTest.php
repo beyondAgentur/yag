@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010-2013 Daniel Lienert <typo3@lienert.cc>, Michael Knoll <mimi@kaktsuteam.de>
-*  All rights reserved
-*
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010-2013 Daniel Lienert <typo3@lienert.cc>, Michael Knoll <mimi@kaktsuteam.de>
+ *  All rights reserved
+ *
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 namespace DL\Yag\Tests\Unit\Domain\Configuration;
 
@@ -31,43 +31,39 @@ use DL\Yag\Tests\Unit\BaseTestCase;
 /**
  * Testcase for configuration builder
  *
- * @package Tests
+ * @package    Tests
  * @subpackage Domain\Configuration
- * @author Michael Knoll <mimi@kaktsuteam.de>
+ * @author     Michael Knoll <mimi@kaktsuteam.de>
  */
-class ConfigurationBuilderTest extends BaseTestCase
-{
+class ConfigurationBuilderTest extends BaseTestCase {
     /**
      * Holds fixture for this testcase
      *
      * @var ConfigurationBuilder
      */
     protected $fixture;
-    
+
     /**
      * Sets up fixture for this testcase
      *
      */
-    public function setUp()
-    {
-        $settings = DefaultTsConfig::getInstance()->tsConfigArray;
-        $this->fixture = new ConfigurationBuilder($settings['plugin']['tx_yag']['settings'], 'test', 'test');
+    public function setUp() {
+        $settings      = DefaultTsConfig::getInstance()->tsConfigArray;
+        $this->fixture = new ConfigurationBuilder( $settings['plugin']['tx_yag']['settings'], 'test', 'test' );
     }
-    
+
     /**
      * @test
      */
-    public function classExists()
-    {
-        $this->assertTrue(class_exists('DL\\Yag\\Domain\\Configuration\\ConfigurationBuilder'));
+    public function classExists() {
+        $this->assertTrue( class_exists( 'DL\\Yag\\Domain\\Configuration\\ConfigurationBuilder' ) );
     }
-    
+
     /**
      * @test
      */
-    public function buildImageProcessorConfigurationReturnsImageProcessorConfiguration()
-    {
+    public function buildImageProcessorConfigurationReturnsImageProcessorConfiguration() {
         $imageProcessorConfiguration = $this->fixture->buildImageProcessorConfiguration();
-        $this->assertTrue(is_a($imageProcessorConfiguration, 'DL\\Yag\\Domain\\Configuration\\ImageProcessing\\ImageProcessorConfiguration'));
+        $this->assertTrue( is_a( $imageProcessorConfiguration, 'DL\\Yag\\Domain\\Configuration\\ImageProcessing\\ImageProcessorConfiguration' ) );
     }
 }
