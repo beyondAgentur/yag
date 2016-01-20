@@ -72,17 +72,6 @@ if (TYPO3_MODE == 'BE') {
         $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearAllCache_additionalTables']['tx_yag_domain_model_resolutionfilecache'] = 'tx_yag_domain_model_resolutionfilecache';
     }
 
-    // Flexform general
-    require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag').'Classes/Utility/Flexform/Div.php';
-
-
-    // Flexform typoScript data provider
-    require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag').'Classes/Utility/Flexform/TyposcriptDataProvider.php';
-
-
-    // Flexform record selector
-    require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag').'Classes/Utility/Flexform/RecordSelector.php';
-
     $yagGalleryRecordSelectorClass = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/RecordSelector.php:DL\\Yag\\Utility\\Flexform\\RecordSelector';
 
 
@@ -108,7 +97,7 @@ if (TYPO3_MODE == 'BE') {
         'extension' => $_EXTKEY,
         'title' => 'YAG Importer',
         'description' => 'Imports images from a directory structure',
-        'additionalFields' => 'Tx_Yag_Scheduler_Importer_DirectoryImporterTaskAdditionalFields'
+        'additionalFields' => 'DL\\Yag\\Scheduler\\Importer\\DirectoryImporterTaskAdditionalFields'
     );
 */
     // Cache Warming
