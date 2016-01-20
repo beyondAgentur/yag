@@ -93,7 +93,7 @@ if (TYPO3_MODE == 'BE') {
      */
 
     // Importer
-/*	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Tx_Yag_Scheduler_Importer_DirectoryImporterTask'] = array(
+/*	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DL\\Yag\\Scheduler\\Importer\\DirectoryImporterTask'] = array(
         'extension' => $_EXTKEY,
         'title' => 'YAG Importer',
         'description' => 'Imports images from a directory structure',

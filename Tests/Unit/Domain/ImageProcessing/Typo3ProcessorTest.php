@@ -182,11 +182,11 @@ class Typo3ProcessorTest extends BaseTestCase
 
         $configurationManager->setContentObject($contentObject);
 
-        $accessibleProcessorClassName = $this->buildAccessibleProxy('Tx_Yag_Domain_ImageProcessing_Typo3Processor');
+        $accessibleProcessorClassName = $this->buildAccessibleProxy('DL\\Yag\\Domain\\ImageProcessing\\Typo3Processor');
 
-        $accessibleProcessor = $this->getMock($accessibleProcessorClassName, array('generateAbsoluteResolutionPathAndFilename')); /** @var $accessibleProcessor Tx_Yag_Domain_ImageProcessing_Typo3Processor  */
+        $accessibleProcessor = $this->getMock($accessibleProcessorClassName, array('generateAbsoluteResolutionPathAndFilename')); /** @var $accessibleProcessor Typo3Processor  */
 
-        $pidDetector = $this->objectManager->get('Tx_Yag_Utility_PidDetector');
+        $pidDetector = $this->objectManager->get('DL\\Yag\\Utility\\PidDetector');
 
         $accessibleProcessor->_injectProcessorConfiguration($this->configurationBuilder->buildImageProcessorConfiguration());
         $accessibleProcessor->injectConfigurationManager($configurationManager);
