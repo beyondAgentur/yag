@@ -21,8 +21,7 @@
     "punktde/pt_extbase": "dev-master"
   },
   "config": {
-    "optimize-autoloader": true,
-    "bin-dir": "bin"
+    "optimize-autoloader": true
   },
   "autoload": {
     "psr-4": {

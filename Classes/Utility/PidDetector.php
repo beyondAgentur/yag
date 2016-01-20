@@ -26,6 +26,7 @@
 namespace DL\Yag\Utility;
 
 use DL\Yag\Utility\Flexform\RecordSelector;
+use Exception;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;

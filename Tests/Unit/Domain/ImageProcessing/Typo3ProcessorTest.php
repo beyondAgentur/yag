@@ -29,7 +29,6 @@ use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
 use DL\Yag\Domain\FileSystem\Div;
 use DL\Yag\Domain\Model\ResolutionFileCache;
 use DL\Yag\Tests\Unit\BaseTestCase;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -51,7 +50,7 @@ class Typo3ProcessorTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->testImagePath = ExtensionManagementUtility::extPath($this->extensionName) . 'Tests/Unit/TestImages/';
+        $this->testImagePath = $this->sourceDirectory . 'Tests/Unit/TestImages/';
         $this->initConfigurationBuilderMock();
     }
 
@@ -90,7 +89,7 @@ class Typo3ProcessorTest extends BaseTestCase
         $typo3Processor = $this->getTypo3ProcessorMock($testImage);
         $typo3Processor->_callRef('processFile', $resolutionConfig, $item, $resolutionFileCacheObject);
 
-        $referenceImage = ExtensionManagementUtility::extPath($this->extensionName) . 'Tests/Unit/TestImages/ref_testImage_200.jpg';
+        $referenceImage = $this->sourceDirectory . 'Tests/Unit/TestImages/ref_testImage_200.jpg';
 
         $this->assertTrue(file_exists($testImage), 'No Image was created in Path ' . $testImage);
 
@@ -159,7 +158,7 @@ class Typo3ProcessorTest extends BaseTestCase
         $typo3Processor = $this->getTypo3ProcessorMock($testImage);
         $typo3Processor->_callRef('processFile', $resolutionConfig, $item, $resolutionFileCacheObject);
 
-        $referenceImage = ExtensionManagementUtility::extPath($this->extensionName) . 'Tests/Unit/TestImages/ref_testImage_200_watermark.jpg';
+        $referenceImage = $this->sourceDirectory . 'Tests/Unit/TestImages/ref_testImage_200_watermark.jpg';
 
         echo '
 			<img src="../'. str_replace(PATH_site, '', $testImage) .'" title="Test Image"/>

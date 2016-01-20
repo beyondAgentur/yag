@@ -109,7 +109,7 @@ class PidDetectorTest extends BaseTestCase
     /** @test */
     public function getCurrentPageIsYagPageThrowsExceptionIfNotInBeMode()
     {
-        $pidDetector = new idDetector(PidDetector::FE_MODE);
+        $pidDetector = new PidDetector(PidDetector::FE_MODE);
         try {
             $pidDetector->getCurrentPageIsYagPage();
         } catch (\Exception $e) {

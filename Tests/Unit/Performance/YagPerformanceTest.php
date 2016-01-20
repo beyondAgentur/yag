@@ -32,7 +32,6 @@ use DL\Yag\Domain\Repository\AlbumRepository;
 use DL\Yag\Domain\Repository\GalleryRepository;
 use DL\Yag\Domain\Repository\ItemRepository;
 use DL\Yag\Tests\Unit\BaseTestCase;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -126,7 +125,7 @@ class YagPerformanceTest extends BaseTestCase
             $item = new Item();
             $item->setTitle('TestItem ' . $i);
             $item->setAlbum($album);
-            $item->setSourceuri( ExtensionManagementUtility::extPath('yag') . 'Tests/Unit/TestImages/testImage.jpg');
+            $item->setSourceuri( $this->sourceDirectory . 'Tests/Unit/TestImages/testImage.jpg');
             
             if ($first) {
                 $album->setThumb($item);

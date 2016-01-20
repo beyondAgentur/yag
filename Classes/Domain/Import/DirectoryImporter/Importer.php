@@ -28,6 +28,7 @@ namespace DL\Yag\Domain\Import\DirectoryImporter;
 use DL\Yag\Domain\FileSystem\Div;
 use DL\Yag\Domain\Import\AbstractImporter;
 use DL\Yag\Domain\Import\FileCrawler;
+use Exception;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**

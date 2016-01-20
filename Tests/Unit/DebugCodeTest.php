@@ -29,7 +29,6 @@
 namespace DL\Yag\Tests\Unit;
 
 use TYPO3\CMS\Core\Tests\UnitTestCase;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Testcase to find debug code in the extension
@@ -44,6 +43,10 @@ class DebugCodeTest extends UnitTestCase
      */
     protected $extensionName = 'yag';
 
+    /**
+     * @var string
+     */
+    protected $sourceDirectory = __DIR__ . '/../../';
 
     /**
      * @return array
@@ -64,7 +67,7 @@ class DebugCodeTest extends UnitTestCase
      */
     public function checkForForgottenDebugCode($debugCommand)
     {
-        $searchPath = ExtensionManagementUtility::extPath($this->extensionName);
+        $searchPath = $this->sourceDirectory . 'Classes';
 
         $result = `fgrep -i -r "$debugCommand" "$searchPath" | grep ".php"`;
         $lines = explode("\n", trim($result));

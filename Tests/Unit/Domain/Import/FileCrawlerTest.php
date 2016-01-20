@@ -28,7 +28,6 @@ namespace DL\Yag\Tests\Unit\Domain\Import;
 use DL\Yag\Domain\Import\FileCrawler;
 use DL\Yag\Tests\Unit\BaseTestCase;
 use DL\Yag\Tests\Unit\Domain\Configuration\DefaultTsConfig;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Testcase for File Crawler
@@ -98,7 +97,7 @@ class FileCrawlerTest extends BaseTestCase
      */
     public function getFilesForGivenDirectoryReturnsFilesForDirectory()
     {
-        $testingDirectory = ExtensionManagementUtility::extPath('yag') . 'Tests/Unit/Domain/Import/FilesForCrawlerTest';
+        $testingDirectory = $this->sourceDirectory . 'Tests/Unit/Domain/Import/FilesForCrawlerTest';
         $crawledFiles = $this->fixture->getFilesForGivenDirectory($testingDirectory);
         $this->assertTrue(in_array($testingDirectory . '/test1.jpg', $crawledFiles));
         $this->assertTrue(in_array($testingDirectory . '/test2.jpg', $crawledFiles));
