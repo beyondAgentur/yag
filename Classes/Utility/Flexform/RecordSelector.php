@@ -33,8 +33,6 @@ use DL\Yag\Domain\Repository\GalleryRepository;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-//require_once ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/AbstractFlexformUtility.php';
-
 /**
  * Class provides dataProvider for FlexForm select lists
  *

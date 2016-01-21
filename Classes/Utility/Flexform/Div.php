@@ -28,8 +28,6 @@ namespace DL\Yag\Utility\Flexform;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-//require_once ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/AbstractFlexformUtility.php';
-
 /**
  * Class provides a general utility for generating flexform
  *

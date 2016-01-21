@@ -25,8 +25,6 @@
 
 namespace DL\Yag\Utility\Flexform;
 
-//require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('yag') . 'Classes/Utility/Flexform/AbstractFlexformUtility.php'; // pt_tools div class
-
 /**
  * Utilitty to get selectable options from typoscript
  *
