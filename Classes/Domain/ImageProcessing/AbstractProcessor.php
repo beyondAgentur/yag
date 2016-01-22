@@ -28,6 +28,7 @@ namespace DL\Yag\Domain\ImageProcessing;
 use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
 use DL\Yag\Domain\Configuration\ImageProcessing\ImageProcessorConfiguration;
 use DL\Yag\Domain\FileSystem\Div;
+use DL\Yag\Domain\FileSystem\HashFileSystem;
 use DL\Yag\Domain\Model\Item;
 use DL\Yag\Domain\Model\ResolutionFileCache;
 use DL\Yag\Domain\Repository\ResolutionFileCacheRepository;
@@ -140,7 +141,7 @@ abstract class AbstractProcessor implements ProcessorInterface {
 
 
     public function __construct() {
-        $this->fileSystemDiv = GeneralUtility::makeInstance( 'Div' ); // Somehow this particular inject does not work??!
+        $this->fileSystemDiv = GeneralUtility::makeInstance( 'DL\\Yag\\Domain\\FileSystem\\Div' ); // Somehow this particular inject does not work??!
     }
 
 

@@ -69,7 +69,7 @@ class ResolutionFileCache extends AbstractEntity implements DomainModelInterface
      * Item to which resolution file cache belongs to
      *
      * @lazy
-     * @var Item $item
+     * @var \DL\Yag\Domain\Model\Item $item
      */
     protected $item;
 

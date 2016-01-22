@@ -443,7 +443,7 @@ class AjaxController extends AbstractController {
      */
     public function getSubDirsAction() {
         $encodedFiles  = '';
-        $fileSystemDiv = $this->objectManager->get( 'Div' );
+        $fileSystemDiv = $this->objectManager->get( 'DL\\Yag\\Domain\\FileSystem\\Div' );
         /** @var Div $fileSystemDiv */
 
         $t3basePath    = Div::getT3BasePath();

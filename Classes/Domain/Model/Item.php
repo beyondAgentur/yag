@@ -564,7 +564,7 @@ class Item extends AbstractEntity implements DomainModelInterface {
     public function getItemMeta() {
         \Tx_PtExtbase_Div::getLazyLoadedObject( $this->itemMeta );
         if ( ! $this->itemMeta instanceof ItemMeta ) {
-            $this->itemMeta = $this->objectManager->get( 'ItemMeta' );
+            $this->itemMeta = $this->objectManager->get( 'DL\\Yag\\Domain\\Model\\ItemMeta' );
         }
 
         return $this->itemMeta;
@@ -674,7 +674,7 @@ class Item extends AbstractEntity implements DomainModelInterface {
             $resetThumb = true;
         }
 
-        $this->objectManager->get( 'FileManager' )->removeImageFileFromAlbumDirectory( $this );
+        $this->objectManager->get( 'DL\\Yag\\Domain\\FileSystem\\FileManager' )->removeImageFileFromAlbumDirectory( $this );
         if ( $deleteCachedFiles ) {
             $this->deleteCachedFiles();
         }

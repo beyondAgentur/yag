@@ -108,7 +108,7 @@ class AlbumController extends AbstractController {
      */
     public function newAction( Gallery $gallery = null, Album $newAlbum = null ) {
         if ( $newAlbum === null ) {
-            $newAlbum = $this->objectManager->get( 'Album' );
+            $newAlbum = $this->objectManager->get( 'DL\\Yag\\Domain\\Model\\Album' );
         }
         $selectableGalleries = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\GalleryRepository' )->findAll();
 

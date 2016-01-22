@@ -68,7 +68,7 @@ class ResolutionFileCache {
      * image (eg the file-not-found image) multiple times in one run
      * without saving it to the database
      *
-     * @var array of ResolutionFileCache
+     * @var array of \DL\Yag\Domain\Model\ResolutionFileCache
      */
     protected $localResolutionFileCache = array();
 
@@ -190,9 +190,9 @@ class ResolutionFileCache {
     /**
      * Add cachefileobjrct to local cache
      *
-     * @param ResolutionFileCache $cacheFileObject
+     * @param \DL\Yag\Domain\Model\ResolutionFileCache $cacheFileObject
      */
-    protected function addResolutionFiletoLocalCache( ResolutionFileCache $cacheFileObject ) {
+    protected function addResolutionFiletoLocalCache( \DL\Yag\Domain\Model\ResolutionFileCache $cacheFileObject ) {
         $objectIdentifier                                    = md5( $cacheFileObject->getParamhash() . $cacheFileObject->getItem()->getSourceuri() );
         $this->localResolutionFileCache[ $objectIdentifier ] = $cacheFileObject;
     }

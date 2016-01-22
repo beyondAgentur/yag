@@ -26,6 +26,7 @@
 namespace DL\Yag\Domain\FileSystem;
 
 use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
+use DL\Yag\Domain\FileSystem\ResolutionFileCache;
 use DL\Yag\Domain\ImageProcessing\ProcessorFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -54,7 +55,7 @@ class ResolutionFileCacheFactory {
         if ( self::$instance === null ) {
             $objectManager = GeneralUtility::makeInstance( 'TYPO3\\CMS\\Extbase\\Object\\ObjectManager' );
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-            self::$instance = $objectManager->get( 'ResolutionFileCache', $objectManager );
+            self::$instance = $objectManager->get( 'DL\\Yag\\Domain\\FileSystem\\ResolutionFileCache', $objectManager );
 
             $hashFileSystem = HashFileSystemFactory::getInstance();
             self::$instance->_injectHashFileSystem( $hashFileSystem );

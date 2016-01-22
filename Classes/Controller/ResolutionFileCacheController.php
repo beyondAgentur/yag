@@ -26,6 +26,7 @@
 namespace DL\Yag\Controller;
 
 use DL\Yag\Domain\Configuration\Image\ResolutionConfigCollectionFactory;
+use DL\Yag\Domain\FileSystem\ResolutionFileCache;
 use DL\Yag\Domain\FileSystem\ResolutionFileCacheFactory;
 use DL\Yag\Domain\Model\Item;
 use DL\Yag\Domain\Repository\ItemRepository;
@@ -39,7 +40,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class ResolutionFileCacheController extends AbstractController {
     /**
-     * @var ResolutionFileCache
+     * @var \DL\Yag\Domain\FileSystem\ResolutionFileCache
      */
     protected $resolutionFileCache;
 

@@ -162,7 +162,7 @@ class GalleryController extends AbstractController {
      */
     public function newAction( Gallery $gallery = null ) {
         if ( $gallery === null ) {
-            $gallery = $this->objectManager->get( 'Gallery' );
+            $gallery = $this->objectManager->get( 'DL\\Yag\\Domain\\Model\\Gallery' );
         }
 
         $this->view->assign( 'gallery', $gallery );

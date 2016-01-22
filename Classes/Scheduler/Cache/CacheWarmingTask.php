@@ -27,6 +27,7 @@ namespace DL\Yag\Scheduler\Cache;
 
 use DL\Yag\Domain\Configuration\ConfigurationBuilderFactory;
 use DL\Yag\Domain\Configuration\Image\ResolutionConfigCollectionFactory;
+use DL\Yag\Domain\FileSystem\ResolutionFileCache;
 use DL\Yag\Domain\FileSystem\ResolutionFileCacheFactory;
 use DL\Yag\Domain\Repository\ItemRepository;
 use DL\Yag\Scheduler\AbstractTask;

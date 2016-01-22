@@ -28,6 +28,7 @@ namespace DL\Yag\Domain\Repository;
 use DL\Yag\Domain\Configuration\Image\ResolutionConfig;
 use DL\Yag\Domain\FileSystem\Div;
 use DL\Yag\Domain\Model\Item;
+use DL\Yag\Domain\Model\ResolutionFileCache;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -116,8 +117,8 @@ class ResolutionFileCacheRepository extends Repository {
 
 
     /**
-     * @param       array               <Item>
-     * @param array $parameterHashArray <ResolutionFileCache>
+     * @param       array               <\DL\Yag\Domain\Model\Item>
+     * @param array $parameterHashArray <\DL\Yag\Domain\Model\ResolutionFileCache>
      *
      * @return array
      */

@@ -52,7 +52,7 @@ class ProcessorFactory {
      */
     public static function getInstance( ConfigurationBuilder $configurationBuilder ) {
         if ( self::$instance == null ) {
-            $processorClass = 'Typo3Processor';
+            $processorClass = 'DL\\Yag\\Domain\\ImageProcessing\\Typo3Processor';
             $objectManager  = GeneralUtility::makeInstance( 'TYPO3\\CMS\\Extbase\\Object\\ObjectManager' );
 
             self::$instance = $objectManager->get( $processorClass );

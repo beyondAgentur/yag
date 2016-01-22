@@ -26,9 +26,15 @@
 namespace DL\Yag\Domain\Import;
 
 use DL\Yag\Domain\AlbumContentManager;
+use DL\Yag\Domain\Configuration\ConfigurationBuilder;
+use DL\Yag\Domain\Configuration\Import\ImporterConfiguration;
 use DL\Yag\Domain\FileSystem\FileManager;
 use DL\Yag\Domain\ImageProcessing\AbstractProcessor;
+use DL\Yag\Domain\Import\MetaData\ItemMetaFactory;
+use DL\Yag\Domain\Model\Album;
+use DL\Yag\Domain\Model\Item;
 use DL\Yag\Domain\Repository\ItemRepository;
+use Tx_Extbase_Domain_Model_FrontendUser;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -55,7 +61,7 @@ abstract class AbstractImporter implements ImporterInterface {
     /**
      * Holds an instance of configuration builder
      *
-     * @var Configuration_ConfigurationBuilder
+     * @var ConfigurationBuilder
      */
     protected $configurationBuilder;
 
@@ -63,7 +69,7 @@ abstract class AbstractImporter implements ImporterInterface {
     /**
      * Holds an instance of the importer configuraation
      *
-     * @var Configuration_Import_ImporterConfiguration
+     * @var ImporterConfiguration
      */
     protected $importerConfiguration;
 
@@ -71,7 +77,7 @@ abstract class AbstractImporter implements ImporterInterface {
     /**
      * Holds an instance of album to which items should be imported
      *
-     * @var Model_Album
+     * @var Album
      */
     protected $album;
 
@@ -109,7 +115,7 @@ abstract class AbstractImporter implements ImporterInterface {
 
 
     /**
-     * @var MetaData_ItemMetaFactory
+     * @var ItemMetaFactory
      */
     protected $itemMetaDataFactory;
 
@@ -203,9 +209,9 @@ abstract class AbstractImporter implements ImporterInterface {
 
 
     /**
-     * @param MetaData_ItemMetaFactory $itemMetaDataFactory
+     * @param ItemMetaFactory $itemMetaDataFactory
      */
-    public function injectItemMetaDataFactory( MetaData_ItemMetaFactory $itemMetaDataFactory ) {
+    public function injectItemMetaDataFactory( ItemMetaFactory $itemMetaDataFactory ) {
         $this->itemMetaDataFactory = $itemMetaDataFactory;
     }
 
@@ -233,9 +239,9 @@ abstract class AbstractImporter implements ImporterInterface {
     /**
      * Injector for configuration builder
      *
-     * @param Configuration_ConfigurationBuilder $configurationBuilder
+     * @param ConfigurationBuilder $configurationBuilder
      */
-    public function setConfigurationBuilder( Configuration_ConfigurationBuilder $configurationBuilder ) {
+    public function setConfigurationBuilder( ConfigurationBuilder $configurationBuilder ) {
         $this->configurationBuilder = $configurationBuilder;
     }
 
@@ -245,7 +251,7 @@ abstract class AbstractImporter implements ImporterInterface {
      *
      * @param $importerConfiguration
      */
-    public function setImporterConfiguration( Configuration_Import_ImporterConfiguration $importerConfiguration ) {
+    public function setImporterConfiguration( ImporterConfiguration $importerConfiguration ) {
         $this->importerConfiguration = $importerConfiguration;
     }
 
@@ -253,9 +259,9 @@ abstract class AbstractImporter implements ImporterInterface {
     /**
      * Sets album to which items should be imported
      *
-     * @param Model_Album $album
+     * @param Album $album
      */
-    public function setAlbum( Model_Album $album ) {
+    public function setAlbum( Album $album ) {
         $this->album = $album;
     }
 
@@ -277,15 +283,15 @@ abstract class AbstractImporter implements ImporterInterface {
      * is given, this one is used. Otherwise a new one is created.
      *
      * @param string     $filePath Absolute file path to file on server
-     * @param Model_Item $item     Item to attach file to
+     * @param Item $item     Item to attach file to
      *
-     * @return Model_Item Item created or used for import
+     * @return Item Item created or used for import
      */
     protected function importFileByFilename( $filePath, $item = null ) {
 
         // Create new item if none is given
         if ( $item === null ) {
-            $item = $this->objectManager->get( 'Model_Item' );
+            $item = $this->objectManager->get( 'DL\\Yag\\Domain\\Model\\Item' );
             $item->setFeUserUid( $this->feUser->getUid() );
         }
 
@@ -340,14 +346,14 @@ abstract class AbstractImporter implements ImporterInterface {
      * Replace the variables in the given format string with fileName or properties of the
      * itemMeta object.
      *
-     * @param Model_Item $item
+     * @param Item $item
      * @param string     $format
      * @param array      $additionalVars
      *
-     * @return Model_Item $item;
+     * @return Item $item;
      */
-    protected function processStringFromMetaData( Model_Item $item, $format, $additionalVars = array() ) {
-        if ( $item->getItemMeta() instanceof Model_ItemMeta ) {
+    protected function processStringFromMetaData( Item $item, $format, $additionalVars = array() ) {
+        if ( $item->getItemMeta() instanceof ItemMeta ) {
             $vars = $item->getItemMeta()->getAttributeArray();
         } else {
             $vars = array();
@@ -387,10 +393,10 @@ abstract class AbstractImporter implements ImporterInterface {
      * Creates a new item object and persists it
      * so that we have an UID for it.
      *
-     * @return Model_Item Persisted item
+     * @return Item Persisted item
      */
     protected function getNewPersistedItem() {
-        $item = $this->objectManager->get( 'Model_Item' );
+        $item = $this->objectManager->get( 'DL\\Yag\\Domain\\Model\\Item' );
 
         if ( $this->feUser ) {
             $item->setFeUserUid( $this->feUser->getUid() );
@@ -437,12 +443,12 @@ abstract class AbstractImporter implements ImporterInterface {
      * If an item is given, UID of item is used as filename for item in original items directory
      *
      * @param string     $filePath Full qualified filepath of file to move
-     * @param Model_Item $item     Item that should hold file (not modified, make sure to set sourceuri manually!
+     * @param Item $item     Item that should hold file (not modified, make sure to set sourceuri manually!
      *
      * @return string
      * @throws Exception
      */
-    protected function moveFileToOrigsDirectory( $filePath, Model_Item $item = null ) {
+    protected function moveFileToOrigsDirectory( $filePath, Item $item = null ) {
 
         // Create path to move file to
         $origsFilePath = $this->fileManager->getOrigFileDirectoryPathForAlbum( $this->album );
