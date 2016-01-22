@@ -99,7 +99,7 @@ class Gallery extends AbstractEntity implements DomainModelInterface {
      * Holds an album which is used as thumbnail for gallery
      *
      * @lazy
-     * @var Album $thumbAlbum
+     * @var \DL\Yag\Domain\Model\Album $thumbAlbum
      */
     protected $thumbAlbum;
 

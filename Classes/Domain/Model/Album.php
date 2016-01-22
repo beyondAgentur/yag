@@ -83,7 +83,7 @@ class Album extends AbstractEntity implements DomainModelInterface {
      * Holds gallery in which this album is kept
      *
      * @lazy
-     * @var Gallery $gallery
+     * @var \DL\Yag\Domain\Model\Gallery $gallery
      */
     protected $gallery;
 
@@ -92,7 +92,7 @@ class Album extends AbstractEntity implements DomainModelInterface {
      * Holds thumbnail for this album
      *
      * @lazy
-     * @var Item $thumb
+     * @var \DL\Yag\Domain\Model\Item $thumb
      */
     protected $thumb;
 
@@ -291,7 +291,7 @@ class Album extends AbstractEntity implements DomainModelInterface {
     /**
      * Setter for gallery
      *
-     * @param Gallery $gallery Holds gallery in which this album is kept
+     * @param DL\Yag|Domain\Model\Gallery $gallery Holds gallery in which this album is kept
      *
      * @return void
      */
@@ -303,7 +303,7 @@ class Album extends AbstractEntity implements DomainModelInterface {
     /**
      * Getter for gallery
      *
-     * @return Gallery Holds gallery in which this album is kept
+     * @return DL\Yag|Domain\Model\Gallery Holds gallery in which this album is kept
      */
     public function getGallery() {
         return \Tx_PtExtbase_Div::getLazyLoadedObject( $this->gallery );

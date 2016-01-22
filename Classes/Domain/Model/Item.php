@@ -151,7 +151,7 @@ class Item extends AbstractEntity implements DomainModelInterface {
     /**
      * Holds album to which item belongs to
      *
-     * @var Album $album
+     * @var \DL\Yag\Domain\Model\Album $album
      */
     protected $album;
 
@@ -160,7 +160,7 @@ class Item extends AbstractEntity implements DomainModelInterface {
      * Holds meta data for item
      *
      * @lazy
-     * @var ItemMeta $itemMeta
+     * @var \DL\Yag\Domain\Model\ItemMeta $itemMeta
      */
     protected $itemMeta;
 
