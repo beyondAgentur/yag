@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010-2013 Daniel Lienert <typo3@lienert.cc>, Michael Knoll <mimi@kaktusteam.de>
-*  All rights reserved
-*
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010-2013 Daniel Lienert <typo3@lienert.cc>, Michael Knoll <mimi@kaktusteam.de>
+ *  All rights reserved
+ *
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 namespace DL\Yag\Domain\Import\DirectoryImporter;
 
@@ -32,12 +32,11 @@ use DL\Yag\Domain\Model\Album;
 /**
  * Importer Builder for directory importer
  *
- * @package Domain
+ * @package    Domain
  * @subpackage Import\DirectoryImporter
- * @author Michael Knoll <mimi@kaktusteam.de>
+ * @author     Michael Knoll <mimi@kaktusteam.de>
  */
-class ImporterBuilder extends \DL\Yag\Domain\Import\ImporterBuilder
-{
+class ImporterBuilder extends \DL\Yag\Domain\Import\ImporterBuilder {
     /**
      * Holds a singleton instance of this class
      *
@@ -51,11 +50,11 @@ class ImporterBuilder extends \DL\Yag\Domain\Import\ImporterBuilder
      *
      * @return ImporterBuilder Singleton instance of directory importer builder
      */
-    public static function getInstance()
-    {
-        if (self::$instance === null) {
-            self::$instance = new self(ConfigurationBuilderFactory::getInstance());
+    public static function getInstance() {
+        if ( self::$instance === null ) {
+            self::$instance = new self( ConfigurationBuilderFactory::getInstance() );
         }
+
         return self::$instance;
     }
 
@@ -64,15 +63,16 @@ class ImporterBuilder extends \DL\Yag\Domain\Import\ImporterBuilder
      * Returns an instance of directory importer
      *
      * @param string $directory Directory to be crawled for files
-     * @param Album $album Album to add imported images to
+     * @param Album  $album     Album to add imported images to
+     *
      * @return Importer
      */
-    public function getInstanceByDirectoryAndAlbum($directory, Album $album)
-    {
-        $importer = parent::createImporterForAlbum('Importer', $album);
+    public function getInstanceByDirectoryAndAlbum( $directory, Album $album ) {
+        $importer = parent::createImporterForAlbum( 'Importer', $album );
         /* @var $importer Importer */
-        $importer->setDirectory($directory);
-        $importer->_injectFileCrawler(new FileCrawler($this->configurationBuilder->buildImporterConfiguration()));
+        $importer->setDirectory( $directory );
+        $importer->_injectFileCrawler( new FileCrawler( $this->configurationBuilder->buildImporterConfiguration() ) );
+
         return $importer;
     }
 }

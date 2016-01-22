@@ -27,7 +27,6 @@ namespace DL\Yag\View\ItemList;
 
 use DL\Yag\View\AbstractFeedView;
 
-class ListRss extends AbstractFeedView
-{
+class ListRss extends AbstractFeedView {
     protected $feedItemType = 'image';
 }

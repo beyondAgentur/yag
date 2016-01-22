@@ -35,18 +35,16 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * Controller for the Item object
  *
  * @package Controller
- * @author Michael Knoll <mimi@kaktusteam.de>
- * @author Daniel Lienert <typo3@lienert.cc>
+ * @author  Michael Knoll <mimi@kaktusteam.de>
+ * @author  Daniel Lienert <typo3@lienert.cc>
  */
-class ItemController extends AbstractController
-{
+class ItemController extends AbstractController {
     /**
      * Initializes the current action
      *
      * @return void
      */
-    protected function postInitializeAction()
-    {
+    protected function postInitializeAction() {
         $this->extListContext = $this->yagContext->getItemlistContext();
     }
 
@@ -59,8 +57,7 @@ class ItemController extends AbstractController
      *
      * @param int $itemListOffset
      */
-    public function showAction($itemListOffset = null)
-    {
+    public function showAction( $itemListOffset = null ) {
 
         /**
          * We use a list here, as we have multiple items which we would like to filter, page etc.
@@ -70,31 +67,31 @@ class ItemController extends AbstractController
          */
 
         // Overwrite pager settings so that only one item is displayed
-        $this->extListContext->getPagerCollection()->setItemsPerPage(1);
+        $this->extListContext->getPagerCollection()->setItemsPerPage( 1 );
 
         // itemUid is NOT the UID of the item but the index of the item in currently filtered list - so it's a list offset!
-        if ($itemListOffset) {
-            $this->extListContext->getPagerCollection()->setPageByRowIndex($itemListOffset - 1);
+        if ( $itemListOffset ) {
+            $this->extListContext->getPagerCollection()->setPageByRowIndex( $itemListOffset - 1 );
         }
 
         $renderedListData = $this->extListContext->getRenderedListData();
 
-        $this->extListContext->getPagerCollection()->setItemCount($this->extListContext->getDataBackend()->getTotalItemsCount());
+        $this->extListContext->getPagerCollection()->setItemCount( $this->extListContext->getDataBackend()->getTotalItemsCount() );
 
-        $pagerIdentifier = (empty($this->settings['pagerIdentifier']) ? 'default' : $this->settings['pagerIdentifier']);
-        $pager = $this->extListContext->getPagerCollection()->getPagerByIdentifier($pagerIdentifier);
+        $pagerIdentifier = ( empty( $this->settings['pagerIdentifier'] ) ? 'default' : $this->settings['pagerIdentifier'] );
+        $pager           = $this->extListContext->getPagerCollection()->getPagerByIdentifier( $pagerIdentifier );
 
-        if ($pager->getItemCount() == $pager->getCurrentPage()) {
-            $this->view->assign('lastItem', 1);
+        if ( $pager->getItemCount() == $pager->getCurrentPage() ) {
+            $this->view->assign( 'lastItem', 1 );
         }
 
-        if ($renderedListData->count()) {
-            $this->view->assign('mainItem', $renderedListData->getFirstRow()->getItemById('image')->getValue());
-            $this->view->assign('absoluteRowIndex', $renderedListData->getFirstRow()->getSpecialValue('absoluteRowIndex'));
+        if ( $renderedListData->count() ) {
+            $this->view->assign( 'mainItem', $renderedListData->getFirstRow()->getItemById( 'image' )->getValue() );
+            $this->view->assign( 'absoluteRowIndex', $renderedListData->getFirstRow()->getSpecialValue( 'absoluteRowIndex' ) );
         }
 
-        $this->view->assign('pagerCollection', $this->extListContext->getPagerCollection());
-        $this->view->assign('pager', $pager);
+        $this->view->assign( 'pagerCollection', $this->extListContext->getPagerCollection() );
+        $this->view->assign( 'pager', $pager );
     }
 
 
@@ -103,52 +100,50 @@ class ItemController extends AbstractController
      *
      * @param Item $item
      */
-    public function showSingleAction(Item $item = null)
-    {
-        if ($item === null) {
+    public function showSingleAction( Item $item = null ) {
+        if ( $item === null ) {
             $itemUid = $this->configurationBuilder->buildContextConfiguration()->getSelectedItemUid();
-            $this->yagContext->setItemUid($itemUid);
+            $this->yagContext->setItemUid( $itemUid );
             $item = $this->yagContext->getItem();
 
-            if ($item === null) {
-                $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_item.noItemSelected', $this->extensionName), '', FlashMessage::ERROR);
-                $this->forward('index', 'Error');
+            if ( $item === null ) {
+                $this->addFlashMessage( LocalizationUtility::translate( 'tx_yag_controller_item.noItemSelected', $this->extensionName ), '', FlashMessage::ERROR );
+                $this->forward( 'index', 'Error' );
             }
         }
 
-        $this->view->assign('item', $item);
+        $this->view->assign( 'item', $item );
     }
 
 
     /**
      * @param Item $item
      */
-    public function updateAction(Item $item)
-    {
-        $this->itemRepository->update($item);
+    public function updateAction( Item $item ) {
+        $this->itemRepository->update( $item );
 
         $this->persistenceManager->persistAll();
-        $this->forward('list', 'ItemList');
+        $this->forward( 'list', 'ItemList' );
     }
 
 
     /**
      * Action for deleting an item
      *
-     * @param Item $item Item to be deleted
+     * @param Item  $item  Item to be deleted
      * @param Album $album Album to forward to
+     *
      * @return string Rendered delete action
      * @rbacNeedsAccess
      * @rbacObject item
      * @rbacAction delete
      */
-    public function deleteAction(Item $item, Album $album = null)
-    {
+    public function deleteAction( Item $item, Album $album = null ) {
         $item->delete();
-        if ($album) {
-            $this->yagContext->setAlbum($album);
+        if ( $album ) {
+            $this->yagContext->setAlbum( $album );
         }
-        $this->forward('list', 'ItemList');
+        $this->forward( 'list', 'ItemList' );
     }
 
 
@@ -161,67 +156,66 @@ class ItemController extends AbstractController
      * @rbacObject item
      * @rbacAction update
      */
-    public function bulkUpdateAction()
-    {
+    public function bulkUpdateAction() {
         $bulkEditData = $this->request->getArguments();
 
         // Somehow, mapping does not seem to work here - so we do it manually
-        $album = $this->albumRepository->findByUid($bulkEditData['album']['uid']);
+        $album = $this->albumRepository->findByUid( $bulkEditData['album']['uid'] );
         /* @var $album Album */
 
-        if ($album == null) {
-           $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_album.noAlbumSelected', $this->extensionName), '', FlashMessage::ERROR);
-            $this->forward('list', 'ItemList');
+        if ( $album == null ) {
+            $this->addFlashMessage( LocalizationUtility::translate( 'tx_yag_controller_album.noAlbumSelected', $this->extensionName ), '', FlashMessage::ERROR );
+            $this->forward( 'list', 'ItemList' );
         }
 
         // Do we have to change thumb for album?
-        if (!$album->getThumb() instanceof Item || $album->getThumb()->getUid() != $bulkEditData['album']['thumb']) {
-            $thumb = $this->itemRepository->findByUid($bulkEditData['album']['thumb']);
-            if ($thumb !== null) {
-                $album->setThumb($thumb);
-                $this->albumRepository->update($album);
+        if ( ! $album->getThumb() instanceof Item || $album->getThumb()->getUid() != $bulkEditData['album']['thumb'] ) {
+            $thumb = $this->itemRepository->findByUid( $bulkEditData['album']['thumb'] );
+            if ( $thumb !== null ) {
+                $album->setThumb( $thumb );
+                $this->albumRepository->update( $album );
             }
         }
 
         // Delete items that are marked for deletion
-        foreach ($bulkEditData['itemsToBeDeleted'] as $itemUid => $value) {
-            if (intval($value) === 1) {
-                $item = $this->itemRepository->findByUid($itemUid);
+        foreach ( $bulkEditData['itemsToBeDeleted'] as $itemUid => $value ) {
+            if ( intval( $value ) === 1 ) {
+                $item = $this->itemRepository->findByUid( $itemUid );
                 /* @var $item Item */
-                if ($item != null) {
+                if ( $item != null ) {
                     $item->delete();
                 }
             }
         }
 
         // Update each item that is associated to the album
-        foreach ($album->getItems() as $item) {
+        foreach ( $album->getItems() as $item ) {
             /* @var $item Item */
 
             $itemUid = $item->getUid();
-            $item->injectObjectManager($this->objectManager);
+            $item->injectObjectManager( $this->objectManager );
 
-            if (array_key_exists($itemUid, $bulkEditData['album']['item'])) {
-                $itemArray = $bulkEditData['album']['item'][$itemUid];
-                $item->setTitle($itemArray['title']);
-                $item->setDescription($itemArray['description']);
+            if ( array_key_exists( $itemUid, $bulkEditData['album']['item'] ) ) {
+                $itemArray = $bulkEditData['album']['item'][ $itemUid ];
+                $item->setTitle( $itemArray['title'] );
+                $item->setDescription( $itemArray['description'] );
 
-                $itemAlbum = $this->albumRepository->findByUid(intval($itemArray['album']['__identity']));
-                if ($itemAlbum != null) {
-                    $item->setAlbum($itemAlbum);
+                $itemAlbum = $this->albumRepository->findByUid( intval( $itemArray['album']['__identity'] ) );
+                if ( $itemAlbum != null ) {
+                    $item->setAlbum( $itemAlbum );
                 }
 
-                $item->setTagsFromCSV($itemArray['tags']);
+                $item->setTagsFromCSV( $itemArray['tags'] );
 
-                $this->itemRepository->update($item);
+                $this->itemRepository->update( $item );
             }
         }
 
         $this->persistenceManager->persistAll();
 
-        $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_item.imagesUpdated', $this->extensionName), '', FlashMessage::OK);
+        $this->addFlashMessage( LocalizationUtility::translate( 'tx_yag_controller_item.imagesUpdated', $this->extensionName ), '', FlashMessage::OK );
 
-        $this->forward('list', 'ItemList');
+        $this->forward( 'list', 'ItemList' );
     }
 
 
@@ -229,27 +223,26 @@ class ItemController extends AbstractController
      * Sends an item as download. The fileHash (or at least a part of 5 characters) is used to avoid grabbing the whole
      * database by incrementing the itemUid.
      *
-     * @param Item $item
+     * @param Item   $item
      * @param string $fileHash
      */
-    public function downloadAction(Item $item, $fileHash)
-    {
-        $requestedFileName = Div::makePathAbsolute($item->getSourceuri());
-        $hashLength = strlen($fileHash) > 5 ? 5 : strlen($fileHash);
+    public function downloadAction( Item $item, $fileHash ) {
+        $requestedFileName = Div::makePathAbsolute( $item->getSourceuri() );
+        $hashLength        = strlen( $fileHash ) > 5 ? 5 : strlen( $fileHash );
 
-        if ($fileHash == '' || $fileHash !== substr($item->getFilehash(), 0, $hashLength) || !is_readable($requestedFileName)) {
-            $this->flashMessageContainer->add('The requested file was not found.', 'File not found', FlashMessage::ERROR);
-            $this->forward('index', 'Error');
+        if ( $fileHash == '' || $fileHash !== substr( $item->getFilehash(), 0, $hashLength ) || ! is_readable( $requestedFileName ) ) {
+            $this->flashMessageContainer->add( 'The requested file was not found.', 'File not found', FlashMessage::ERROR );
+            $this->forward( 'index', 'Error' );
         }
 
-        $this->response->setHeader('Cache-control', 'public', true);
-        $this->response->setHeader('Content-Description', 'File transfer', true);
-        $this->response->setHeader('Content-Disposition', 'attachment; filename="' . $item->getOriginalFilename() . '"', true);
-        $this->response->setHeader('Content-Type', $item->getItemType(), true);
-        $this->response->setHeader('Content-Transfer-Encoding', 'binary', true);
+        $this->response->setHeader( 'Cache-control', 'public', true );
+        $this->response->setHeader( 'Content-Description', 'File transfer', true );
+        $this->response->setHeader( 'Content-Disposition', 'attachment; filename="' . $item->getOriginalFilename() . '"', true );
+        $this->response->setHeader( 'Content-Type', $item->getItemType(), true );
+        $this->response->setHeader( 'Content-Transfer-Encoding', 'binary', true );
         $this->response->sendHeaders();
 
-        @readfile($requestedFileName);
+        @readfile( $requestedFileName );
 
         exit();
     }

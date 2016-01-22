@@ -34,12 +34,11 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 /**
  * Directory based importer importing files for a given directory on the server
  *
- * @package Domain
+ * @package    Domain
  * @subpackage Import\DirectoryImporter
- * @author Michael Knoll <mimi@kaktsuteam.de>
+ * @author     Michael Knoll <mimi@kaktsuteam.de>
  */
-class Importer extends AbstractImporter
-{
+class Importer extends AbstractImporter {
     /**
      * Holds directory to import files from
      *
@@ -99,8 +98,7 @@ class Importer extends AbstractImporter
      *
      * @param FileCrawler $fileCrawler
      */
-    public function _injectFileCrawler(FileCrawler $fileCrawler)
-    {
+    public function _injectFileCrawler( FileCrawler $fileCrawler ) {
         $this->fileCrawler = $fileCrawler;
     }
 
@@ -108,8 +106,7 @@ class Importer extends AbstractImporter
     /**
      * @param ObjectManager $objectManager
      */
-    public function injectObjectManager( ObjectManager $objectManager)
-    {
+    public function injectObjectManager( ObjectManager $objectManager ) {
         $this->objectManager = $objectManager;
     }
 
@@ -118,12 +115,12 @@ class Importer extends AbstractImporter
      * Sets directory to crawl for files
      *
      * @param string $directory Directory to be crawled
+     *
      * @throws Exception
      */
-    public function setDirectory($directory)
-    {
-        if (!file_exists($directory)) {
-            throw new Exception('Directory ' . $directory . ' is not existing.', 1287590389);
+    public function setDirectory( $directory ) {
+        if ( ! file_exists( $directory ) ) {
+            throw new Exception( 'Directory ' . $directory . ' is not existing.', 1287590389 );
         }
         $this->directory = $directory;
     }
@@ -135,9 +132,8 @@ class Importer extends AbstractImporter
      *
      * @param bool $crawlRecursive
      */
-    public function setCrawlRecursive($crawlRecursive)
-    {
-        if ($crawlRecursive) {
+    public function setCrawlRecursive( $crawlRecursive ) {
+        if ( $crawlRecursive ) {
             $this->crawlRecursive = true;
         } else {
             $this->crawlRecursive = false;
@@ -145,9 +141,8 @@ class Importer extends AbstractImporter
     }
 
 
-    public function setNoDuplicates($noDuplicates)
-    {
-        if ($noDuplicates) {
+    public function setNoDuplicates( $noDuplicates ) {
+        if ( $noDuplicates ) {
             $this->noDuplicates = true;
         } else {
             $this->noDuplicates = false;
@@ -160,8 +155,7 @@ class Importer extends AbstractImporter
      *
      * @return string
      */
-    public function getDirectory()
-    {
+    public function getDirectory() {
         return $this->directory;
     }
 
@@ -172,35 +166,34 @@ class Importer extends AbstractImporter
      * Crawls given directory for images using file crawler.
      * Each image found in this directory is added to the given album.
      */
-    public function runImport()
-    {
-        $files = $this->fileCrawler->getFilesForGivenDirectory($this->directory, $this->crawlRecursive);
+    public function runImport() {
+        $files = $this->fileCrawler->getFilesForGivenDirectory( $this->directory, $this->crawlRecursive );
 
         $this->initItemSorting();
 
-        foreach ($files as $filePath) {
+        foreach ( $files as $filePath ) {
             // Prevent import, if noDuplicates is set to true and we already have item imported in album
-            if ($this->noDuplicates && $this->album->containsItemByHash(md5_file($filePath))) {
+            if ( $this->noDuplicates && $this->album->containsItemByHash( md5_file( $filePath ) ) ) {
                 continue;
             }
 
             $origFilePath = $filePath;
 
             $item = null;
-            if ($this->moveFilesToOrigsDirectory) {
-                $item = $this->getNewPersistedItem();
-                $filePath = $this->moveFileToOrigsDirectory($filePath, $item);
+            if ( $this->moveFilesToOrigsDirectory ) {
+                $item     = $this->getNewPersistedItem();
+                $filePath = $this->moveFileToOrigsDirectory( $filePath, $item );
             } else {
-                $item = $this->objectManager->get('DL\\Yag\\Domain\\Model\\Item');
+                $item = $this->objectManager->get( 'DL\\Yag\\Domain\\Model\\Item' );
             }
 
-            $item->setOriginalFilename(Div::getFilenameFromFilePath($origFilePath));
+            $item->setOriginalFilename( Div::getFilenameFromFilePath( $origFilePath ) );
 
             // We increase item sorting with each item that has to be imported
-            $item->setSorting(++$this->itemSorting);
+            $item->setSorting( ++ $this->itemSorting );
 
-            $this->importFileByFilename($filePath, $item);
-            $this->itemsImported++;
+            $this->importFileByFilename( $filePath, $item );
+            $this->itemsImported ++;
         }
         $this->runPostImportAction();
     }
@@ -213,8 +206,7 @@ class Importer extends AbstractImporter
      *
      * @return int
      */
-    public function getItemsImported()
-    {
+    public function getItemsImported() {
         return $this->itemsImported;
     }
 
@@ -224,8 +216,7 @@ class Importer extends AbstractImporter
      *
      * @return void
      */
-    protected function initItemSorting()
-    {
+    protected function initItemSorting() {
         $this->itemSorting = $this->album->getMaxSorting();
     }
 }

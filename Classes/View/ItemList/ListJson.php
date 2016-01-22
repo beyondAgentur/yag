@@ -25,21 +25,18 @@
 
 namespace DL\Yag\View\ItemList;
 
-class ListJson extends \Tx_PtExtbase_View_BaseView
-{
+class ListJson extends \Tx_PtExtbase_View_BaseView {
     /**
      * @return string|void
      */
-    public function render()
-    {
+    public function render() {
         //		ob_clean();
-        header('Content-Type: application/json;charset=UTF-8');
+        header( 'Content-Type: application/json;charset=UTF-8' );
         echo parent::render();
         exit;
     }
 
 
-    protected function buildItemList()
-    {
+    protected function buildItemList() {
     }
 }

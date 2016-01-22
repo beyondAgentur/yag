@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010-2012 Daniel Lienert <typo3@lienert.cc>
-*  All rights reserved
-*
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010-2012 Daniel Lienert <typo3@lienert.cc>
+ *  All rights reserved
+ *
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 namespace TYPO3\CMS\Yag\Fal\Driver;
 
@@ -42,8 +42,7 @@ use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 
-class YagDriver extends AbstractDriver
-{
+class YagDriver extends AbstractDriver {
     /**
      * @var array
      */
@@ -109,22 +108,20 @@ class YagDriver extends AbstractDriver
      *
      * @return void
      */
-    public function initialize()
-    {
+    public function initialize() {
         $this->capabilities = ResourceStorage::CAPABILITY_BROWSABLE | ResourceStorage::CAPABILITY_PUBLIC; // | \TYPO3\CMS\Core\Resource\ResourceStorage::CAPABILITY_WRITABLE;
 
-        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->objectManager = GeneralUtility::makeInstance( 'TYPO3\\CMS\\Extbase\\Object\\ObjectManager' );
 
-        $this->galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository');
-        $this->albumRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository');
-        $this->itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository');
-        $this->signalSlotDispatcher = $this->objectManager->get('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
+        $this->galleryRepository    = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\GalleryRepository' );
+        $this->albumRepository      = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\AlbumRepository' );
+        $this->itemRepository       = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\ItemRepository' );
+        $this->signalSlotDispatcher = $this->objectManager->get( 'TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher' );
 
-        $this->yagFileSystemDiv = $this->objectManager->get('DL\\Yag\\Domain\\FileSystem\\Div');
-        $this->pidDetector = $this->objectManager->get('DL\\Yag\\Domain\\Utility\\PidDetector');
-        $this->registry = $this->objectManager->get('TYPO3\\CMS\\Core\\Registry');
+        $this->yagFileSystemDiv = $this->objectManager->get( 'DL\\Yag\\Domain\\FileSystem\\Div' );
+        $this->pidDetector      = $this->objectManager->get( 'DL\\Yag\\Domain\\Utility\\PidDetector' );
+        $this->registry         = $this->objectManager->get( 'TYPO3\\CMS\\Core\\Registry' );
     }
-
 
 
     /**
@@ -132,14 +129,13 @@ class YagDriver extends AbstractDriver
      * Throws an exception if a configuration will not work.
      *
      * @param array $configuration
+     *
      * @return void
      */
-    public static function verifyConfiguration(array $configuration)
-    {
+    public static function verifyConfiguration( array $configuration ) {
         // TODO: Implement verifyConfiguration() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
-
 
 
     /**
@@ -147,70 +143,68 @@ class YagDriver extends AbstractDriver
      *
      * @return void
      */
-    public function processConfiguration()
-    {
+    public function processConfiguration() {
     }
 
 
-    public function processImage($fileProcessingService, $driver, ProcessedFile $processedFile, $file, $context, $configuration)
-    {
-        error_log('FAL DRIVER ' . __FUNCTION__);
+    public function processImage( $fileProcessingService, $driver, ProcessedFile $processedFile, $file, $context, $configuration ) {
+        error_log( 'FAL DRIVER ' . __FUNCTION__ );
     }
-
 
 
     /**
      * Returns the public URL to a file.
      *
      * @param ResourceInterface $resource
-     * @param bool  $relativeToCurrentScript    Determines whether the URL returned should be relative to the current script, in case it is relative at all (only for the LocalDriver)
+     * @param bool              $relativeToCurrentScript Determines whether the URL returned should be relative to the
+     *                                                   current script, in case it is relative at all (only for the
+     *                                                   LocalDriver)
+     *
      * @return string
      */
-    public function getPublicUrl( ResourceInterface $resource, $relativeToCurrentScript = false)
-    {
-        if ( GeneralUtility::isFirstPartOfStr($resource->getIdentifier(), '/_processed_/')) {
-            $publicUrl =  '../typo3temp/yag' . $resource->getIdentifier(); // TODO: ....!!!!
+    public function getPublicUrl( ResourceInterface $resource, $relativeToCurrentScript = false ) {
+        if ( GeneralUtility::isFirstPartOfStr( $resource->getIdentifier(), '/_processed_/' ) ) {
+            $publicUrl = '../typo3temp/yag' . $resource->getIdentifier(); // TODO: ....!!!!
         } else {
-            $item = $resource->getProperty('yagItem');
+            $item = $resource->getProperty( 'yagItem' );
 
-            if (!$item instanceof Item) {
-                $pathInfo = new PathInfo($resource->getIdentifier());
-                $item = $this->getItem($pathInfo);
+            if ( ! $item instanceof Item ) {
+                $pathInfo = new PathInfo( $resource->getIdentifier() );
+                $item     = $this->getItem( $pathInfo );
             }
 
-            $publicUrl =  $this->yagFileSystemDiv->getFileRelFileName($item->getSourceuri());
+            $publicUrl = $this->yagFileSystemDiv->getFileRelFileName( $item->getSourceuri() );
         }
 
 
-        if ($relativeToCurrentScript) {
-            $publicUrl = PathUtility::getRelativePathTo(PathUtility::dirname((PATH_site . $publicUrl))) . PathUtility::basename($publicUrl);
+        if ( $relativeToCurrentScript ) {
+            $publicUrl = PathUtility::getRelativePathTo( PathUtility::dirname( ( PATH_site . $publicUrl ) ) ) . PathUtility::basename( $publicUrl );
         }
+
         return $publicUrl;
     }
-
 
 
     /**
      * Creates a (cryptographic) hash for a file.
      *
      * @param FileInterface $file
-     * @param string $hashAlgorithm The hash algorithm to use
+     * @param string        $hashAlgorithm The hash algorithm to use
+     *
      * @return string
      */
-    public function hash( FileInterface $file, $hashAlgorithm)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function hash( FileInterface $file, $hashAlgorithm ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
 
         $pathInfo = new PathInfo();
-        $pathInfo->setFromFalPath($file->getIdentifier());
+        $pathInfo->setFromFalPath( $file->getIdentifier() );
 
-        switch ($hashAlgorithm) {
+        switch ( $hashAlgorithm ) {
             case 'sha1':
-                return sha1($file->getIdentifier());
+                return sha1( $file->getIdentifier() );
                 break;
         }
     }
-
 
 
     /**
@@ -218,12 +212,12 @@ class YagDriver extends AbstractDriver
      *
      * @param string $fileName
      * @param Folder $parentFolder
+     *
      * @return \TYPO3\CMS\Core\Resource\File
      */
-    public function createFile($fileName, Folder $parentFolder)
-    {
+    public function createFile( $fileName, Folder $parentFolder ) {
         // TODO: Implement createFile() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
@@ -233,11 +227,11 @@ class YagDriver extends AbstractDriver
      * of processing resources and money) for large files.
      *
      * @param FileInterface $file
+     *
      * @return string The file contents
      */
-    public function getFileContents( FileInterface $file)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function getFileContents( FileInterface $file ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
         // TODO: Implement getFileContents() method.
     }
 
@@ -245,16 +239,15 @@ class YagDriver extends AbstractDriver
      * Sets the contents of a file to the specified value.
      *
      * @param FileInterface $file
-     * @param string $contents
+     * @param string        $contents
+     *
      * @return integer The number of bytes written to the file
      * @throws \RuntimeException if the operation failed
      */
-    public function setFileContents( FileInterface $file, $contents)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function setFileContents( FileInterface $file, $contents ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
         // TODO: Implement setFileContents() method.
     }
-
 
 
     /**
@@ -262,67 +255,67 @@ class YagDriver extends AbstractDriver
      *
      * This assumes that the local file exists, so no further check is done here!
      *
-     * @param string $localFilePath
-     * @param Folder $targetFolder
-     * @param string $fileName The name to add the file under
-     * @param AbstractFile $updateFileObject Optional file object to update (instead of creating a new object). With this parameter, this function can be used to "populate" a dummy file object with a real file underneath.
+     * @param string       $localFilePath
+     * @param Folder       $targetFolder
+     * @param string       $fileName         The name to add the file under
+     * @param AbstractFile $updateFileObject Optional file object to update (instead of creating a new object). With
+     *                                       this parameter, this function can be used to "populate" a dummy file
+     *                                       object with a real file underneath.
+     *
      * @return FileInterface
      */
-    public function addFile($localFilePath, Folder $targetFolder, $fileName, AbstractFile $updateFileObject = null)
-    {
+    public function addFile( $localFilePath, Folder $targetFolder, $fileName, AbstractFile $updateFileObject = null ) {
         // TODO: Implement addFile() method.
 
-        error_log('FAL DRIVER: ' . __FUNCTION__ . ' Folder: ' . $targetFolder->getCombinedIdentifier() . ' FileName ' . $fileName) . 'FileObject ';
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ . ' Folder: ' . $targetFolder->getCombinedIdentifier() . ' FileName ' . $fileName ) . 'FileObject ';
 
 
-
-        if ($targetFolder == $this->storage->getProcessingFolder()) {
+        if ( $targetFolder == $this->storage->getProcessingFolder() ) {
             $yagTempFolder = 'typo3temp/yag'; // TODO: use configured value
 
-            $falTempFolder = $this->yagFileSystemDiv->makePathAbsolute($yagTempFolder . $targetFolder->getIdentifier());
-            $this->yagFileSystemDiv->checkDirAndCreateIfMissing($falTempFolder);
-            $falTempFilePath = Div::concatenatePaths(array($falTempFolder, $fileName));
+            $falTempFolder = $this->yagFileSystemDiv->makePathAbsolute( $yagTempFolder . $targetFolder->getIdentifier() );
+            $this->yagFileSystemDiv->checkDirAndCreateIfMissing( $falTempFolder );
+            $falTempFilePath = Div::concatenatePaths( array( $falTempFolder, $fileName ) );
 
-            rename($localFilePath, $falTempFilePath);
+            rename( $localFilePath, $falTempFilePath );
         }
 
-        return $this->getFile($falTempFilePath);
+        return $this->getFile( $falTempFilePath );
     }
-
 
 
     /**
      * Checks if a resource exists - does not care for the type (file or folder).
      *
      * @param $identifier
+     *
      * @return boolean
      */
-    public function resourceExists($identifier)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function resourceExists( $identifier ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
         // TODO: Implement resourceExists() method.
     }
-
 
 
     /**
      * Checks if a file exists.
      *
      * @param string $identifier
+     *
      * @return boolean
      */
-    public function fileExists($identifier)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__ . ' Identifier: ' . $identifier);
+    public function fileExists( $identifier ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ . ' Identifier: ' . $identifier );
 
-        if ( GeneralUtility::isFirstPartOfStr($identifier, '/_processed_/')) {
-            $absolutePath = $this->yagFileSystemDiv->makePathAbsolute('fileadmin' . $identifier);
-            $fileExists = file_exists($absolutePath);
+        if ( GeneralUtility::isFirstPartOfStr( $identifier, '/_processed_/' ) ) {
+            $absolutePath = $this->yagFileSystemDiv->makePathAbsolute( 'fileadmin' . $identifier );
+            $fileExists   = file_exists( $absolutePath );
+
             return $fileExists;
         } else {
             $pathInfo = new PathInfo();
-            if ($pathInfo->setFromFalPath($identifier) && $pathInfo->getPathType() === PathInfo::INFO_ITEM) {
-                return $this->traversePath($pathInfo);
+            if ( $pathInfo->setFromFalPath( $identifier ) && $pathInfo->getPathType() === PathInfo::INFO_ITEM ) {
+                return $this->traversePath( $pathInfo );
             }
         }
 
@@ -330,33 +323,31 @@ class YagDriver extends AbstractDriver
     }
 
 
-
     /**
      * Checks if a folder exists
      *
      * @param string $identifier
+     *
      * @return boolean
      */
-    public function folderExists($identifier)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function folderExists( $identifier ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
 
-        if (!$identifier) {
+        if ( ! $identifier ) {
             return true;
         }
 
-        if ($identifier === '/' || $identifier === '/_processed_/') {
+        if ( $identifier === '/' || $identifier === '/_processed_/' ) {
             return true;
         } else {
-            $pathInfo = $this->buildPathInfo($identifier);
+            $pathInfo = $this->buildPathInfo( $identifier );
         }
-        if ($pathInfo->getPathType() === PathInfo::INFO_ITEM) {
+        if ( $pathInfo->getPathType() === PathInfo::INFO_ITEM ) {
             return false;
         }
 
-        return $this->traversePath($pathInfo);
+        return $this->traversePath( $pathInfo );
     }
-
 
 
     /**
@@ -364,14 +355,13 @@ class YagDriver extends AbstractDriver
      *
      * @param string $fileName
      * @param Folder $folder
+     *
      * @return boolean
      */
-    public function fileExistsInFolder($fileName, Folder $folder)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function fileExistsInFolder( $fileName, Folder $folder ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
         // TODO: Implement fileExistsInFolder() method.
     }
-
 
 
     /**
@@ -379,36 +369,37 @@ class YagDriver extends AbstractDriver
      * file, you have to take care of replacing the current version yourself!
      *
      * @param FileInterface $file
-     * @param bool $writable Set this to FALSE if you only need the file for read operations. This might speed up things, e.g. by using a cached local version. Never modify the file if you have set this flag!
+     * @param bool          $writable Set this to FALSE if you only need the file for read operations. This might speed
+     *                                up things, e.g. by using a cached local version. Never modify the file if you
+     *                                have set this flag!
+     *
      * @return string The path to the file on the local disk
      */
-    public function getFileForLocalProcessing( FileInterface $file, $writable = true)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function getFileForLocalProcessing( FileInterface $file, $writable = true ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
 
-        if (!$file->isIndexed() || !($file->getProperty('yagItem') instanceof Item)) {
+        if ( ! $file->isIndexed() || ! ( $file->getProperty( 'yagItem' ) instanceof Item ) ) {
             $identifier = $file->getIdentifier();
-            $fileInfo = $this->getFileInfoByIdentifier($identifier);
+            $fileInfo   = $this->getFileInfoByIdentifier( $identifier );
 
-            $sourceUri =  $this->yagFileSystemDiv->makePathAbsolute($fileInfo['sourceUri']);
+            $sourceUri = $this->yagFileSystemDiv->makePathAbsolute( $fileInfo['sourceUri'] );
         } else {
-            $item = $file->getProperty('yagItem');
-            $sourceUri =  $this->yagFileSystemDiv->makePathAbsolute($item->getSourceuri());
+            $item      = $file->getProperty( 'yagItem' );
+            $sourceUri = $this->yagFileSystemDiv->makePathAbsolute( $item->getSourceuri() );
         }
 
         return $sourceUri;
     }
 
 
-
     /**
      * Returns the permissions of a file as an array (keys r, w) of boolean flags
      *
      * @param FileInterface $file
+     *
      * @return array
      */
-    public function getFilePermissions( FileInterface $file)
-    {
+    public function getFilePermissions( FileInterface $file ) {
         return array(
             'r' => true,
             'w' => false,
@@ -419,10 +410,10 @@ class YagDriver extends AbstractDriver
      * Returns the permissions of a folder as an array (keys r, w) of boolean flags
      *
      * @param Folder $folder
+     *
      * @return array
      */
-    public function getFolderPermissions( Folder $folder)
-    {
+    public function getFolderPermissions( Folder $folder ) {
         return array(
             'r' => true,
             'w' => false,
@@ -433,43 +424,39 @@ class YagDriver extends AbstractDriver
      * Renames a file
      *
      * @param FileInterface $file
-     * @param string $newName
+     * @param string        $newName
+     *
      * @return string The new identifier of the file if the operation succeeds
      * @throws \RuntimeException if renaming the file failed
      */
-    public function renameFile( FileInterface $file, $newName)
-    {
+    public function renameFile( FileInterface $file, $newName ) {
         // TODO: Implement renameFile() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
      * Replaces the contents (and file-specific metadata) of a file object with a local file.
      *
      * @param AbstractFile $file
-     * @param string $localFilePath
+     * @param string       $localFilePath
+     *
      * @return boolean
      */
-    public function replaceFile( AbstractFile $file, $localFilePath)
-    {
+    public function replaceFile( AbstractFile $file, $localFilePath ) {
         // TODO: Implement replaceFile() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
 
+    protected function getProcessedFileByIdentifier( $identifier ) {
+        $isTempFile = stristr( $identifier, $this->storage->getProcessingFolder()->getIdentifier() );
 
-
-
-    protected function getProcessedFileByIdentifier($identifier)
-    {
-        $isTempFile = stristr($identifier, $this->storage->getProcessingFolder()->getIdentifier());
-
-        if ($isTempFile) {
+        if ( $isTempFile ) {
             return array(
-                'mimetype' => 'JPG',
-                'name' => 'name',
+                'mimetype'   => 'JPG',
+                'name'       => 'name',
                 'identifier' => 'falTemp|' . $identifier,
-                'storage' => $this->storage->getUid(),
+                'storage'    => $this->storage->getUid(),
             );
         }
 
@@ -481,14 +468,14 @@ class YagDriver extends AbstractDriver
      * Returns a folder within the given folder. Use this method instead of doing your own string manipulation magic
      * on the identifiers because non-hierarchical storages might fail otherwise.
      *
-     * @param $name
+     * @param        $name
      * @param Folder $parentFolder
+     *
      * @return Folder
      */
-    public function getFolderInFolder($name, Folder $parentFolder)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
-        die('FIF');
+    public function getFolderInFolder( $name, Folder $parentFolder ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
+        die( 'FIF' );
         // TODO: Implement getFolderInFolder() method.
     }
 
@@ -496,11 +483,11 @@ class YagDriver extends AbstractDriver
      * Copies a file to a temporary path and returns that path.
      *
      * @param FileInterface $file
+     *
      * @return string The temporary path
      */
-    public function copyFileToTemporaryPath( FileInterface $file)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function copyFileToTemporaryPath( FileInterface $file ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
         // TODO: Implement copyFileToTemporaryPath() method.
     }
 
@@ -510,13 +497,13 @@ class YagDriver extends AbstractDriver
      * moved to another folder in the same storage.
      *
      * @param FileInterface $file
-     * @param Folder $targetFolder
-     * @param string $fileName
+     * @param Folder        $targetFolder
+     * @param string        $fileName
+     *
      * @return string The new identifier of the file
      */
-    public function moveFileWithinStorage( FileInterface $file, Folder $targetFolder, $fileName)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function moveFileWithinStorage( FileInterface $file, Folder $targetFolder, $fileName ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
         // TODO: Implement moveFileWithinStorage() method.
     }
 
@@ -526,13 +513,13 @@ class YagDriver extends AbstractDriver
      * copied to another folder in the same storage.
      *
      * @param FileInterface $file
-     * @param Folder $targetFolder
-     * @param string $fileName
+     * @param Folder        $targetFolder
+     * @param string        $fileName
+     *
      * @return FileInterface The new (copied) file object.
      */
-    public function copyFileWithinStorage( FileInterface $file, Folder $targetFolder, $fileName)
-    {
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+    public function copyFileWithinStorage( FileInterface $file, Folder $targetFolder, $fileName ) {
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
         // TODO: Implement copyFileWithinStorage() method.
     }
 
@@ -542,12 +529,12 @@ class YagDriver extends AbstractDriver
      * @param Folder $folderToMove
      * @param Folder $targetFolder
      * @param string $newFolderName
+     *
      * @return array A map of old to new file identifiers
      */
-    public function moveFolderWithinStorage( Folder $folderToMove, Folder $targetFolder, $newFolderName)
-    {
+    public function moveFolderWithinStorage( Folder $folderToMove, Folder $targetFolder, $newFolderName ) {
         // TODO: Implement moveFolderWithinStorage() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
@@ -556,12 +543,12 @@ class YagDriver extends AbstractDriver
      * @param Folder $folderToMove
      * @param Folder $targetFolder
      * @param string $newFileName
+     *
      * @return boolean
      */
-    public function copyFolderWithinStorage( Folder $folderToMove, Folder $targetFolder, $newFileName)
-    {
+    public function copyFolderWithinStorage( Folder $folderToMove, Folder $targetFolder, $newFileName ) {
         // TODO: Implement copyFolderWithinStorage() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
@@ -570,25 +557,25 @@ class YagDriver extends AbstractDriver
      * this has to be taken care of in the upper layers (e.g. the Storage)!
      *
      * @param FileInterface $file
+     *
      * @return boolean TRUE if deleting the file succeeded
      */
-    public function deleteFile( FileInterface $file)
-    {
+    public function deleteFile( FileInterface $file ) {
         // TODO: Implement deleteFile() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
      * Removes a folder from this storage.
      *
-     * @param Folder $folder
+     * @param Folder  $folder
      * @param boolean $deleteRecursively
+     *
      * @return boolean
      */
-    public function deleteFolder( Folder $folder, $deleteRecursively = false)
-    {
+    public function deleteFolder( Folder $folder, $deleteRecursively = false ) {
         // TODO: Implement deleteFolder() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
@@ -597,12 +584,12 @@ class YagDriver extends AbstractDriver
      * @param string $localFilePath
      * @param Folder $targetFolder
      * @param string $targetFileName
+     *
      * @return string The new identifier of the file
      */
-    public function addFileRaw($localFilePath, Folder $targetFolder, $targetFileName)
-    {
+    public function addFileRaw( $localFilePath, Folder $targetFolder, $targetFileName ) {
         // TODO: Implement addFileRaw() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
@@ -614,12 +601,12 @@ class YagDriver extends AbstractDriver
      * create an object for) them - e.g. when moving a file to another storage.
      *
      * @param string $identifier
+     *
      * @return boolean TRUE if removing the file succeeded
      */
-    public function deleteFileRaw($identifier)
-    {
+    public function deleteFileRaw( $identifier ) {
         // TODO: Implement deleteFileRaw() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
@@ -627,100 +614,96 @@ class YagDriver extends AbstractDriver
      *
      * @return Folder
      */
-    public function getRootLevelFolder()
-    {
-        if (!$this->rootLevelFolder) {
-            $this->rootLevelFolder = ResourceFactory::getInstance()->createFolderObject($this->storage, '/', '');
+    public function getRootLevelFolder() {
+        if ( ! $this->rootLevelFolder ) {
+            $this->rootLevelFolder = ResourceFactory::getInstance()->createFolderObject( $this->storage, '/', '' );
         }
+
         return $this->rootLevelFolder;
     }
-
 
 
     /**
      * Returns a folder by its identifier.
      *
      * @param string $identifier
+     *
      * @return Folder
      */
-    public function getFolder($identifier)
-    {
-        if ($identifier === '/' || $identifier === '/_processed_/') {
-            return parent::getFOlder($identifier);
+    public function getFolder( $identifier ) {
+        if ( $identifier === '/' || $identifier === '/_processed_/' ) {
+            return parent::getFOlder( $identifier );
         }
 
-        $pathInfo = $this->buildPathInfo($identifier);
+        $pathInfo   = $this->buildPathInfo( $identifier );
         $identifier = $pathInfo->getFalPath();
 
-        $name = $this->getNameFromIdentifier($identifier);
-        return ResourceFactory::getInstance()->createFolderObject($this->storage, $identifier, $name);
+        $name = $this->getNameFromIdentifier( $identifier );
+
+        return ResourceFactory::getInstance()->createFolderObject( $this->storage, $identifier, $name );
     }
 
 
-
-    protected function getDirectoryItemList($path, $start, $numberOfItems, array $filterMethods, $itemHandlerMethod, $itemRows = array(), $recursive = false)
-    {
-        error_log('------------> FAL DRIVER: ' . __FUNCTION__ . ' with Mode ' . $itemHandlerMethod . ' with Identifier '. $path);
+    protected function getDirectoryItemList( $path, $start, $numberOfItems, array $filterMethods, $itemHandlerMethod, $itemRows = array(), $recursive = false ) {
+        error_log( '------------> FAL DRIVER: ' . __FUNCTION__ . ' with Mode ' . $itemHandlerMethod . ' with Identifier ' . $path );
 
         $items = array();
 
-        $pathInfo = $this->buildPathInfo($path);
-        $this->initDriver($pathInfo);
+        $pathInfo = $this->buildPathInfo( $path );
+        $this->initDriver( $pathInfo );
 
-        if ($itemHandlerMethod == $this->folderListCallbackMethod && $pathInfo->getPathType() !== PathInfo::INFO_ALBUM) {
-            $items = $this->getFolderList_itemCallback($pathInfo);
+        if ( $itemHandlerMethod == $this->folderListCallbackMethod && $pathInfo->getPathType() !== PathInfo::INFO_ALBUM ) {
+            $items = $this->getFolderList_itemCallback( $pathInfo );
         }
 
-        if ($itemHandlerMethod == $this->fileListCallbackMethod && $pathInfo->getPathType() === PathInfo::INFO_ALBUM) {
-            $items = $this->getFileList_itemCallback($pathInfo);
+        if ( $itemHandlerMethod == $this->fileListCallbackMethod && $pathInfo->getPathType() === PathInfo::INFO_ALBUM ) {
+            $items = $this->getFileList_itemCallback( $pathInfo );
         }
 
         return $items;
     }
 
 
-
     /**
      * @param $path
+     *
      * @return \TYPO3\CMS\Yag\Fal\Driver\PathInfo
      */
-    protected function buildPathInfo($path)
-    {
-        if ($path == './' || $path == '.') {
+    protected function buildPathInfo( $path ) {
+        if ( $path == './' || $path == '.' ) {
             $path = $this->retrieveLastAccessedFalPath();
         }
 
-        $pathInfo = new PathInfo($path);
+        $pathInfo = new PathInfo( $path );
 
-        $this->storeLastAccessedFalPath($path);
+        $this->storeLastAccessedFalPath( $path );
 
         return $pathInfo;
     }
 
 
-
     /**
      * Returns information about a file for a given file identifier.
      *
-     * @param string $identifier The (relative) path to the file.
-     * @param array $propertiesToExtract Array of properties which should be extracted, if empty all will be extracted
+     * @param string $identifier          The (relative) path to the file.
+     * @param array  $propertiesToExtract Array of properties which should be extracted, if empty all will be extracted
+     *
      * @return array
      */
-    public function getFileInfoByIdentifier($identifier, array $propertiesToExtract = array())
-    {
-        error_log('------------> FAL DRIVER: ' . __FUNCTION__ . ' with Identifier '. $identifier);
+    public function getFileInfoByIdentifier( $identifier, array $propertiesToExtract = array() ) {
+        error_log( '------------> FAL DRIVER: ' . __FUNCTION__ . ' with Identifier ' . $identifier );
 
-        $pathInfo = $this->buildPathInfo($identifier);
+        $pathInfo = $this->buildPathInfo( $identifier );
 
-        $fileInfo = $this->getProcessedFileByIdentifier($identifier);
+        $fileInfo = $this->getProcessedFileByIdentifier( $identifier );
 
-        if ($fileInfo !== false) {
+        if ( $fileInfo !== false ) {
             return $fileInfo;
         } else {
-            $pathInfo->setFromFalPath($identifier);
+            $pathInfo->setFromFalPath( $identifier );
         }
 
-        $fileInfo = $this->getYAGObjectInfoByPathInfo($pathInfo);
+        $fileInfo = $this->getYAGObjectInfoByPathInfo( $pathInfo );
 
         return $fileInfo;
     }
@@ -728,86 +711,83 @@ class YagDriver extends AbstractDriver
 
     /**
      * @param string $identifier
+     *
      * @return string|void
      */
-    protected function getNameFromIdentifier($identifier)
-    {
+    protected function getNameFromIdentifier( $identifier ) {
         $pathInfo = new PathInfo();
 
-        error_log('------------> FAL DRIVER: ' . __FUNCTION__ . ' with Identifier '. $identifier);
+        error_log( '------------> FAL DRIVER: ' . __FUNCTION__ . ' with Identifier ' . $identifier );
 
-        if ($identifier === '/_processed_/') {
+        if ( $identifier === '/_processed_/' ) {
             return 'Processed';
         }
 
-        if ($pathInfo->setFromFalPath($identifier) !== false) {
+        if ( $pathInfo->setFromFalPath( $identifier ) !== false ) {
             return $pathInfo->getDisplayName();
         }
     }
 
 
+    protected function getFileList_itemCallback( PathInfo $pathInfo ) {
+        error_log( '-> ' . __FUNCTION__ . ' PathType: ' . $pathInfo->getPathType() );
 
-    protected function getFileList_itemCallback(PathInfo $pathInfo)
-    {
-        error_log('-> ' . __FUNCTION__ . ' PathType: ' . $pathInfo->getPathType());
+        if ( $pathInfo->getPathType() === PathInfo::INFO_ALBUM ) {
+            $items = $this->getItems( $pathInfo );
 
-        if ($pathInfo->getPathType() === PathInfo::INFO_ALBUM) {
-            $items = $this->getItems($pathInfo);
             return $items;
         }
     }
 
 
-
-    protected function traversePath(PathInfo $pathInfo)
-    {
+    protected function traversePath( PathInfo $pathInfo ) {
         $pathInfo = $pathInfo;
-        if (array_key_exists($pathInfo->getYagDirectoryPath(), $this->yagDirectoryPathCache)) {
+        if ( array_key_exists( $pathInfo->getYagDirectoryPath(), $this->yagDirectoryPathCache ) ) {
             return true;
         }
 
-        if ($pathInfo->getPathType() === PathInfo::INFO_ROOT) {
-            $this->getPages($pathInfo);
+        if ( $pathInfo->getPathType() === PathInfo::INFO_ROOT ) {
+            $this->getPages( $pathInfo );
         }
-        if ($pathInfo->getPathType() === PathInfo::INFO_PID) {
+        if ( $pathInfo->getPathType() === PathInfo::INFO_PID ) {
             $this->getPages();
-            $this->getGalleries($pathInfo);
+            $this->getGalleries( $pathInfo );
         }
 
-        if ($pathInfo->getPathType() === PathInfo::INFO_GALLERY) {
-            $this->getPages($pathInfo);
-            $this->getGalleries($pathInfo);
-            $this->getAlbums($pathInfo);
+        if ( $pathInfo->getPathType() === PathInfo::INFO_GALLERY ) {
+            $this->getPages( $pathInfo );
+            $this->getGalleries( $pathInfo );
+            $this->getAlbums( $pathInfo );
         }
 
-        if ($pathInfo->getPathType() === PathInfo::INFO_ALBUM) {
-            $this->getPages($pathInfo);
-            $this->getGalleries($pathInfo);
-            $this->getAlbums($pathInfo);
-            $this->getItems($pathInfo);
+        if ( $pathInfo->getPathType() === PathInfo::INFO_ALBUM ) {
+            $this->getPages( $pathInfo );
+            $this->getGalleries( $pathInfo );
+            $this->getAlbums( $pathInfo );
+            $this->getItems( $pathInfo );
         }
 
-        return array_key_exists($pathInfo->getYagDirectoryPath(), $this->yagDirectoryPathCache);
+        return array_key_exists( $pathInfo->getYagDirectoryPath(), $this->yagDirectoryPathCache );
     }
 
 
     /**
      * @param PathInfo $pathInfo
+     *
      * @return array
      */
-    protected function getFolderList_itemCallback(PathInfo $pathInfo)
-    {
-        switch ($pathInfo->getPathType()) {
+    protected function getFolderList_itemCallback( PathInfo $pathInfo ) {
+        switch ( $pathInfo->getPathType() ) {
             case PathInfo::INFO_ROOT:
-                $items =  $this->getPages($pathInfo);
+                $items = $this->getPages( $pathInfo );
                 break;
 
             case PathInfo::INFO_PID:
-                $items = $this->getGalleries($pathInfo);
+                $items = $this->getGalleries( $pathInfo );
                 break;
 
             case PathInfo::INFO_GALLERY:
-                $items = $this->getAlbums($pathInfo);
+                $items = $this->getAlbums( $pathInfo );
                 break;
         }
 
@@ -818,87 +798,82 @@ class YagDriver extends AbstractDriver
     /**
      * @param PathInfo $pathInfo
      */
-    protected function initDriver(PathInfo $pathInfo)
-    {
-        error_log('-> ' . __FUNCTION__);
+    protected function initDriver( PathInfo $pathInfo ) {
+        error_log( '-> ' . __FUNCTION__ );
 
-        $this->determinePidFromPathInfo($pathInfo);
-        $this->initializePidDetector($pathInfo);
+        $this->determinePidFromPathInfo( $pathInfo );
+        $this->initializePidDetector( $pathInfo );
     }
 
 
-    protected function initializePidDetector(PathInfo $pathInfo)
-    {
-        $this->pidDetector->setMode(PidDetector::MANUAL_MODE);
+    protected function initializePidDetector( PathInfo $pathInfo ) {
+        $this->pidDetector->setMode( PidDetector::MANUAL_MODE );
 
-        if ($pathInfo->getPid()) {
-            $this->pidDetector->setPids(array($pathInfo->getPid()));
+        if ( $pathInfo->getPid() ) {
+            $this->pidDetector->setPids( array( $pathInfo->getPid() ) );
             $this->initializeRepositories();
         }
     }
 
 
-    public function determinePidFromPathInfo(PathInfo $pathInfo)
-    {
-        $connection = $GLOBALS['TYPO3_DB']; /** @var \t3lib_DB $connection */
+    public function determinePidFromPathInfo( PathInfo $pathInfo ) {
+        $connection = $GLOBALS['TYPO3_DB'];
+        /** @var \t3lib_DB $connection */
 
-        if ($pathInfo->getPid()) {
+        if ( $pathInfo->getPid() ) {
             return $pathInfo->getPid();
         }
 
-        if ($pathInfo->getGalleryUId()) {
-            $result = $connection->exec_SELECTgetSingleRow('pid', 'tx_yag_domain_model_gallery', 'uid = ' . $pathInfo->getGalleryUId());
-            $pathInfo->setPid($result['pid']);
+        if ( $pathInfo->getGalleryUId() ) {
+            $result = $connection->exec_SELECTgetSingleRow( 'pid', 'tx_yag_domain_model_gallery', 'uid = ' . $pathInfo->getGalleryUId() );
+            $pathInfo->setPid( $result['pid'] );
         }
 
-        if ($pathInfo->getAlbumUid()) {
-            $result = $connection->exec_SELECTgetSingleRow('pid', 'tx_yag_domain_model_album', 'uid = ' . $pathInfo->getAlbumUid());
-            $pathInfo->setPid($result['pid']);
+        if ( $pathInfo->getAlbumUid() ) {
+            $result = $connection->exec_SELECTgetSingleRow( 'pid', 'tx_yag_domain_model_album', 'uid = ' . $pathInfo->getAlbumUid() );
+            $pathInfo->setPid( $result['pid'] );
         }
 
         return $pathInfo->getPid();
     }
 
 
-    protected function initializeRepositories()
-    {
-        $this->galleryRepository->injectPidDetector($this->pidDetector);
+    protected function initializeRepositories() {
+        $this->galleryRepository->injectPidDetector( $this->pidDetector );
         $this->galleryRepository->initializeObject();
 
-        $this->albumRepository->injectPidDetector($this->pidDetector);
+        $this->albumRepository->injectPidDetector( $this->pidDetector );
         $this->albumRepository->initializeObject();
 
-        $this->itemRepository->injectPidDetector($this->pidDetector);
+        $this->itemRepository->injectPidDetector( $this->pidDetector );
         $this->itemRepository->initializeObject();
     }
-
 
 
     /**
      * @return mixed
      */
-    protected function getPages()
-    {
+    protected function getPages() {
         $pathInfo = new PathInfo();
 
-        if (!array_key_exists('/', $this->yagDirectoryCache)) {
+        if ( ! array_key_exists( '/', $this->yagDirectoryCache ) ) {
             $this->yagDirectoryCache['/'] = array();
-            $pageRecordList = $this->pidDetector->getPageRecords();
+            $pageRecordList               = $this->pidDetector->getPageRecords();
 
-            foreach ($pageRecordList as $pageRecord) {
-                $pathInfo->setDisplayName($pageRecord['title'])
-                    ->setPid($pageRecord['uid'])
-                    ->setPathType(PathInfo::INFO_PID);
+            foreach ( $pageRecordList as $pageRecord ) {
+                $pathInfo->setDisplayName( $pageRecord['title'] )
+                         ->setPid( $pageRecord['uid'] )
+                         ->setPathType( PathInfo::INFO_PID );
 
-                $this->yagDirectoryCache['/'][$pageRecord['uid']] = array(
-                    'ctime' => $pageRecord['crdate'],
-                    'mtime' => $pageRecord['tstamp'],
-                    'name' =>  $pageRecord['title'] . ' |' . $pageRecord['uid'],
+                $this->yagDirectoryCache['/'][ $pageRecord['uid'] ] = array(
+                    'ctime'      => $pageRecord['crdate'],
+                    'mtime'      => $pageRecord['tstamp'],
+                    'name'       => $pageRecord['title'] . ' |' . $pageRecord['uid'],
                     'identifier' => $pageRecord['title'] . ' |' . $pageRecord['uid'],
-                    'storage' => $this->storage->getUid(),
+                    'storage'    => $this->storage->getUid(),
                 );
 
-                $this->yagDirectoryPathCache['/' . $pageRecord['uid']] = true;
+                $this->yagDirectoryPathCache[ '/' . $pageRecord['uid'] ] = true;
             }
         }
 
@@ -906,120 +881,126 @@ class YagDriver extends AbstractDriver
     }
 
 
-
-    protected function getGalleries(PathInfo $pathInfo)
-    {
-        $this->initializePidDetector($pathInfo);
+    protected function getGalleries( PathInfo $pathInfo ) {
+        $this->initializePidDetector( $pathInfo );
 
         $pagePath = '/' . $pathInfo->getPid();
 
-        if (!array_key_exists($pagePath, $this->yagDirectoryCache)) {
-            $this->yagDirectoryCache[$pagePath] = array();
-            $galleries = $this->galleryRepository->findAll();
+        if ( ! array_key_exists( $pagePath, $this->yagDirectoryCache ) ) {
+            $this->yagDirectoryCache[ $pagePath ] = array();
+            $galleries                            = $this->galleryRepository->findAll();
 
-            foreach ($galleries as $gallery) { /** @var Gallery $gallery */
-                $this->yagDirectoryCache[$pagePath][$gallery->getUid()] = $this->buildGalleryObjectInfo($pathInfo, $gallery);
-                $this->yagDirectoryPathCache[$pagePath . '/' . $gallery->getUid()] = true;
+            foreach ( $galleries as $gallery ) {
+                /** @var Gallery $gallery */
+                $this->yagDirectoryCache[ $pagePath ][ $gallery->getUid() ]          = $this->buildGalleryObjectInfo( $pathInfo, $gallery );
+                $this->yagDirectoryPathCache[ $pagePath . '/' . $gallery->getUid() ] = true;
             }
         }
 
-        return $this->yagDirectoryCache[$pagePath];
+        return $this->yagDirectoryCache[ $pagePath ];
     }
 
 
-
-    protected function buildGalleryObjectInfo(PathInfo $pathInfo, Gallery $gallery)
-    {
+    protected function buildGalleryObjectInfo( PathInfo $pathInfo, Gallery $gallery ) {
         return array(
-            'name' => $gallery->getName() . ' |' . $gallery->getUid(),
-            'identifier' => Div::concatenatePaths(array($pathInfo->getPagePath(), $gallery->getName() . ' |' . $gallery->getUid())),
-            'storage' => $this->storage->getUid(),
+            'name'       => $gallery->getName() . ' |' . $gallery->getUid(),
+            'identifier' => Div::concatenatePaths( array(
+                $pathInfo->getPagePath(),
+                $gallery->getName() . ' |' . $gallery->getUid()
+            ) ),
+            'storage'    => $this->storage->getUid(),
         );
     }
 
 
+    protected function getAlbums( PathInfo $pathInfo ) {
+        $galleryPath = '/' . implode( '/', array( $pathInfo->getPid(), $pathInfo->getGalleryUId() ) );
 
-    protected function getAlbums(PathInfo $pathInfo)
-    {
-        $galleryPath = '/' . implode('/', array($pathInfo->getPid(), $pathInfo->getGalleryUId()));
+        if ( ! array_key_exists( $galleryPath, $this->yagDirectoryCache ) ) {
+            $this->yagDirectoryCache[ $galleryPath ] = array();
 
-        if (!array_key_exists($galleryPath, $this->yagDirectoryCache)) {
-            $this->yagDirectoryCache[$galleryPath] = array();
+            $albums = $this->albumRepository->findByGallery( $pathInfo->getGalleryUId() );
 
-            $albums = $this->albumRepository->findByGallery($pathInfo->getGalleryUId());
-
-            foreach ($albums as $album) {
-                $this->yagDirectoryCache[$galleryPath][$album->getUid()] = $this->buildAlbumObjectInfo($pathInfo, $album);
-                $this->yagDirectoryPathCache[$galleryPath . '/' . $album->getUid()] = true;
+            foreach ( $albums as $album ) {
+                $this->yagDirectoryCache[ $galleryPath ][ $album->getUid() ]          = $this->buildAlbumObjectInfo( $pathInfo, $album );
+                $this->yagDirectoryPathCache[ $galleryPath . '/' . $album->getUid() ] = true;
             }
         }
 
-        return $this->yagDirectoryCache[$galleryPath];
+        return $this->yagDirectoryCache[ $galleryPath ];
     }
 
 
     /**
      * @param PathInfo $pathInfo
-     * @param Album $album
+     * @param Album    $album
+     *
      * @return array
      */
-    protected function buildAlbumObjectInfo(PathInfo $pathInfo, Album $album)
-    {
+    protected function buildAlbumObjectInfo( PathInfo $pathInfo, Album $album ) {
         return array(
-            'name' => $album->getName() . ' |' . $album->getUid(),
-            'identifier' => Div::concatenatePaths(array($pathInfo->getGalleryPath(), $album->getName() . ' |' . $album->getUid())) . '/',
-            'storage' => $this->storage->getUid(),
+            'name'       => $album->getName() . ' |' . $album->getUid(),
+            'identifier' => Div::concatenatePaths( array(
+                    $pathInfo->getGalleryPath(),
+                    $album->getName() . ' |' . $album->getUid()
+                ) ) . '/',
+            'storage'    => $this->storage->getUid(),
         );
     }
 
 
     /**
      * @param PathInfo $pathInfo
+     *
      * @return object
      */
-    protected function getItem(PathInfo $pathInfo)
-    {
-        $this->initializePidDetector($pathInfo);
-        return $this->itemRepository->findByUid($pathInfo->getItemUid());
+    protected function getItem( PathInfo $pathInfo ) {
+        $this->initializePidDetector( $pathInfo );
+
+        return $this->itemRepository->findByUid( $pathInfo->getItemUid() );
     }
 
 
-    protected function getItems(PathInfo $pathInfo)
-    {
-        $albumPath = '/' . implode('/', array($pathInfo->getPid(), $pathInfo->getGalleryUId(), $pathInfo->getAlbumUid()));
+    protected function getItems( PathInfo $pathInfo ) {
+        $albumPath = '/' . implode( '/', array(
+                $pathInfo->getPid(),
+                $pathInfo->getGalleryUId(),
+                $pathInfo->getAlbumUid()
+            ) );
 
-        if (!array_key_exists($albumPath, $this->yagDirectoryCache)) {
-            $items = $this->itemRepository->findByAlbum($pathInfo->getAlbumUid());
-            $this->yagDirectoryCache[$albumPath] = array();
+        if ( ! array_key_exists( $albumPath, $this->yagDirectoryCache ) ) {
+            $items                                 = $this->itemRepository->findByAlbum( $pathInfo->getAlbumUid() );
+            $this->yagDirectoryCache[ $albumPath ] = array();
 
-            foreach ($items as $item) {
-                $this->yagDirectoryCache[$albumPath][$item->getUid()] = $this->buildItemObjectInfo($pathInfo, $item);
-                $this->yagDirectoryPathCache[$albumPath . '/' . $item->getUid()] = true;
+            foreach ( $items as $item ) {
+                $this->yagDirectoryCache[ $albumPath ][ $item->getUid() ]          = $this->buildItemObjectInfo( $pathInfo, $item );
+                $this->yagDirectoryPathCache[ $albumPath . '/' . $item->getUid() ] = true;
             }
         }
 
-        return $this->yagDirectoryCache[$albumPath];
+        return $this->yagDirectoryCache[ $albumPath ];
     }
 
 
-
-    protected function buildItemObjectInfo(PathInfo $pathInfo, Item $item)
-    {
+    protected function buildItemObjectInfo( PathInfo $pathInfo, Item $item ) {
         return array(
-            'size' => $item->getFilesize(),
-            'atime' => $item->getTstamp()->getTimestamp(),
-            'mtime' => $item->getTstamp()->getTimestamp(),
-            'ctime' => $item->getCrdate()->getTimestamp(),
-            'mimetype' => 'image/jpeg',
-            'yagItem' => $item,
-            'name' => $item->getOriginalFilename(),
-            'identifier' =>  Div::concatenatePaths(array($pathInfo->getAlbumPath(), $item->getTitle() . ' |' . $item->getUid())),
-            'storage' => $this->storage->getUid(),
+            'size'        => $item->getFilesize(),
+            'atime'       => $item->getTstamp()->getTimestamp(),
+            'mtime'       => $item->getTstamp()->getTimestamp(),
+            'ctime'       => $item->getCrdate()->getTimestamp(),
+            'mimetype'    => 'image/jpeg',
+            'yagItem'     => $item,
+            'name'        => $item->getOriginalFilename(),
+            'identifier'  => Div::concatenatePaths( array(
+                $pathInfo->getAlbumPath(),
+                $item->getTitle() . ' |' . $item->getUid()
+            ) ),
+            'storage'     => $this->storage->getUid(),
             'description' => $item->getDescription(),
-            'title' => $item->getTitle(),
-            'height' => $item->getHeight(),
-            'width' => $item->getWidth(),
-            'sourceUri' => $item->getSourceuri(),
+            'title'       => $item->getTitle(),
+            'height'      => $item->getHeight(),
+            'width'       => $item->getWidth(),
+            'sourceUri'   => $item->getSourceuri(),
         );
     }
 
@@ -1029,10 +1010,9 @@ class YagDriver extends AbstractDriver
      *
      * @return Folder
      */
-    public function getDefaultFolder()
-    {
+    public function getDefaultFolder() {
         // TODO: Implement getDefaultFolder() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
@@ -1040,12 +1020,12 @@ class YagDriver extends AbstractDriver
      *
      * @param string $newFolderName
      * @param Folder $parentFolder
+     *
      * @return Folder The new (created) folder object
      */
-    public function createFolder($newFolderName, Folder $parentFolder)
-    {
+    public function createFolder( $newFolderName, Folder $parentFolder ) {
         // TODO: Implement createFolder() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
 
@@ -1054,12 +1034,12 @@ class YagDriver extends AbstractDriver
      *
      * @param string $folderName
      * @param Folder $folder
+     *
      * @return boolean
      */
-    public function folderExistsInFolder($folderName, Folder $folder)
-    {
+    public function folderExistsInFolder( $folderName, Folder $folder ) {
         // TODO: Implement folderExistsInFolder() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
@@ -1067,13 +1047,13 @@ class YagDriver extends AbstractDriver
      *
      * @param Folder $folder
      * @param string $newName The target path (including the file name!)
+     *
      * @return array A map of old to new file identifiers
      * @throws \RuntimeException if renaming the folder failed
      */
-    public function renameFolder( Folder $folder, $newName)
-    {
+    public function renameFolder( Folder $folder, $newName ) {
         // TODO: Implement renameFolder() method.
-        error_log('FAL DRIVER: ' . __FUNCTION__);
+        error_log( 'FAL DRIVER: ' . __FUNCTION__ );
     }
 
     /**
@@ -1082,59 +1062,57 @@ class YagDriver extends AbstractDriver
      * This can e.g. be used to check for webmounts.
      *
      * @param Folder $container
-     * @param mixed $content An object or an identifier to check
+     * @param mixed  $content An object or an identifier to check
+     *
      * @return boolean TRUE if $content is within $container
      */
-    public function isWithin( Folder $container, $content)
-    {
+    public function isWithin( Folder $container, $content ) {
         // TODO: Implement isWithin() method.
-        error_log('CALLED: ' . __FUNCTION__ . ' with ' . $content . ' in folder ' . $container->getCombinedIdentifier());
+        error_log( 'CALLED: ' . __FUNCTION__ . ' with ' . $content . ' in folder ' . $container->getCombinedIdentifier() );
     }
 
     /**
      * Checks if a folder contains files and (if supported) other folders.
      *
      * @param Folder $folder
+     *
      * @return boolean TRUE if there are no files and folders within $folder
      */
-    public function isFolderEmpty( Folder $folder)
-    {
+    public function isFolderEmpty( Folder $folder ) {
         // TODO: Implement isFolderEmpty() method.
-        error_log('CALLED: ' . __FUNCTION__);
+        error_log( 'CALLED: ' . __FUNCTION__ );
     }
 
 
-
-    protected function getYAGObjectInfoByPathInfo(PathInfo $pathInfo)
-    {
-        switch ($pathInfo->getPathType()) {
+    protected function getYAGObjectInfoByPathInfo( PathInfo $pathInfo ) {
+        switch ( $pathInfo->getPathType() ) {
 
             case PathInfo::INFO_PID:
                 return array(
-                    'name' => $pathInfo->getDisplayName() . '|' . $pathInfo->getPid(),
+                    'name'       => $pathInfo->getDisplayName() . '|' . $pathInfo->getPid(),
                     'identifier' => $pathInfo->getIdentifier(),
-                    'storage' => $this->storage->getUid(),
+                    'storage'    => $this->storage->getUid(),
                 );
                 break;
 
             case PathInfo::INFO_GALLERY:
-                $gallery = $this->galleryRepository->findByUid($pathInfo->getGalleryUId());
-                if ($gallery instanceof Gallery) {
-                    return $this->buildGalleryObjectInfo($pathInfo, $gallery);
+                $gallery = $this->galleryRepository->findByUid( $pathInfo->getGalleryUId() );
+                if ( $gallery instanceof Gallery ) {
+                    return $this->buildGalleryObjectInfo( $pathInfo, $gallery );
                 }
                 break;
 
             case PathInfo::INFO_ALBUM:
-                $album = $this->albumRepository->findByUid($pathInfo->getAlbumUid());
-                if ($album instanceof Album) {
-                    return $this->buildAlbumObjectInfo($pathInfo, $album);
+                $album = $this->albumRepository->findByUid( $pathInfo->getAlbumUid() );
+                if ( $album instanceof Album ) {
+                    return $this->buildAlbumObjectInfo( $pathInfo, $album );
                 }
                 break;
 
             case PathInfo::INFO_ITEM:
-                $item = $this->itemRepository->findByUid($pathInfo->getItemUid());
-                if ($item instanceof Item) {
-                    return $this->buildItemObjectInfo($pathInfo, $item);
+                $item = $this->itemRepository->findByUid( $pathInfo->getItemUid() );
+                if ( $item instanceof Item ) {
+                    return $this->buildItemObjectInfo( $pathInfo, $item );
                 }
                 break;
         }
@@ -1144,17 +1122,13 @@ class YagDriver extends AbstractDriver
     }
 
 
-
-
-    protected function storeLastAccessedFalPath($falPath)
-    {
-        $this->registry->set('tx_yag', 'lastAccessedFalPath', $falPath);
+    protected function storeLastAccessedFalPath( $falPath ) {
+        $this->registry->set( 'tx_yag', 'lastAccessedFalPath', $falPath );
     }
 
 
-    protected function retrieveLastAccessedFalPath()
-    {
-        return $this->registry->get('tx_yag', 'lastAccessedFalPath');
+    protected function retrieveLastAccessedFalPath() {
+        return $this->registry->get( 'tx_yag', 'lastAccessedFalPath' );
     }
 
     /**
@@ -1329,4 +1303,5 @@ class YagDriver extends AbstractDriver
      */
     public function countFoldersInFolder( $folderIdentifier, $recursive = false, array $folderNameFilterCallbacks = array() ) {
         // TODO: Implement countFoldersInFolder() method.
-}}
+    }
+}

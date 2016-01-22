@@ -35,10 +35,9 @@ use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
  * Class implements a controller for YAG ajax requests
  *
  * @package Controller
- * @author Michael Knoll <mimi@kaktusteam.de>
+ * @author  Michael Knoll <mimi@kaktusteam.de>
  */
-class AjaxController extends AbstractController
-{
+class AjaxController extends AbstractController {
     /**
      * Holds an instance of item repository
      *
@@ -74,8 +73,7 @@ class AjaxController extends AbstractController
     /**
      * @param ItemRepository $itemRepository
      */
-    public function injectItemRepository(ItemRepository $itemRepository)
-    {
+    public function injectItemRepository( ItemRepository $itemRepository ) {
         $this->itemRepository = $itemRepository;
     }
 
@@ -83,8 +81,7 @@ class AjaxController extends AbstractController
     /**
      * @param AlbumRepository $albumRepository
      */
-    public function injectAlbumRepository(AlbumRepository $albumRepository)
-    {
+    public function injectAlbumRepository( AlbumRepository $albumRepository ) {
         $this->albumRepository = $albumRepository;
     }
 
@@ -92,8 +89,7 @@ class AjaxController extends AbstractController
     /**
      * @param GalleryRepository $galleryRepository
      */
-    public function injectGalleryRepository(GalleryRepository $galleryRepository)
-    {
+    public function injectGalleryRepository( GalleryRepository $galleryRepository ) {
         $this->galleryRepository = $galleryRepository;
     }
 
@@ -101,8 +97,7 @@ class AjaxController extends AbstractController
     /**
      * @param PersistenceManagerInterface $persistence_Manager
      */
-    public function injectPersistenceManager( PersistenceManagerInterface $persistence_Manager)
-    {
+    public function injectPersistenceManager( PersistenceManagerInterface $persistence_Manager ) {
         $this->persistenceManager = $persistence_Manager;
     }
 
@@ -111,38 +106,38 @@ class AjaxController extends AbstractController
      * Returns auto complete data for directory picker
      *
      * @param string $directoryStartsWith Beginning of directory to do autocomplete
+     *
      * @return string JSON array of directories
      */
-    public function directoryAutoCompleteAction($directoryStartsWith = '')
-    {
-        $directoryStartsWith = urldecode($directoryStartsWith);
-        $baseDir = 'fileadmin/';
-        $subDir = '';
-        if (substr($directoryStartsWith, -1) == '/' && is_dir(Div::getT3BasePath() . $baseDir . '/' . $directoryStartsWith)) {
+    public function directoryAutoCompleteAction( $directoryStartsWith = '' ) {
+        $directoryStartsWith = urldecode( $directoryStartsWith );
+        $baseDir             = 'fileadmin/';
+        $subDir              = '';
+        if ( substr( $directoryStartsWith, - 1 ) == '/' && is_dir( Div::getT3BasePath() . $baseDir . '/' . $directoryStartsWith ) ) {
             $subDir = $directoryStartsWith;
         }
 
-        $directories = scandir(Div::getT3BasePath() . $baseDir . $subDir);
+        $directories = scandir( Div::getT3BasePath() . $baseDir . $subDir );
 
         $returnArray = array(
-            array('directoryStartsWith' => $directoryStartsWith),
-            array('baseDir' => $baseDir),
-            array('subDir' => $subDir),
-            array('debug' => $_GET),
-            array('directories' => $directories)
+            array( 'directoryStartsWith' => $directoryStartsWith ),
+            array( 'baseDir' => $baseDir ),
+            array( 'subDir' => $subDir ),
+            array( 'debug' => $_GET ),
+            array( 'directories' => $directories )
         );
 
-        foreach ($directories as $directory) {
-            if (is_dir(Div::getT3BasePath() . $baseDir . $subDir . $directory)
-                && !($directory == '.') && !($directory == '..')
+        foreach ( $directories as $directory ) {
+            if ( is_dir( Div::getT3BasePath() . $baseDir . $subDir . $directory )
+                 && ! ( $directory == '.' ) && ! ( $directory == '..' )
             ) {
-                $returnArray[] = array('value' => $subDir . $directory);
+                $returnArray[] = array( 'value' => $subDir . $directory );
             }
         }
 
         ob_clean();
-        header('Content-Type: application/json;charset=UTF-8');
-        echo json_encode($returnArray);
+        header( 'Content-Type: application/json;charset=UTF-8' );
+        echo json_encode( $returnArray );
         exit();
     }
 
@@ -151,12 +146,12 @@ class AjaxController extends AbstractController
      * Deletes an item
      *
      * @param Item $item Item to be deleted
+     *
      * @rbacNeedsAccess
      * @rbacObject Item
      * @rbacAction delete
      */
-    public function deleteItemAction(Item $item)
-    {
+    public function deleteItemAction( Item $item ) {
         $item->delete();
         $this->itemRepository->syncTranslatedItems();
         $this->returnDataAndShutDown();
@@ -166,17 +161,17 @@ class AjaxController extends AbstractController
     /**
      * Updates title of a given item
      *
-     * @param Item $item Item to update title
+     * @param Item   $item      Item to update title
      * @param string $itemTitle New title of item
+     *
      * @rbacNeedsAccess
      * @rbacObject Item
      * @rbacAction edit
      */
-    public function updateItemTitleAction(Item $item, $itemTitle)
-    {
-        $item->setTitle(utf8_encode($itemTitle));
+    public function updateItemTitleAction( Item $item, $itemTitle ) {
+        $item->setTitle( utf8_encode( $itemTitle ) );
 
-        $this->itemRepository->update($item);
+        $this->itemRepository->update( $item );
 
         $this->returnDataAndShutDown();
     }
@@ -186,14 +181,14 @@ class AjaxController extends AbstractController
      * Sets an item as thumb file for album
      *
      * @param Item $item Item to be used as thumb for album
+     *
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction edit
      */
-    public function setItemAsAlbumThumbAction(Item $item)
-    {
-        $item->getAlbum()->setThumb($item);
-        $this->albumRepository->update($item->getAlbum());
+    public function setItemAsAlbumThumbAction( Item $item ) {
+        $item->getAlbum()->setThumb( $item );
+        $this->albumRepository->update( $item->getAlbum() );
         $this->returnDataAndShutDown();
     }
 
@@ -201,17 +196,17 @@ class AjaxController extends AbstractController
     /**
      * Updates description for a given item
      *
-     * @param Item $item Item to be updated
+     * @param Item   $item            Item to be updated
      * @param string $itemDescription Description of item
+     *
      * @rbacNeedsAccess
      * @rbacObject Item
      * @rbacAction update
      */
-    public function updateItemDescriptionAction($item, $itemDescription)
-    {
-        $item->setDescription(utf8_encode($itemDescription));
+    public function updateItemDescriptionAction( $item, $itemDescription ) {
+        $item->setDescription( utf8_encode( $itemDescription ) );
 
-        $this->itemRepository->update($item);
+        $this->itemRepository->update( $item );
         $this->persistenceManager->persistAll();
 
         $this->returnDataAndShutDown();
@@ -224,18 +219,17 @@ class AjaxController extends AbstractController
      * @rbacObject Album
      * @rbacAction update
      */
-    public function updateItemSortingAction()
-    {
-        $order = GeneralUtility::_POST('imageUid');
+    public function updateItemSortingAction() {
+        $order = GeneralUtility::_POST( 'imageUid' );
         // As we can have paging in the backend, we need to add an offset which is
-        $offset = GeneralUtility::_GET('offset');
+        $offset = GeneralUtility::_GET( 'offset' );
 
-        foreach ($order as $index => $itemUid) {
-            $item = $this->itemRepository->findByUid($itemUid);
+        foreach ( $order as $index => $itemUid ) {
+            $item = $this->itemRepository->findByUid( $itemUid );
             // We probably get a wrong or empty item from jquery, as item could be deleted in the meantime
-            if (!is_null($item)) {
-                $item->setSorting($index + $offset);
-                $this->itemRepository->update($item);
+            if ( ! is_null( $item ) ) {
+                $item->setSorting( $index + $offset );
+                $this->itemRepository->update( $item );
             }
         }
 
@@ -249,19 +243,19 @@ class AjaxController extends AbstractController
      * Updates sorting of albums in gallery
      *
      * @param Gallery $gallery Gallery to set order of albums for
+     *
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction update
      */
-    public function updateAlbumSortingAction(Gallery $gallery)
-    {
-        $order = GeneralUtility::_POST('albumUid');
+    public function updateAlbumSortingAction( Gallery $gallery ) {
+        $order = GeneralUtility::_POST( 'albumUid' );
 
-        foreach ($order as $index => $albumUid) {
-            $album = $this->albumRepository->findByUid($albumUid);
+        foreach ( $order as $index => $albumUid ) {
+            $album = $this->albumRepository->findByUid( $albumUid );
             /** @var Album $album */
-            $album->setSorting($index);
-            $this->albumRepository->update($album);
+            $album->setSorting( $index );
+            $this->albumRepository->update( $album );
         }
 
         $this->albumRepository->syncTranslatedAlbums();
@@ -276,15 +270,14 @@ class AjaxController extends AbstractController
      * @rbacObject Gallery
      * @rbacAction edit
      */
-    public function updateGallerySortingAction()
-    {
-        $order = GeneralUtility::_POST('galleryUid');
+    public function updateGallerySortingAction() {
+        $order = GeneralUtility::_POST( 'galleryUid' );
 
-        foreach ($order as $index => $galleryUid) {
-            $gallery = $this->galleryRepository->findByUid($galleryUid);
+        foreach ( $order as $index => $galleryUid ) {
+            $gallery = $this->galleryRepository->findByUid( $galleryUid );
             /* @var $gallery Gallery */
-            $gallery->setSorting($index);
-            $this->galleryRepository->update($gallery);
+            $gallery->setSorting( $index );
+            $this->galleryRepository->update( $gallery );
         }
 
         $this->galleryRepository->syncTranslatedGalleries();
@@ -297,14 +290,14 @@ class AjaxController extends AbstractController
      * Sets hidden property of gallery to 1.
      *
      * @param Gallery $gallery Gallery to set hidden property for
+     *
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction edit
      */
-    public function hideGalleryAction(Gallery $gallery)
-    {
-        $gallery->setHidden(1);
-        $this->galleryRepository->update($gallery);
+    public function hideGalleryAction( Gallery $gallery ) {
+        $gallery->setHidden( 1 );
+        $this->galleryRepository->update( $gallery );
         $this->returnDataAndShutDown();
     }
 
@@ -313,14 +306,14 @@ class AjaxController extends AbstractController
      * Sets hidden property of gallery to 0.
      *
      * @param Gallery $gallery Gallery to set hidden property for
+     *
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction edit
      */
-    public function unhideGalleryAction(Gallery $gallery)
-    {
-        $gallery->setHidden(0);
-        $this->galleryRepository->update($gallery);
+    public function unhideGalleryAction( Gallery $gallery ) {
+        $gallery->setHidden( 0 );
+        $this->galleryRepository->update( $gallery );
         $this->returnDataAndShutDown();
     }
 
@@ -328,18 +321,18 @@ class AjaxController extends AbstractController
     /**
      * Updates title of album
      *
-     * @param int $albumUid UID of album to be updated
+     * @param int    $albumUid   UID of album to be updated
      * @param string $albumTitle Title to be set as album title
+     *
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction edit
      */
-    public function updateAlbumTitleAction($albumUid, $albumTitle)
-    {
+    public function updateAlbumTitleAction( $albumUid, $albumTitle ) {
         // We do this for escaping reasons
-        $album = $this->albumRepository->findByUid(intval($albumUid));
-        $album->setTitle(utf8_encode($albumTitle));
-        $this->albumRepository->update($album);
+        $album = $this->albumRepository->findByUid( intval( $albumUid ) );
+        $album->setTitle( utf8_encode( $albumTitle ) );
+        $this->albumRepository->update( $album );
         $this->returnDataAndShutDown();
     }
 
@@ -347,18 +340,18 @@ class AjaxController extends AbstractController
     /**
      * Updated description of an album
      *
-     * @param int $albumUid UID of album to be updated
+     * @param int    $albumUid         UID of album to be updated
      * @param string $albumDescription Description to be set as album description
+     *
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction edit
      */
-    public function updateAlbumDescriptionAction($albumUid, $albumDescription)
-    {
+    public function updateAlbumDescriptionAction( $albumUid, $albumDescription ) {
         // We do this for escaping reasons
-        $album = $this->albumRepository->findByUid($albumUid);
-        $album->setDescription(utf8_encode($albumDescription));
-        $this->albumRepository->update($album);
+        $album = $this->albumRepository->findByUid( $albumUid );
+        $album->setDescription( utf8_encode( $albumDescription ) );
+        $this->albumRepository->update( $album );
         $this->returnDataAndShutDown();
     }
 
@@ -367,14 +360,14 @@ class AjaxController extends AbstractController
      * Sets album as gallery thumb for each gallery associated with given album
      *
      * @param Album $album Album to set as thumb for all galleries associated with this album
+     *
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction edit
      */
-    public function setAlbumAsGalleryThumbAction(Album $album)
-    {
-        $album->getGallery()->setThumbAlbum($album);
-        $this->galleryRepository->update($album->getGallery());
+    public function setAlbumAsGalleryThumbAction( Album $album ) {
+        $album->getGallery()->setThumbAlbum( $album );
+        $this->galleryRepository->update( $album->getGallery() );
         $this->returnDataAndShutDown();
     }
 
@@ -383,14 +376,14 @@ class AjaxController extends AbstractController
      * Sets hidden property of album to 1.
      *
      * @param Album $album Album to set hidden property for
+     *
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction edit
      */
-    public function hideAlbumAction(Album $album)
-    {
-        $album->setHidden(1);
-        $this->albumRepository->update($album);
+    public function hideAlbumAction( Album $album ) {
+        $album->setHidden( 1 );
+        $this->albumRepository->update( $album );
         $this->returnDataAndShutDown();
     }
 
@@ -399,14 +392,14 @@ class AjaxController extends AbstractController
      * Sets hidden property of album to 0.
      *
      * @param Album $album Album to set hidden property for
+     *
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction edit
      */
-    public function unhideAlbumAction(Album $album)
-    {
-        $album->setHidden(0);
-        $this->albumRepository->update($album);
+    public function unhideAlbumAction( Album $album ) {
+        $album->setHidden( 0 );
+        $this->albumRepository->update( $album );
         $this->returnDataAndShutDown();
     }
 
@@ -415,12 +408,12 @@ class AjaxController extends AbstractController
      * Deletes given gallery
      *
      * @param Gallery $gallery
+     *
      * @rbacNeedsAccess
      * @rbacObject Gallery
      * @rbacAction delete
      */
-    public function deleteGalleryAction(Gallery $gallery)
-    {
+    public function deleteGalleryAction( Gallery $gallery ) {
         $gallery->delete();
         $this->galleryRepository->syncTranslatedGalleries();
         $this->returnDataAndShutDown();
@@ -431,12 +424,12 @@ class AjaxController extends AbstractController
      * Deletes given album
      *
      * @param Album $album
+     *
      * @rbacNeedsAccess
      * @rbacObject Album
      * @rbacAction delete
      */
-    public function deleteAlbumAction(Album $album)
-    {
+    public function deleteAlbumAction( Album $album ) {
         $album->delete();
         $this->albumRepository->syncTranslatedAlbums();
         $this->returnDataAndShutDown();
@@ -448,31 +441,30 @@ class AjaxController extends AbstractController
      *
      * @return string ul/li - encoded subdirectory list
      */
-    public function getSubDirsAction()
-    {
-        $encodedFiles = '';
-        $fileSystemDiv = $this->objectManager->get('Div');
+    public function getSubDirsAction() {
+        $encodedFiles  = '';
+        $fileSystemDiv = $this->objectManager->get( 'Div' );
         /** @var Div $fileSystemDiv */
 
-        $t3basePath = Div::getT3BasePath();
-        $submittedPath = urldecode(GeneralUtility::_POST('dir'));
+        $t3basePath    = Div::getT3BasePath();
+        $submittedPath = urldecode( GeneralUtility::_POST( 'dir' ) );
 
-        if ($submittedPath) {
+        if ( $submittedPath ) {
             $pathToBeScanned = $t3basePath . $submittedPath;
-            $files = $fileSystemDiv->getBackendAccessibleDirectoryEntries($pathToBeScanned);
+            $files           = $fileSystemDiv->getBackendAccessibleDirectoryEntries( $pathToBeScanned );
 
-            if (count($files)) {
+            if ( count( $files ) ) {
                 // All dirs
-                foreach ($files as $file) {
-                    if (is_dir($pathToBeScanned . $file)) {
+                foreach ( $files as $file ) {
+                    if ( is_dir( $pathToBeScanned . $file ) ) {
                         $encodedFiles .= "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" . $submittedPath . $file . "/\">" . $file . "</a></li>";
                     }
                 }
 
-                foreach ($files as $file) {
-                    if (!is_dir($pathToBeScanned . $file)) {
-                        $ext = preg_replace('/^.*\./', '', $file);
-                        $encodedFiles .= "<li class=\"file ext_$ext\"><a href=\"#\" rel=\"" . htmlentities($submittedPath . $file) . "\">" . htmlentities($file) . "</a></li>";
+                foreach ( $files as $file ) {
+                    if ( ! is_dir( $pathToBeScanned . $file ) ) {
+                        $ext = preg_replace( '/^.*\./', '', $file );
+                        $encodedFiles .= "<li class=\"file ext_$ext\"><a href=\"#\" rel=\"" . htmlentities( $submittedPath . $file ) . "\">" . htmlentities( $file ) . "</a></li>";
                     }
                 }
             }
@@ -480,19 +472,19 @@ class AjaxController extends AbstractController
             $mountDirs = $fileSystemDiv->getBackendFileMountPaths();
 
             // All dirs
-            foreach ($mountDirs as $directory) {
-                $directory = substr($directory, -1, 1) == '/' ? substr($directory, 0, -1) : $directory;
-                $directory = str_replace($t3basePath, '', $directory);
+            foreach ( $mountDirs as $directory ) {
+                $directory = substr( $directory, - 1, 1 ) == '/' ? substr( $directory, 0, - 1 ) : $directory;
+                $directory = str_replace( $t3basePath, '', $directory );
 
-                if (is_dir($t3basePath . $directory)) {
-                    $encodedFiles .= "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" . $directory . "/\">" . basename($directory) . "</a></li>";
+                if ( is_dir( $t3basePath . $directory ) ) {
+                    $encodedFiles .= "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" . $directory . "/\">" . basename( $directory ) . "</a></li>";
                 }
             }
         }
 
         $encodedFiles = "<ul class=\"jqueryFileTree\" style=\"display: none;\">" . $encodedFiles . "</ul>";
 
-        $this->returnDataAndShutDown($encodedFiles);
+        $this->returnDataAndShutDown( $encodedFiles );
     }
 
 
@@ -502,10 +494,9 @@ class AjaxController extends AbstractController
      *
      * @param string $content
      */
-    protected function returnDataAndShutDown($content = 'OK')
-    {
+    protected function returnDataAndShutDown( $content = 'OK' ) {
         $this->persistenceManager->persistAll();
-        $this->lifecycleManager->updateState(\Tx_PtExtbase_Lifecycle_Manager::END);
+        $this->lifecycleManager->updateState( \Tx_PtExtbase_Lifecycle_Manager::END );
         GeneralUtility::cleanOutputBuffers();
         echo $content;
         exit();

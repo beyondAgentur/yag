@@ -28,20 +28,16 @@ namespace DL\Yag\ViewHelpers\Form;
 
 use TYPO3\CMS\Fluid\ViewHelpers\Form\SelectViewHelper;
 
-class CategoryViewHelper extends SelectViewHelper
-{
+class CategoryViewHelper extends SelectViewHelper {
+    /**
+     * @var array
+     */
+    protected static $categoryDataCache = array();
     /**
      * @var \TYPO3\CMS\Extbase\Domain\Repository\CategoryRepository
      * @inject
      */
     protected $categoryRepository;
-
-
-    /**
-     * @var array
-     */
-    protected static $categoryDataCache = array();
-
 
     /**
      * Initialize arguments.
@@ -49,21 +45,19 @@ class CategoryViewHelper extends SelectViewHelper
      * @return void
      * @api
      */
-    public function initializeArguments()
-    {
+    public function initializeArguments() {
         parent::initializeArguments();
 
-        $this->registerTagAttribute('categoryPid', 'integer', 'The Pid, where the categories should be taken from', true);
-        $this->overrideArgument('options', 'array', 'Associative array with internal IDs as key, and the values are displayed in the select box', false);
+        $this->registerTagAttribute( 'categoryPid', 'integer', 'The Pid, where the categories should be taken from', true );
+        $this->overrideArgument( 'options', 'array', 'Associative array with internal IDs as key, and the values are displayed in the select box', false );
     }
 
 
     /**
      * @return string
      */
-    public function render()
-    {
-        $this->arguments['options'] = $this->buildOptions($this->buildCategoryData());
+    public function render() {
+        $this->arguments['options'] = $this->buildOptions( $this->buildCategoryData() );
 
         return parent::render();
     }
@@ -71,14 +65,15 @@ class CategoryViewHelper extends SelectViewHelper
 
     /**
      * @param $categories
+     *
      * @return array
      */
-    protected function buildOptions($categories)
-    {
+    protected function buildOptions( $categories ) {
         $options = array();
 
-        foreach ($categories as $category) { /** @var \TYPO3\CMS\Extbase\Domain\Model\Category $category */
-            $options[$category->getUid()] = $category->getTitle();
+        foreach ( $categories as $category ) {
+            /** @var \TYPO3\CMS\Extbase\Domain\Model\Category $category */
+            $options[ $category->getUid() ] = $category->getTitle();
         }
 
         return $options;
@@ -88,14 +83,13 @@ class CategoryViewHelper extends SelectViewHelper
     /**
      * @return array
      */
-    protected function buildCategoryData()
-    {
+    protected function buildCategoryData() {
         $pid = (int) $this->arguments['categoryPid'];
 
-        if (!array_key_exists($pid, self::$categoryDataCache)) {
-            self::$categoryDataCache[$pid] = $this->categoryRepository->findByPid($pid);
+        if ( ! array_key_exists( $pid, self::$categoryDataCache ) ) {
+            self::$categoryDataCache[ $pid ] = $this->categoryRepository->findByPid( $pid );
         }
 
-        return self::$categoryDataCache[$pid];
+        return self::$categoryDataCache[ $pid ];
     }
 }

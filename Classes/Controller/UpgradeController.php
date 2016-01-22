@@ -29,14 +29,12 @@ namespace DL\Yag\Controller;
  * Controller for Backend Module actions
  *
  * @package Controller
- * @author Daniel Lienert <typo3@lienert.cc>
+ * @author  Daniel Lienert <typo3@lienert.cc>
  */
-class UpgradeController extends AbstractController
-{
+class UpgradeController extends AbstractController {
     /**
      * Render a message if no settings are available
      */
-    public function doUpgradeV15V20Action()
-    {
+    public function doUpgradeV15V20Action() {
     }
 }

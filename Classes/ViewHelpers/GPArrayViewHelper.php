@@ -31,28 +31,30 @@ namespace DL\Yag\ViewHelpers;
 /**
  * GPValueViewHelper
  *
- * @author Daniel Lienert
- * @package ViewHelpers
+ * @author     Daniel Lienert
+ * @package    ViewHelpers
  * @subpackage NameSpace
  */
-class GPArrayViewHelper extends \Tx_PtExtlist_ViewHelpers_Namespace_GPArrayViewHelper
-{
+class GPArrayViewHelper extends \Tx_PtExtlist_ViewHelpers_Namespace_GPArrayViewHelper {
     /**
      * render build key/value GET/POST-array within the namespace of the given object
      *
-     * @param string $arguments : list of arguments
+     * @param string                                                  $arguments         : list of arguments
      * @param \Tx_PtExtlist_Domain_StateAdapter_IdentifiableInterface $object
-     * 	either as list of 'key : value' pairs
-     *  or as list of properties wich are then recieved from the object
-     * @param string $nameSpace
-     * @param string $contextIdentifier send a specific contextIdentifier
+     *                                                                                   either as list of 'key :
+     *                                                                                   value' pairs or as list of
+     *                                                                                   properties wich are then
+     *                                                                                   recieved from the object
+     * @param string                                                  $nameSpace
+     * @param string                                                  $contextIdentifier send a specific
+     *                                                                                   contextIdentifier
+     *
      * @return array GPArray of objects namespace
      */
-    public function render($arguments, $object = null, $nameSpace = '', $contextIdentifier = '')
-    {
-        $argumentArray = parent::render($arguments, $object, $nameSpace);
+    public function render( $arguments, $object = null, $nameSpace = '', $contextIdentifier = '' ) {
+        $argumentArray = parent::render( $arguments, $object, $nameSpace );
 
-        if ($contextIdentifier) {
+        if ( $contextIdentifier ) {
             $argumentArray['contextIdentifier'] = $contextIdentifier;
         }
 

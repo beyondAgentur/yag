@@ -27,53 +27,45 @@ namespace DL\Yag\View;
 
 use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 
-abstract class AbstractFeedView extends \Tx_PtExtbase_View_BaseView
-{
+abstract class AbstractFeedView extends \Tx_PtExtbase_View_BaseView {
     protected $feedItemType = 'unknown';
 
 
-    public function initializeView()
-    {
-        $feedFormat = $this->controllerContext->getRequest()->getFormat();
-        $feedFormat = ucfirst(strtolower($feedFormat));
-        $templatePathAndFileName = array_shift($this->getTemplateRootPaths()) . "/Feeds/$feedFormat.html";
-        $this->setTemplatePathAndFilename($templatePathAndFileName);
+    public function initializeView() {
+        $feedFormat              = $this->controllerContext->getRequest()->getFormat();
+        $feedFormat              = ucfirst( strtolower( $feedFormat ) );
+        $templatePathAndFileName = array_shift( $this->getTemplateRootPaths() ) . "/Feeds/$feedFormat.html";
+        $this->setTemplatePathAndFilename( $templatePathAndFileName );
     }
-
 
 
     /**
      * @return string|void
      */
-    public function render()
-    {
-        $this->assign('feedInfo', $this->buildFeedInfo());
-        $this->assign('feedItemType', $this->feedItemType);
+    public function render() {
+        $this->assign( 'feedInfo', $this->buildFeedInfo() );
+        $this->assign( 'feedItemType', $this->feedItemType );
 
         ob_clean();
         echo parent::render();
         exit;
     }
 
-
-
-    /**
-     * @param ControllerContext $controllerContext
-     * @return bool
-     */
-    public function canRender( ControllerContext $controllerContext)
-    {
-        return true;
-    }
-
-
     /**
      * @return array
      */
-    protected function buildFeedInfo()
-    {
+    protected function buildFeedInfo() {
         return array(
             'creationDate' => new \DateTime(),
         );
+    }
+
+    /**
+     * @param ControllerContext $controllerContext
+     *
+     * @return bool
+     */
+    public function canRender( ControllerContext $controllerContext ) {
+        return true;
     }
 }

@@ -38,20 +38,18 @@ use TYPO3\CMS\Extbase\Utility\ArrayUtility;
 /**
  * Base class for all YAG importers
  *
- * @package Domain
+ * @package    Domain
  * @subpackage Import
- * @author Daniel Lienert <typo3@lienert.cc>
- * @author Michael Knoll <mimi@kaktusteam.de>
+ * @author     Daniel Lienert <typo3@lienert.cc>
+ * @author     Michael Knoll <mimi@kaktusteam.de>
  */
-abstract class AbstractImporter implements ImporterInterface
-{
+abstract class AbstractImporter implements ImporterInterface {
     /**
      * Holds an instance of album content manager
      *
      * @var AlbumContentManager
      */
     protected $albumContentManager;
-
 
 
     /**
@@ -62,14 +60,12 @@ abstract class AbstractImporter implements ImporterInterface
     protected $configurationBuilder;
 
 
-
     /**
      * Holds an instance of the importer configuraation
      *
      * @var Configuration_Import_ImporterConfiguration
      */
     protected $importerConfiguration;
-
 
 
     /**
@@ -80,14 +76,12 @@ abstract class AbstractImporter implements ImporterInterface
     protected $album;
 
 
-
     /**
      * Holds an instance of persistence manager
      *
      * @var PersistenceManager
      */
     protected $persistenceManager;
-
 
 
     /**
@@ -98,14 +92,12 @@ abstract class AbstractImporter implements ImporterInterface
     protected $imageProcessor;
 
 
-
     /**
      * Holds an instance of item repository
      *
      * @var ItemRepository
      */
     protected $itemRepository;
-
 
 
     /**
@@ -161,8 +153,7 @@ abstract class AbstractImporter implements ImporterInterface
     /**
      * @param ObjectManager $objectManager
      */
-    public function injectObjectManager( ObjectManager $objectManager)
-    {
+    public function injectObjectManager( ObjectManager $objectManager ) {
         $this->objectManager = $objectManager;
     }
 
@@ -172,8 +163,7 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * @param PersistenceManager $persistenceManager
      */
-    public function injectPersistenceManager( PersistenceManager $persistenceManager)
-    {
+    public function injectPersistenceManager( PersistenceManager $persistenceManager ) {
         $this->persistenceManager = $persistenceManager;
     }
 
@@ -181,8 +171,7 @@ abstract class AbstractImporter implements ImporterInterface
     /**
      * @param FileManager $fileManager
      */
-    public function injectFileManager(FileManager $fileManager)
-    {
+    public function injectFileManager( FileManager $fileManager ) {
         $this->fileManager = $fileManager;
     }
 
@@ -192,8 +181,7 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * @param ItemRepository $itemRepository
      */
-    public function injectItemRepository(ItemRepository $itemRepository)
-    {
+    public function injectItemRepository( ItemRepository $itemRepository ) {
         $this->itemRepository = $itemRepository;
     }
 
@@ -201,8 +189,7 @@ abstract class AbstractImporter implements ImporterInterface
     /**
      * @param ItemMetaRepository $itemMetaRepository
      */
-    public function injectItemMetaRepository(ItemMetaRepository $itemMetaRepository)
-    {
+    public function injectItemMetaRepository( ItemMetaRepository $itemMetaRepository ) {
         $this->itemMetaRepository = $itemMetaRepository;
     }
 
@@ -210,8 +197,7 @@ abstract class AbstractImporter implements ImporterInterface
     /**
      * @param Div $fileSystemDiv
      */
-    public function injectResolutionFileSystemDiv(Div $fileSystemDiv)
-    {
+    public function injectResolutionFileSystemDiv( Div $fileSystemDiv ) {
         $this->fileSystemDiv = $fileSystemDiv;
     }
 
@@ -219,11 +205,9 @@ abstract class AbstractImporter implements ImporterInterface
     /**
      * @param MetaData_ItemMetaFactory $itemMetaDataFactory
      */
-    public function injectItemMetaDataFactory(MetaData_ItemMetaFactory $itemMetaDataFactory)
-    {
+    public function injectItemMetaDataFactory( MetaData_ItemMetaFactory $itemMetaDataFactory ) {
         $this->itemMetaDataFactory = $itemMetaDataFactory;
     }
-
 
 
     /**
@@ -231,11 +215,9 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * @param AbstractProcessor $imageProcessor
      */
-    public function setImageProcessor(AbstractProcessor $imageProcessor)
-    {
+    public function setImageProcessor( AbstractProcessor $imageProcessor ) {
         $this->imageProcessor = $imageProcessor;
     }
-
 
 
     /**
@@ -243,11 +225,9 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * @param AlbumContentManager $albumContentManager
      */
-    public function setAlbumManager(AlbumContentManager $albumContentManager)
-    {
+    public function setAlbumManager( AlbumContentManager $albumContentManager ) {
         $this->albumContentManager = $albumContentManager;
     }
-
 
 
     /**
@@ -255,11 +235,9 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * @param Configuration_ConfigurationBuilder $configurationBuilder
      */
-    public function setConfigurationBuilder(Configuration_ConfigurationBuilder $configurationBuilder)
-    {
+    public function setConfigurationBuilder( Configuration_ConfigurationBuilder $configurationBuilder ) {
         $this->configurationBuilder = $configurationBuilder;
     }
-
 
 
     /**
@@ -267,11 +245,9 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * @param $importerConfiguration
      */
-    public function setImporterConfiguration(Configuration_Import_ImporterConfiguration $importerConfiguration)
-    {
+    public function setImporterConfiguration( Configuration_Import_ImporterConfiguration $importerConfiguration ) {
         $this->importerConfiguration = $importerConfiguration;
     }
-
 
 
     /**
@@ -279,89 +255,85 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * @param Model_Album $album
      */
-    public function setAlbum(Model_Album $album)
-    {
+    public function setAlbum( Model_Album $album ) {
         $this->album = $album;
     }
-
 
 
     /**
      * Setter for fe_user object
      *
      * @abstract
+     *
      * @param FrontendUser $feUser
      */
-    public function setFeUser( FrontendUser $feUser)
-    {
+    public function setFeUser( FrontendUser $feUser ) {
         $this->feUser = $feUser;
     }
-
 
 
     /**
      * Imports a file given by its filepath. If an item object
      * is given, this one is used. Otherwise a new one is created.
      *
-     * @param string $filePath Absolute file path to file on server
-     * @param Model_Item $item Item to attach file to
+     * @param string     $filePath Absolute file path to file on server
+     * @param Model_Item $item     Item to attach file to
+     *
      * @return Model_Item Item created or used for import
      */
-    protected function importFileByFilename($filePath, $item = null)
-    {
+    protected function importFileByFilename( $filePath, $item = null ) {
 
         // Create new item if none is given
-        if ($item === null) {
-            $item = $this->objectManager->get('Model_Item');
-            $item->setFeUserUid($this->feUser->getUid());
+        if ( $item === null ) {
+            $item = $this->objectManager->get( 'Model_Item' );
+            $item->setFeUserUid( $this->feUser->getUid() );
         }
 
         // Set sorting of item, if not yet given
-        if (!$item->getSorting() > 0) {
-            $item->setSorting($this->album->getMaxSorting() + 1);
+        if ( ! $item->getSorting() > 0 ) {
+            $item->setSorting( $this->album->getMaxSorting() + 1 );
         }
 
-        $fileSizes = getimagesize($filePath);
-        $relativeFilePath = $this->getRelativeFilePath($filePath);
+        $fileSizes        = getimagesize( $filePath );
+        $relativeFilePath = $this->getRelativeFilePath( $filePath );
 
-        $item->setSourceuri($relativeFilePath);
-        $item->setFilename(Div::getFilenameFromFilePath($relativeFilePath));
+        $item->setSourceuri( $relativeFilePath );
+        $item->setFilename( Div::getFilenameFromFilePath( $relativeFilePath ) );
 
-        $item->setWidth($fileSizes[0]);
-        $item->setHeight($fileSizes[1]);
-        $item->setItemType($fileSizes['mime']);
+        $item->setWidth( $fileSizes[0] );
+        $item->setHeight( $fileSizes[1] );
+        $item->setItemType( $fileSizes['mime'] );
 
         // Metadata
-        if ($this->importerConfiguration->getParseItemMeta()) {
+        if ( $this->importerConfiguration->getParseItemMeta() ) {
             try {
-                $item->setItemMeta($this->itemMetaDataFactory->createItemMetaForFile($filePath));
-            } catch (Exception $e) {
-                GeneralUtility::sysLog('Error while extracting MetaData from "' . $filePath . '". Error was: ' . $e->getMessage(), 'yag', 2);
+                $item->setItemMeta( $this->itemMetaDataFactory->createItemMetaForFile( $filePath ) );
+            } catch ( Exception $e ) {
+                GeneralUtility::sysLog( 'Error while extracting MetaData from "' . $filePath . '". Error was: ' . $e->getMessage(), 'yag', 2 );
             }
 
-            if ($this->importerConfiguration->getGenerateTagsFromMetaData() && is_a($item->getItemMeta(), 'Model_ItemMeta')) {
+            if ( $this->importerConfiguration->getGenerateTagsFromMetaData() && is_a( $item->getItemMeta(), 'Model_ItemMeta' ) ) {
                 try {
-                    $item->addTagsFromCSV($item->getItemMeta()->getKeywords());
-                } catch (Exception $e) {
-                    GeneralUtility::sysLog('Error while saving KeyWords from"' . $filePath . '". Error was: ' . $e->getMessage(), 'yag', 2);
+                    $item->addTagsFromCSV( $item->getItemMeta()->getKeywords() );
+                } catch ( Exception $e ) {
+                    GeneralUtility::sysLog( 'Error while saving KeyWords from"' . $filePath . '". Error was: ' . $e->getMessage(), 'yag', 2 );
                 }
             }
 
-            $item->setTitle($this->processStringFromMetaData($item, $this->importerConfiguration->getTitleFormat()));
-            $item->setDescription($this->processStringFromMetaData($item, $this->importerConfiguration->getDescriptionFormat()));
+            $item->setTitle( $this->processStringFromMetaData( $item, $this->importerConfiguration->getTitleFormat() ) );
+            $item->setDescription( $this->processStringFromMetaData( $item, $this->importerConfiguration->getDescriptionFormat() ) );
         }
 
-        $item->setAlbum($this->album);
+        $item->setAlbum( $this->album );
 
-        $item->setFilesize(filesize($filePath));
+        $item->setFilesize( filesize( $filePath ) );
         $item->setItemAsAlbumThumbIfNotExisting();
-        $item->setFilehash(md5_file($filePath));
-        $this->albumContentManager->addItem($item);
-        $this->itemRepository->add($item);
+        $item->setFilehash( md5_file( $filePath ) );
+        $this->albumContentManager->addItem( $item );
+        $this->itemRepository->add( $item );
 
         return $item;
     }
-
 
 
     /**
@@ -369,27 +341,26 @@ abstract class AbstractImporter implements ImporterInterface
      * itemMeta object.
      *
      * @param Model_Item $item
-     * @param string $format
-     * @param array $additionalVars
+     * @param string     $format
+     * @param array      $additionalVars
+     *
      * @return Model_Item $item;
      */
-    protected function processStringFromMetaData(Model_Item $item, $format, $additionalVars = array())
-    {
-        if ($item->getItemMeta() instanceof Model_ItemMeta) {
+    protected function processStringFromMetaData( Model_Item $item, $format, $additionalVars = array() ) {
+        if ( $item->getItemMeta() instanceof Model_ItemMeta ) {
             $vars = $item->getItemMeta()->getAttributeArray();
         } else {
             $vars = array();
         }
 
         $vars['origFileName'] = $item->getOriginalFilename();
-        $vars['fileName'] = $this->processTitleFromFileName($item->getOriginalFilename());
+        $vars['fileName']     = $this->processTitleFromFileName( $item->getOriginalFilename() );
 
-        $vars = ArrayUtility::arrayMergeRecursiveOverrule($vars, $additionalVars);
-        $formattedString = \Tx_PtExtlist_Utility_RenderValue::renderDataByConfigArray($vars, $format);
+        $vars            = ArrayUtility::arrayMergeRecursiveOverrule( $vars, $additionalVars );
+        $formattedString = \Tx_PtExtlist_Utility_RenderValue::renderDataByConfigArray( $vars, $format );
 
         return $formattedString;
     }
-
 
 
     /**
@@ -399,17 +370,17 @@ abstract class AbstractImporter implements ImporterInterface
      * this function will return images/img001.jpg
      *
      * @param string $filePath
+     *
      * @return string
      */
-    protected function getRelativeFilePath($filePath)
-    {
+    protected function getRelativeFilePath( $filePath ) {
         $basePath = Div::getT3BasePath();
-        if (substr($filePath, 0, strlen($basePath)) == $basePath) {
-            $filePath = substr($filePath, strlen($basePath));
+        if ( substr( $filePath, 0, strlen( $basePath ) ) == $basePath ) {
+            $filePath = substr( $filePath, strlen( $basePath ) );
         }
+
         return $filePath;
     }
-
 
 
     /**
@@ -418,20 +389,18 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * @return Model_Item Persisted item
      */
-    protected function getNewPersistedItem()
-    {
-        $item = $this->objectManager->get('Model_Item');
+    protected function getNewPersistedItem() {
+        $item = $this->objectManager->get( 'Model_Item' );
 
-        if ($this->feUser) {
-            $item->setFeUserUid($this->feUser->getUid());
+        if ( $this->feUser ) {
+            $item->setFeUserUid( $this->feUser->getUid() );
         }
 
-        $this->itemRepository->add($item);
+        $this->itemRepository->add( $item );
         $this->persistenceManager->persistAll();
 
         return $item;
     }
-
 
 
     /**
@@ -441,28 +410,25 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * @param string $path Path to file to set mask for
      */
-    protected function setFileMask($path)
-    {
+    protected function setFileMask( $path ) {
         // we cannot do this on windows
-        if (!(strtoupper(substr(PHP_OS, 0, 3)) == "WIN")) {
-            chmod($path, $this->importerConfiguration->getImportFileMask());
+        if ( ! ( strtoupper( substr( PHP_OS, 0, 3 ) ) == "WIN" ) ) {
+            chmod( $path, $this->importerConfiguration->getImportFileMask() );
         }
     }
-
 
 
     /**
      * Returns a file path for an image stored to directory with original files
      *
-     * @param string $filename Filename of file to get path for
-     * @param bool $createDirIfNotExists If true, directory will be created if it doesn't exist
+     * @param string $filename             Filename of file to get path for
+     * @param bool   $createDirIfNotExists If true, directory will be created if it doesn't exist
+     *
      * @return string Absolute path for filename in directory with original files
      */
-    protected function getOrigFilePathForFile($filename, $createDirIfNotExists = true)
-    {
-        return $this->fileManager->getOrigFileDirectoryPathForAlbum($this->album, $createDirIfNotExists)  . $filename;
+    protected function getOrigFilePathForFile( $filename, $createDirIfNotExists = true ) {
+        return $this->fileManager->getOrigFileDirectoryPathForAlbum( $this->album, $createDirIfNotExists ) . $filename;
     }
-
 
 
     /**
@@ -470,84 +436,78 @@ abstract class AbstractImporter implements ImporterInterface
      *
      * If an item is given, UID of item is used as filename for item in original items directory
      *
-     * @param string $filePath Full qualified filepath of file to move
-     * @param Model_Item $item Item that should hold file (not modified, make sure to set sourceuri manually!
+     * @param string     $filePath Full qualified filepath of file to move
+     * @param Model_Item $item     Item that should hold file (not modified, make sure to set sourceuri manually!
+     *
      * @return string
      * @throws Exception
      */
-    protected function moveFileToOrigsDirectory($filePath, Model_Item $item = null)
-    {
+    protected function moveFileToOrigsDirectory( $filePath, Model_Item $item = null ) {
 
         // Create path to move file to
-        $origsFilePath = $this->fileManager->getOrigFileDirectoryPathForAlbum($this->album);
-        $fileSuffix = pathinfo($filePath, PATHINFO_EXTENSION);
+        $origsFilePath = $this->fileManager->getOrigFileDirectoryPathForAlbum( $this->album );
+        $fileSuffix    = pathinfo( $filePath, PATHINFO_EXTENSION );
 
-        if ($item !== null) {
-            if ($item->getOriginalFilename()) {
-                $origsFilePath .= $item->getUid() . '_' . $this->fileSystemDiv->cleanFileName($item->getOriginalFilename());
+        if ( $item !== null ) {
+            if ( $item->getOriginalFilename() ) {
+                $origsFilePath .= $item->getUid() . '_' . $this->fileSystemDiv->cleanFileName( $item->getOriginalFilename() );
             } else {
                 $origsFilePath .= $item->getUid() . '.' . $fileSuffix; // if we get an item, we use UID of item as a part of the filename
             }
         } else {
-            $origsFilePath .= Div::getFilenameFromFilePath($filePath); // if we do not get one, we use filename of given filepart
+            $origsFilePath .= Div::getFilenameFromFilePath( $filePath ); // if we do not get one, we use filename of given filepart
         }
 
-        if (!rename($filePath, $origsFilePath)) {
-            throw new Exception('Could not move file ' . $filePath . ' to ' . $origsFilePath, 1294176900);
+        if ( ! rename( $filePath, $origsFilePath ) ) {
+            throw new Exception( 'Could not move file ' . $filePath . ' to ' . $origsFilePath, 1294176900 );
         }
 
         // Set appropriate file mask
-        $this->setFileMask($origsFilePath);
+        $this->setFileMask( $origsFilePath );
 
         return $origsFilePath;
     }
-
 
 
     /**
      * Extract an image title from the file name
      *
      * @param $fileName
+     *
      * @return string
      */
-    protected function processTitleFromFileName($fileName)
-    {
-        $title = implode('.', array_slice(explode('.', $fileName), 0, -1));
-        $title = ucfirst($title);
-        $title = str_replace(array('.', '_'), ' ', $title);
+    protected function processTitleFromFileName( $fileName ) {
+        $title = implode( '.', array_slice( explode( '.', $fileName ), 0, - 1 ) );
+        $title = ucfirst( $title );
+        $title = str_replace( array( '.', '_' ), ' ', $title );
+
         return $title;
     }
-
 
 
     /**
      * Files will be moved to a directory containing original files
      * for album before they are processed
      */
-    public function setMoveFilesToOrigsDirectoryToTrue()
-    {
+    public function setMoveFilesToOrigsDirectoryToTrue() {
         $this->moveFilesToOrigsDirectory = true;
     }
-
 
 
     /**
      * Files won't be moved to a directory containing original files
      * for album before they are processed
      */
-    public function setMoveFilesToOrigsDirectoryToFalse()
-    {
+    public function setMoveFilesToOrigsDirectoryToFalse() {
         $this->moveFilesToOrigsDirectory = false;
     }
-
 
 
     /**
      * Runs everything, that should be done after import
      * is finished.
      */
-    protected function runPostImportAction()
-    {
+    protected function runPostImportAction() {
         $this->albumContentManager->setAlbumAsGalleryThumbIfNotExisting();
         $this->persistenceManager->persistAll();
     }

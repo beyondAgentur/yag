@@ -34,27 +34,25 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * Controller for gallery
  *
  * @package Controller
- * @author Daniel Lienert <typo3@lienert.cc>
- * @author Michael Knoll <mimi@kaktusteam.de>
+ * @author  Daniel Lienert <typo3@lienert.cc>
+ * @author  Michael Knoll <mimi@kaktusteam.de>
  */
-class GalleryController extends AbstractController
-{
+class GalleryController extends AbstractController {
     /**
      * Show list of galleries
      *
      * @return string Rendered list of galleries action
      */
-    public function listAction()
-    {
+    public function listAction() {
         // Reset all selections in yag context
         $extlistContext = $this->yagContext->getGalleryListContext();
-        $extlistContext->getPagerCollection()->setItemsPerPage($this->configurationBuilder->buildGalleryListConfiguration()->getItemsPerPage());
-        $extlistContext->getPagerCollection()->setItemCount($extlistContext->getDataBackend()->getTotalItemsCount());
+        $extlistContext->getPagerCollection()->setItemsPerPage( $this->configurationBuilder->buildGalleryListConfiguration()->getItemsPerPage() );
+        $extlistContext->getPagerCollection()->setItemCount( $extlistContext->getDataBackend()->getTotalItemsCount() );
 
-        $this->view->assign('listData', $extlistContext->getRenderedListData());
-        $this->view->assign('pagerCollection', $extlistContext->getPagerCollection());
-        $this->view->assign('pager', $extlistContext->getPagerCollection()->getPagerByIdentifier($this->configurationBuilder->buildGalleryListConfiguration()->getPagerIdentifier()));
-        $this->view->assign('pidDetector', $this->pidDetector);
+        $this->view->assign( 'listData', $extlistContext->getRenderedListData() );
+        $this->view->assign( 'pagerCollection', $extlistContext->getPagerCollection() );
+        $this->view->assign( 'pager', $extlistContext->getPagerCollection()->getPagerByIdentifier( $this->configurationBuilder->buildGalleryListConfiguration()->getPagerIdentifier() ) );
+        $this->view->assign( 'pidDetector', $this->pidDetector );
     }
 
 
@@ -62,31 +60,31 @@ class GalleryController extends AbstractController
      * Show the albums of the gallery
      *
      * @param Gallery $gallery Gallery to be rendered
+     *
      * @return string Rendered Index action
      */
-    public function indexAction(Gallery $gallery = null)
-    {
+    public function indexAction( Gallery $gallery = null ) {
         $extlistContext = $this->yagContext->getAlbumListContext();
-        $extlistContext->getPagerCollection()->setItemsPerPage($this->configurationBuilder->buildAlbumListConfiguration()->getItemsPerPage());
-        $extlistContext->getPagerCollection()->setItemCount($extlistContext->getDataBackend()->getTotalItemsCount());
+        $extlistContext->getPagerCollection()->setItemsPerPage( $this->configurationBuilder->buildAlbumListConfiguration()->getItemsPerPage() );
+        $extlistContext->getPagerCollection()->setItemCount( $extlistContext->getDataBackend()->getTotalItemsCount() );
 
-        if ($gallery === null) {
+        if ( $gallery === null ) {
             // If we do not get a gallery from Request, we get it from context
             $gallery = $this->yagContext->getGallery();
         } else {
-            $this->yagContext->setGallery($gallery);
+            $this->yagContext->setGallery( $gallery );
         }
 
-        if ($gallery === null) {
-            $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_gallery.noGallerySelected', $this->extensionName), '', FlashMessage::ERROR);
-            $this->forward('index', 'Error');
+        if ( $gallery === null ) {
+            $this->addFlashMessage( LocalizationUtility::translate( 'tx_yag_controller_gallery.noGallerySelected', $this->extensionName ), '', FlashMessage::ERROR );
+            $this->forward( 'index', 'Error' );
         }
 
-        $this->view->assign('gallery', $gallery);
-        $this->view->assign('galleries', $this->galleryRepository->findAll());
-        $this->view->assign('listData', $extlistContext->getRenderedListData());
-        $this->view->assign('pagerCollection', $extlistContext->getPagerCollection());
-        $this->view->assign('pager', $extlistContext->getPagerCollection()->getPagerByIdentifier($this->configurationBuilder->buildAlbumListConfiguration()->getPagerIdentifier()));
+        $this->view->assign( 'gallery', $gallery );
+        $this->view->assign( 'galleries', $this->galleryRepository->findAll() );
+        $this->view->assign( 'listData', $extlistContext->getRenderedListData() );
+        $this->view->assign( 'pagerCollection', $extlistContext->getPagerCollection() );
+        $this->view->assign( 'pager', $extlistContext->getPagerCollection()->getPagerByIdentifier( $this->configurationBuilder->buildAlbumListConfiguration()->getPagerIdentifier() ) );
     }
 
 
@@ -95,11 +93,10 @@ class GalleryController extends AbstractController
      *
      * @return string Rendered action
      */
-    public function showSingleAction()
-    {
+    public function showSingleAction() {
         $galleryUid = $this->configurationBuilder->buildContextConfiguration()->getSelectedGalleryUid();
-        $this->yagContext->setGalleryUid($galleryUid);
-        $this->forward('index');
+        $this->yagContext->setGalleryUid( $galleryUid );
+        $this->forward( 'index' );
     }
 
 
@@ -107,15 +104,15 @@ class GalleryController extends AbstractController
      * Edit action for gallery object
      *
      * @param Gallery $gallery Gallery to be edited
+     *
      * @return string The rendered edit action
      * @dontvalidate $gallery
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction edit
      */
-    public function editAction(Gallery $gallery)
-    {
-        $this->view->assign('gallery', $gallery);
+    public function editAction( Gallery $gallery ) {
+        $this->view->assign( 'gallery', $gallery );
     }
 
 
@@ -123,16 +120,16 @@ class GalleryController extends AbstractController
      * Update action for gallery object
      *
      * @param Gallery $gallery Gallery to be updated
+     *
      * @return string The rendered update action
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction edit
      */
-    public function updateAction(Gallery $gallery)
-    {
-        $this->galleryRepository->update($gallery);
-        $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_gallery.gallerySuccessfullyUpdated', $this->extensionName));
-        $this->redirect('list');
+    public function updateAction( Gallery $gallery ) {
+        $this->galleryRepository->update( $gallery );
+        $this->addFlashMessage( LocalizationUtility::translate( 'tx_yag_controller_gallery.gallerySuccessfullyUpdated', $this->extensionName ) );
+        $this->redirect( 'list' );
     }
 
 
@@ -140,16 +137,16 @@ class GalleryController extends AbstractController
      * Delete action for deleting a gallery
      *
      * @param Gallery $gallery Gallery object to be deleted
+     *
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction delete
      */
-    public function deleteAction(Gallery $gallery)
-    {
+    public function deleteAction( Gallery $gallery ) {
         $gallery->delete();
-        $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_gallery.gallerySuccessfullyDeleted', $this->extensionName, array($gallery->getName())));
+        $this->addFlashMessage( LocalizationUtility::translate( 'tx_yag_controller_gallery.gallerySuccessfullyDeleted', $this->extensionName, array( $gallery->getName() ) ) );
         $this->galleryRepository->syncTranslatedGalleries();
-        $this->redirect('list');
+        $this->redirect( 'list' );
     }
 
 
@@ -157,18 +154,18 @@ class GalleryController extends AbstractController
      * new action
      *
      * @param Gallery $gallery
+     *
      * @return string The rendered new action
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction create
      */
-    public function newAction(Gallery $gallery = null)
-    {
-        if ($gallery === null) {
-            $gallery = $this->objectManager->get('Gallery');
+    public function newAction( Gallery $gallery = null ) {
+        if ( $gallery === null ) {
+            $gallery = $this->objectManager->get( 'Gallery' );
         }
 
-        $this->view->assign('gallery', $gallery);
+        $this->view->assign( 'gallery', $gallery );
     }
 
 
@@ -176,15 +173,15 @@ class GalleryController extends AbstractController
      * Create  gallery action
      *
      * @param Gallery $gallery
+     *
      * @return string The rendered create action
      * @rbacNeedsAccess
      * @rbacObject gallery
      * @rbacAction create
      */
-    public function createAction(Gallery $gallery)
-    {
-        $this->galleryRepository->add($gallery);
-        $this->addFlashMessage(LocalizationUtility::translate('tx_yag_controller_gallery.gallerySuccessfullyCreated', $this->extensionName));
-        $this->redirect('list');
+    public function createAction( Gallery $gallery ) {
+        $this->galleryRepository->add( $gallery );
+        $this->addFlashMessage( LocalizationUtility::translate( 'tx_yag_controller_gallery.gallerySuccessfullyCreated', $this->extensionName ) );
+        $this->redirect( 'list' );
     }
 }

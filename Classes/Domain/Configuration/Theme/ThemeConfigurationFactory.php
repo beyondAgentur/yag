@@ -30,27 +30,26 @@ use DL\Yag\Domain\Configuration\ConfigurationBuilder;
 /**
  * Factory for theme configuration
  *
- * @package Domain
+ * @package    Domain
  * @subpackage Configuration\Theme
-
- * @author Daniel Lienert <typo3@lienert.cc>
+ * @author     Daniel Lienert <typo3@lienert.cc>
  */
-class ThemeConfigurationFactory
-{
+class ThemeConfigurationFactory {
     /**
      * @static
+     *
      * @param ConfigurationBuilder $configurationBuilder
-     * @param null $themeSettings array
-     * @param null $themeName string
+     * @param null                 $themeSettings array
+     * @param null                 $themeName     string
+     *
      * @return ThemeConfiguration
      */
-    public static function getInstance(ConfigurationBuilder $configurationBuilder, $themeSettings = null, $themeName = null)
-    {
-        if (!$themeSettings) {
-            $themeSettings = $configurationBuilder->getSettingsForConfigObject('theme');
-            $themeName = $configurationBuilder->getTheme();
+    public static function getInstance( ConfigurationBuilder $configurationBuilder, $themeSettings = null, $themeName = null ) {
+        if ( ! $themeSettings ) {
+            $themeSettings = $configurationBuilder->getSettingsForConfigObject( 'theme' );
+            $themeName     = $configurationBuilder->getTheme();
         }
 
-        return new ThemeConfiguration($configurationBuilder, $themeSettings, $themeName);
+        return new ThemeConfiguration( $configurationBuilder, $themeSettings, $themeName );
     }
 }

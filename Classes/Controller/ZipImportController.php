@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010-2013 Daniel Lienert <typo3@lienert.cc>, Michael Knoll <mimi@kaktsuteam.de>
-*  All rights reserved
-*
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010-2013 Daniel Lienert <typo3@lienert.cc>, Michael Knoll <mimi@kaktsuteam.de>
+ *  All rights reserved
+ *
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 namespace DL\Yag\Controller;
 
@@ -33,12 +33,11 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class implements an controller for importing images from a zip archive
- * 
+ *
  * @package Controller
- * @author Michael Knoll <mimi@kaktusteam.de>
+ * @author  Michael Knoll <mimi@kaktusteam.de>
  */
-class ZipImportController extends AbstractController
-{
+class ZipImportController extends AbstractController {
     /**
      * @inject
      * @var \Tx_PtExtlist_Domain_StateAdapter_GetPostVarAdapterFactory
@@ -50,49 +49,48 @@ class ZipImportController extends AbstractController
      *
      * @return string The HTML source for import form
      */
-    public function showImportFormAction()
-    {
-        $albums = $this->albumRepository->findAll();
+    public function showImportFormAction() {
+        $albums    = $this->albumRepository->findAll();
         $galleries = $this->galleryRepository->findAll();
 
-        $this->view->assign('galleries', $galleries);
-        $this->view->assign('albums', $albums);
+        $this->view->assign( 'galleries', $galleries );
+        $this->view->assign( 'albums', $albums );
     }
-
 
 
     /**
      * Shows results for importing images from zip
      *
      * @param Album $album
+     *
      * @return string The rendered import from zip action
      */
-    public function importFromZipAction(Album $album)
-    {
+    public function importFromZipAction( Album $album ) {
         $getPostVarAdapter = $this->getPostVarAdapterFactory->getInstance();
         // Be careful: Path to file is in $_FILES which we don't get from "standard" GP vars!
-        $filePath = $getPostVarAdapter->getFilesVarsByNamespace('tmp_name.file');
-        if ($filePath == '') {
+        $filePath = $getPostVarAdapter->getFilesVarsByNamespace( 'tmp_name.file' );
+        if ( $filePath == '' ) {
             $this->addFlashMessage(
-                LocalizationUtility::translate('tx_yag_controller_zipimportcontroller_importfromzipaction.nofilegiven', $this->extensionName),
+                LocalizationUtility::translate( 'tx_yag_controller_zipimportcontroller_importfromzipaction.nofilegiven', $this->extensionName ),
                 '',
                 FlashMessage::ERROR
             );
-            $this->redirect('addItems', 'Album', null, array('album' => $album));
+            $this->redirect( 'addItems', 'Album', null, array( 'album' => $album ) );
+
             return;
         }
-        
-        $importer = ImporterBuilder::getInstance()->getZipImporterInstanceForAlbumAndFilePath($album, $filePath);
+
+        $importer = ImporterBuilder::getInstance()->getZipImporterInstanceForAlbumAndFilePath( $album, $filePath );
         $importer->runImport();
-        $this->yagContext->setAlbum($album);
-        
+        $this->yagContext->setAlbum( $album );
+
         // TODO add number of images imported to $importer object
         $this->addFlashMessage(
-            LocalizationUtility::translate('tx_yag_controller_zipimportcontroller_importfromzipaction.uploadsuccessfull', $this->extensionName, array($importer->getItemsImported())),
+            LocalizationUtility::translate( 'tx_yag_controller_zipimportcontroller_importfromzipaction.uploadsuccessfull', $this->extensionName, array( $importer->getItemsImported() ) ),
             '',
-            FlashMessage::OK);
-        $this->yagContext->setAlbum($album);
-        $this->redirect('list', 'ItemList');
+            FlashMessage::OK );
+        $this->yagContext->setAlbum( $album );
+        $this->redirect( 'list', 'ItemList' );
     }
 
 
@@ -101,28 +99,28 @@ class ZipImportController extends AbstractController
      *
      * TODO this method is not yet used and hence not tested!
      *
-     * @param Gallery $gallery Gallery to add album to
-     * @param string $albumName Name of album to be created
+     * @param Gallery $gallery   Gallery to add album to
+     * @param string  $albumName Name of album to be created
+     *
      * @throws Exception
      */
-    public function createNewAlbumAndImportFromZipAction(Gallery $gallery, $albumName)
-    {
+    public function createNewAlbumAndImportFromZipAction( Gallery $gallery, $albumName ) {
         $album = new Album();
-        $album->setName($albumName);
-        $album->addGallery($gallery);
-        $gallery->addAlbum($album);
-        $this->albumRepository->add($album);
-        
-        $persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+        $album->setName( $albumName );
+        $album->addGallery( $gallery );
+        $gallery->addAlbum( $album );
+        $this->albumRepository->add( $album );
+
+        $persistenceManager = GeneralUtility::makeInstance( 'TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager' );
         $persistenceManager->persistAll();
-        
-        if (!$album->getUid() > 0) {
-            throw new Exception('Album hat keine UID!');
+
+        if ( ! $album->getUid() > 0 ) {
+            throw new Exception( 'Album hat keine UID!' );
         }
-        
-        $importer = ImporterBuilder::getInstance()->getZipImporterInstanceForAlbum($album);
+
+        $importer = ImporterBuilder::getInstance()->getZipImporterInstanceForAlbum( $album );
         $importer->runImport();
 
-        $this->view->assign('album', $album);
+        $this->view->assign( 'album', $album );
     }
 }

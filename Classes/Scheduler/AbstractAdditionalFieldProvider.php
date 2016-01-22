@@ -31,22 +31,23 @@ use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
 /**
  * YAG Scheduler Task
  *
- * @package YAG
+ * @package    YAG
  * @subpackage Scheduler
  */
-abstract class AbstractAdditionalFieldProvider  implements AdditionalFieldProviderInterface
-{
+abstract class AbstractAdditionalFieldProvider implements AdditionalFieldProviderInterface {
     /**
-     * @param $templatePathPart
+     * @param       $templatePathPart
      * @param array $data
+     *
      * @return string
      */
-    protected function getFieldHTML($templatePathPart, $data = array())
-    {
-        $view = GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView'); /** @var $view \TYPO3\CMS\Fluid\View\StandaloneView */
-        $view->assignMultiple($data);
-        $templateFileName = GeneralUtility::getFileAbsFileName('EXT:yag/Resources/Private/Templates/Scheduler/' . $templatePathPart);
-        $view->setTemplatePathAndFilename($templateFileName);
+    protected function getFieldHTML( $templatePathPart, $data = array() ) {
+        $view = GeneralUtility::makeInstance( 'TYPO3\\CMS\\Fluid\\View\\StandaloneView' );
+        /** @var $view \TYPO3\CMS\Fluid\View\StandaloneView */
+        $view->assignMultiple( $data );
+        $templateFileName = GeneralUtility::getFileAbsFileName( 'EXT:yag/Resources/Private/Templates/Scheduler/' . $templatePathPart );
+        $view->setTemplatePathAndFilename( $templateFileName );
+
         return $view->render();
     }
 }

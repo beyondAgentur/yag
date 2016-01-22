@@ -34,12 +34,11 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 /**
  * Class implements Album domain object
  *
- * @package Domain
+ * @package    Domain
  * @subpackage Model
- * @author Daniel Lienert <typo3@lienert.cc>
+ * @author     Daniel Lienert <typo3@lienert.cc>
  */
-class Album extends AbstractEntity implements DomainModelInterface
-{
+class Album extends AbstractEntity implements DomainModelInterface {
     /**
      * Name for album
      *
@@ -135,8 +134,7 @@ class Album extends AbstractEntity implements DomainModelInterface
     protected $objectManager;
 
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->initStorageObjects();
         $this->date = new \DateTime();
     }
@@ -145,8 +143,7 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * @param ObjectManager $objectManager
      */
-    public function injectObjectManager( ObjectManager $objectManager)
-    {
+    public function injectObjectManager( ObjectManager $objectManager ) {
         $this->objectManager = $objectManager;
     }
 
@@ -156,8 +153,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return void
      */
-    protected function initStorageObjects()
-    {
+    protected function initStorageObjects() {
         $this->items = new ObjectStorage();
     }
 
@@ -166,10 +162,10 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Setter for name
      *
      * @param string $name Name for album
+     *
      * @return void
      */
-    public function setName($name)
-    {
+    public function setName( $name ) {
         $this->name = $name;
     }
 
@@ -179,8 +175,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return string Name for album
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -190,8 +185,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @param int $sorting
      */
-    public function setSorting($sorting)
-    {
+    public function setSorting( $sorting ) {
         $this->sorting = $sorting;
     }
 
@@ -201,8 +195,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return int
      */
-    public function getSorting()
-    {
+    public function getSorting() {
         return $this->sorting;
     }
 
@@ -211,10 +204,10 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Setter for description
      *
      * @param string $description Description for album
+     *
      * @return void
      */
-    public function setDescription($description)
-    {
+    public function setDescription( $description ) {
         $this->description = $description;
     }
 
@@ -224,8 +217,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return string Description for album
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -234,10 +226,10 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Setter for date
      *
      * @param \DateTime $date Date for album
+     *
      * @return void
      */
-    public function setDate(\DateTime $date)
-    {
+    public function setDate( \DateTime $date ) {
         $this->date = $date;
     }
 
@@ -247,8 +239,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return \DateTime Date for album
      */
-    public function getDate()
-    {
+    public function getDate() {
         return $this->date;
     }
 
@@ -257,10 +248,10 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Setter for feUserUid
      *
      * @param integer $feUserUid UID of fe user that owns album
+     *
      * @return void
      */
-    public function setFeUserUid($feUserUid)
-    {
+    public function setFeUserUid( $feUserUid ) {
         $this->feUserUid = $feUserUid;
     }
 
@@ -270,8 +261,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return integer UID of fe user that owns album
      */
-    public function getFeUserUid()
-    {
+    public function getFeUserUid() {
         return $this->feUserUid;
     }
 
@@ -280,10 +270,10 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Setter for feGroupUid
      *
      * @param integer $feGroupUid UID of fe group that owns album
+     *
      * @return void
      */
-    public function setFeGroupUid($feGroupUid)
-    {
+    public function setFeGroupUid( $feGroupUid ) {
         $this->feGroupUid = $feGroupUid;
     }
 
@@ -293,8 +283,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return integer UID of fe group that owns album
      */
-    public function getFeGroupUid()
-    {
+    public function getFeGroupUid() {
         return $this->feGroupUid;
     }
 
@@ -303,10 +292,10 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Setter for gallery
      *
      * @param Gallery $gallery Holds gallery in which this album is kept
+     *
      * @return void
      */
-    public function setGallery(Gallery $gallery)
-    {
+    public function setGallery( Gallery $gallery ) {
         $this->gallery = $gallery;
     }
 
@@ -316,9 +305,8 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return Gallery Holds gallery in which this album is kept
      */
-    public function getGallery()
-    {
-        return \Tx_PtExtbase_Div::getLazyLoadedObject($this->gallery);
+    public function getGallery() {
+        return \Tx_PtExtbase_Div::getLazyLoadedObject( $this->gallery );
     }
 
 
@@ -326,10 +314,10 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Setter for thumb
      *
      * @param Item $thumb Holds thumbnail for this album
+     *
      * @return void
      */
-    public function setThumb(Item $thumb)
-    {
+    public function setThumb( Item $thumb ) {
         $this->thumb = $thumb;
     }
 
@@ -339,9 +327,8 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return Item Holds thumbnail for this album
      */
-    public function getThumb()
-    {
-        return \Tx_PtExtbase_Div::getLazyLoadedObject($this->thumb);
+    public function getThumb() {
+        return \Tx_PtExtbase_Div::getLazyLoadedObject( $this->thumb );
     }
 
 
@@ -352,8 +339,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @internal param $ \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Item> $items Holds items of this album
      */
-    public function setItems( ObjectStorage $items)
-    {
+    public function setItems( ObjectStorage $items ) {
         $this->items = $items;
     }
 
@@ -363,8 +349,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag\Domain\Model\Item> Holds items of this album
      */
-    public function getItems()
-    {
+    public function getItems() {
         return $this->items;
     }
 
@@ -373,11 +358,11 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Adds a Item
      *
      * @param Item the Item to be added
+     *
      * @return void
      */
-    public function addItem(Item $item)
-    {
-        $this->items->attach($item);
+    public function addItem( Item $item ) {
+        $this->items->attach( $item );
     }
 
 
@@ -385,19 +370,18 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Removes a Item
      *
      * @param Item the Item to be removed
+     *
      * @return void
      */
-    public function removeItem(Item $itemToRemove)
-    {
-        $this->items->detach($itemToRemove);
+    public function removeItem( Item $itemToRemove ) {
+        $this->items->detach( $itemToRemove );
     }
 
 
     /**
      * @param int $hidden
      */
-    public function setHidden($hidden)
-    {
+    public function setHidden( $hidden ) {
         $this->hidden = $hidden;
     }
 
@@ -405,8 +389,7 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * @return int
      */
-    public function getHidden()
-    {
+    public function getHidden() {
         return $this->hidden;
     }
 
@@ -414,8 +397,7 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * @param float $rating
      */
-    public function setRating($rating)
-    {
+    public function setRating( $rating ) {
         $this->rating = $rating;
     }
 
@@ -423,8 +405,7 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * @return float
      */
-    public function getRating()
-    {
+    public function getRating() {
         return $this->rating;
     }
 
@@ -440,8 +421,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return int
      */
-    public function getItemCount()
-    {
+    public function getItemCount() {
         return $this->items->count();
     }
 
@@ -451,28 +431,26 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @param bool $deleteItems If set to true, all items of album are removed, too
      */
-    public function delete($deleteItems = true)
-    {
-        if ($deleteItems) {
+    public function delete( $deleteItems = true ) {
+        if ( $deleteItems ) {
             $this->deleteAllItems();
         }
 
         $this->deleteThumb();
 
         $this->gallery->setThumbAlbumToTopOfAlbums();
-        $albumRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository');
-        $albumRepository->remove($this);
+        $albumRepository = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\AlbumRepository' );
+        $albumRepository->remove( $this );
 
-        $this->objectManager->get('DL\\Yag\\Domain\\FileSystem\\FileManager')->removeAlbumDirectory($this);
+        $this->objectManager->get( 'DL\\Yag\\Domain\\FileSystem\\FileManager' )->removeAlbumDirectory( $this );
     }
 
 
     /**
      * @return void
      */
-    public function deleteThumb()
-    {
-        if ($this->thumb && is_object($this->thumb)) {
+    public function deleteThumb() {
+        if ( $this->thumb && is_object( $this->thumb ) ) {
             $this->thumb->delete();
             $this->thumb = null;
         }
@@ -482,9 +460,8 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * @return void
      */
-    public function deleteAllItems()
-    {
-        foreach ($this->items->toArray() as $item) {
+    public function deleteAllItems() {
+        foreach ( $this->items->toArray() as $item ) {
             /* @var $item Item */
             $item->delete();
         }
@@ -494,9 +471,8 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * Sets thumbnail to first item of items in this album
      */
-    public function setThumbToTopOfItems()
-    {
-        if (count($this->items) > 0) {
+    public function setThumbToTopOfItems() {
+        if ( count( $this->items ) > 0 ) {
             $this->thumb = $this->items->current();
         }
     }
@@ -507,13 +483,12 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return boolean TRUE if album is gallery thumb, FALSE else
      */
-    public function getIsGalleryThumb()
-    {
+    public function getIsGalleryThumb() {
         $gallery = $this->getGallery();
 
-        if ($gallery instanceof Gallery
-            && ($gallery->getThumbAlbum() instanceof Album)
-            && $gallery->getThumbAlbum()->getUid() == $this->getUid()
+        if ( $gallery instanceof Gallery
+             && ( $gallery->getThumbAlbum() instanceof Album )
+             && $gallery->getThumbAlbum()->getUid() == $this->getUid()
         ) {
             return true;
         } else {
@@ -529,18 +504,18 @@ class Album extends AbstractEntity implements DomainModelInterface
      * and sorting direction. Sorting field must be one field of item,
      * sorting direction must be 1 = ASC or -1 = DESC.
      *
-     * @param string $sortingField Field of item to be used for sorting
+     * @param string $sortingField     Field of item to be used for sorting
      * @param string $sortingDirection Sorting direction to be used for sorting.
+     *
      * @return void
      */
-    public function updateSorting($sortingField, $sortingDirection)
-    {
-        $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository');
+    public function updateSorting( $sortingField, $sortingDirection ) {
+        $itemRepository = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\ItemRepository' );
         /* @var ItemRepository $itemRepository */
-        $sortedItems = $itemRepository->getSortedItemsByAlbumFieldAndDirection($this, $sortingField, $sortingDirection);
+        $sortedItems = $itemRepository->getSortedItemsByAlbumFieldAndDirection( $this, $sortingField, $sortingDirection );
         $this->items = new ObjectStorage();
-        foreach ($sortedItems as $item) {
-            $this->items->attach($item);
+        foreach ( $sortedItems as $item ) {
+            $this->items->attach( $item );
         }
     }
 
@@ -550,12 +525,11 @@ class Album extends AbstractEntity implements DomainModelInterface
      *
      * @return int
      */
-    public function getMaxSorting()
-    {
-        $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository');
+    public function getMaxSorting() {
+        $itemRepository = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\ItemRepository' );
         /* @var $itemRepository ItemRepository */
-        $maxSortingItem = $itemRepository->getItemWithMaxSortingForAlbum($this);
-        if (count($maxSortingItem) > 0) {
+        $maxSortingItem = $itemRepository->getItemWithMaxSortingForAlbum( $this );
+        if ( count( $maxSortingItem ) > 0 ) {
             return $maxSortingItem[0]->getSorting();
         } else {
             return 0;
@@ -567,16 +541,17 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Checks, whether an image for a given filehash is included in album
      *
      * @param string $fileHash MD5 hash of item to be checked to be in this album
+     *
      * @return bool True, if image is included
      */
-    public function containsItemByHash($fileHash)
-    {
-        foreach ($this->items as $item) {
+    public function containsItemByHash( $fileHash ) {
+        foreach ( $this->items as $item ) {
             /* @var $item Item */
-            if ($item->getFilehash() == $fileHash) {
+            if ( $item->getFilehash() == $fileHash ) {
                 return true;
             }
         }
+
         return false;
     }
 }

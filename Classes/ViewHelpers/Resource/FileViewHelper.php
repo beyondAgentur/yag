@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-* Copyright notice
-*
-*   2010 Daniel Lienert <typo3@lienert.cc>, Michael Knoll <mimi@kaktusteam.de>
-* All rights reserved
-*
-*
-* This script is part of the TYPO3 project. The TYPO3 project is
-* free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* The GNU General Public License can be found at
-* http://www.gnu.org/copyleft/gpl.html.
-*
-* This script is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ * Copyright notice
+ *
+ *   2010 Daniel Lienert <typo3@lienert.cc>, Michael Knoll <mimi@kaktusteam.de>
+ * All rights reserved
+ *
+ *
+ * This script is part of the TYPO3 project. The TYPO3 project is
+ * free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * The GNU General Public License can be found at
+ * http://www.gnu.org/copyleft/gpl.html.
+ *
+ * This script is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 namespace DL\Yag\ViewHelpers\Resource;
 
@@ -30,22 +30,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
-* Generic Viewhelper for rendering an URL to a file using getFileAbsFileName
-* 
-* Example:
-* 
-* <yag:resource.file path="{item}">
-* 
-* Only renders URL, no link action!
-* 
-* @package ViewHelpers
-* @subpackage Resource
-* @author Daniel Lienert <typo3@lienert.cc>
-* @author Michael Knoll <mimi@kaktusteam.de>
-*/
-
-class FileViewHelper extends AbstractViewHelper
-{
+ * Generic Viewhelper for rendering an URL to a file using getFileAbsFileName
+ *
+ * Example:
+ *
+ * <yag:resource.file path="{item}">
+ *
+ * Only renders URL, no link action!
+ *
+ * @package    ViewHelpers
+ * @subpackage Resource
+ * @author     Daniel Lienert <typo3@lienert.cc>
+ * @author     Michael Knoll <mimi@kaktusteam.de>
+ */
+class FileViewHelper extends AbstractViewHelper {
     /**
      * @var Div
      */
@@ -55,8 +53,7 @@ class FileViewHelper extends AbstractViewHelper
     /**
      * @param Div $fileSystemDiv
      */
-    public function injectFileSystemDiv(Div $fileSystemDiv)
-    {
+    public function injectFileSystemDiv( Div $fileSystemDiv ) {
         $this->fileSystemDiv = $fileSystemDiv;
     }
 
@@ -65,18 +62,18 @@ class FileViewHelper extends AbstractViewHelper
      * Render the path
      *
      * @param string $path
+     *
      * @return string
      */
-    public function render($path = '')
-    {
-        if ($path == '') {
+    public function render( $path = '' ) {
+        if ( $path == '' ) {
             $path = $this->renderChildren();
         }
 
-        if (file_exists( GeneralUtility::getFileAbsFileName($path))) {
-            return $this->fileSystemDiv->getFileRelFileName($path);
+        if ( file_exists( GeneralUtility::getFileAbsFileName( $path ) ) ) {
+            return $this->fileSystemDiv->getFileRelFileName( $path );
         } else {
-            return sprintf('The given Path %s was not found', htmlspecialchars($path));
+            return sprintf( 'The given Path %s was not found', htmlspecialchars( $path ) );
         }
     }
 }

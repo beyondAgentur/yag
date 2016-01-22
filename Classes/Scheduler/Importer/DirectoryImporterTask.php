@@ -31,27 +31,24 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
 /**
  * YAG Scheduler Task
  *
- * @package YAG
+ * @package    YAG
  * @subpackage Scheduler
  */
-class DirectoryImporterTask extends AbstractTask
-{
+class DirectoryImporterTask extends AbstractTask {
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      */
     protected $objectManager;
 
 
-
     /**
      * @return boolean Returns TRUE on successful execution, FALSE on error
      */
-    public function execute()
-    {
+    public function execute() {
         $this->initializeExtbase();
         $this->initializeObject();
 
-        if ($this->importer->run($this->getConfiguration())) {
+        if ( $this->importer->run( $this->getConfiguration() ) ) {
             return true;
         }
 
@@ -63,31 +60,29 @@ class DirectoryImporterTask extends AbstractTask
      *
      * This is necessary to resolve the TypoScript interface definitions
      */
-    protected function initializeExtbase()
-    {
+    protected function initializeExtbase() {
         $configuration['extensionName'] = 'Yag';
-        $configuration['pluginName'] = 'dummy';
-        $extbaseBootstrap = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Core\\Bootstrap'); /** @var \TYPO3\CMS\Extbase\Core\Bootstrap $extbaseBootstrap  */
-        $extbaseBootstrap->initialize($configuration);
+        $configuration['pluginName']    = 'dummy';
+        $extbaseBootstrap               = GeneralUtility::makeInstance( 'TYPO3\\CMS\\Extbase\\Core\\Bootstrap' );
+        /** @var \TYPO3\CMS\Extbase\Core\Bootstrap $extbaseBootstrap */
+        $extbaseBootstrap->initialize( $configuration );
     }
 
     /**
      * @return void
      */
-    public function initializeObject()
-    {
-        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+    public function initializeObject() {
+        $this->objectManager = GeneralUtility::makeInstance( 'TYPO3\\CMS\\Extbase\\Object\\ObjectManager' );
     }
 
     /**
      *
      * @return array
      */
-    protected function getConfiguration()
-    {
+    protected function getConfiguration() {
         return array(
             'liveMode' => $this->tx_ptdpppzca_mode,
-            'prefix' => $this->tx_ptdpppzca_prefix
+            'prefix'   => $this->tx_ptdpppzca_prefix
         );
     }
 
@@ -95,8 +90,7 @@ class DirectoryImporterTask extends AbstractTask
     /**
      * @return string
      */
-    public function getAdditionalInformation()
-    {
+    public function getAdditionalInformation() {
         return "Import from directory";
     }
 }

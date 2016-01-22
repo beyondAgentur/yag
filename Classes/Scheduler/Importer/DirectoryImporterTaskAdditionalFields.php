@@ -32,30 +32,31 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
 /**
  * SQL Runner Task Additional Fields
  *
- * @package YAG
+ * @package    YAG
  * @subpackage Scheduler
  */
-class DirectoryImporterTaskAdditionalFields implements AdditionalFieldProviderInterface
-{
+class DirectoryImporterTaskAdditionalFields implements AdditionalFieldProviderInterface {
     /**
      * @var array
      */
     protected $configuration = array(
         'sysFolderPid' => 'SysFolder Pid',
-        'removeFiles' => 'Remove Files after import',
+        'removeFiles'  => 'Remove Files after import',
     );
 
     /**
      * Gets additional fields to render in the form to add/edit a task
      *
-     * @param array $taskInfo Values of the fields from the add/edit task form
-     * @param tx_scheduler_Task $task The task object being eddited. Null when adding a task!
+     * @param array                     $taskInfo        Values of the fields from the add/edit task form
+     * @param tx_scheduler_Task         $task            The task object being eddited. Null when adding a task!
      * @param SchedulerModuleController $schedulerModule Reference to the scheduler backend module
-     * @return array A two dimensional array, array('Identifier' => array('fieldId' => array('code' => '', 'label' => '', 'cshKey' => '', 'cshLabel' => ''))
+     *
+     * @return array A two dimensional array, array('Identifier' => array('fieldId' => array('code' => '', 'label' =>
+     *               '', 'cshKey' => '', 'cshLabel' => ''))
      */
-    public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule)
-    {
+    public function getAdditionalFields( array &$taskInfo, $task, SchedulerModuleController $schedulerModule ) {
         $additionalFields = array();
+
         return $additionalFields;
     }
 
@@ -63,25 +64,27 @@ class DirectoryImporterTaskAdditionalFields implements AdditionalFieldProviderIn
     /**
      * Validates the additional fields' values
      *
-     * @param array $submittedData An array containing the data submitted by the add/edit task form
+     * @param array                     $submittedData   An array containing the data submitted by the add/edit task
+     *                                                   form
      * @param SchedulerModuleController $schedulerModule Reference to the scheduler backend module
+     *
      * @return boolean TRUE if validation was ok (or selected class is not relevant), FALSE otherwise
      */
-    public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule)
-    {
-        $submittedData[$this->configuration['sysFolderPid']] = (int) $submittedData[$this->configuration['sysFolderPid']];
+    public function validateAdditionalFields( array &$submittedData, SchedulerModuleController $schedulerModule ) {
+        $submittedData[ $this->configuration['sysFolderPid'] ] = (int) $submittedData[ $this->configuration['sysFolderPid'] ];
+
         return true;
     }
 
     /**
      * Takes care of saving the additional fields' values in the task's object
      *
-     * @param array                          $submittedData An array containing the data submitted by the add/edit task form
+     * @param array                          $submittedData An array containing the data submitted by the add/edit task
+     *                                                      form
      * @param tx_scheduler_Task|AbstractTask $task          Reference to the scheduler backend module
      */
-    public function saveAdditionalFields(array $submittedData, AbstractTask $task)
-    {
-        $configuration = $this->configuration;
-        $task->$configuration['sysFolderPid'] = $submittedData[$configuration['sysFolderPid']];
+    public function saveAdditionalFields( array $submittedData, AbstractTask $task ) {
+        $configuration                        = $this->configuration;
+        $task->$configuration['sysFolderPid'] = $submittedData[ $configuration['sysFolderPid'] ];
     }
 }

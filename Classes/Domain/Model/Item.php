@@ -1,28 +1,28 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010-2011 Michael Knoll <mimi@kaktusteam.de>
-*  			Daniel Lienert <typo3@lienert.cc>
-*  			
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010-2011 Michael Knoll <mimi@kaktusteam.de>
+ *            Daniel Lienert <typo3@lienert.cc>
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 namespace DL\Yag\Domain\Model;
 
@@ -37,16 +37,15 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Gallery implements Item domain object. An item is anything that can be 
+ * Gallery implements Item domain object. An item is anything that can be
  * attached to an album as content.
- * 
- * @author Daniel Lienert <typo3@lienert.cc>
- * @author Michael Knoll <mimi@kaktusteam.de>
- * @package Domain
+ *
+ * @author     Daniel Lienert <typo3@lienert.cc>
+ * @author     Michael Knoll <mimi@kaktusteam.de>
+ * @package    Domain
  * @subpackage Model
  */
-class Item extends AbstractEntity implements DomainModelInterface
-{
+class Item extends AbstractEntity implements DomainModelInterface {
     /**
      * Title of item
      *
@@ -75,7 +74,7 @@ class Item extends AbstractEntity implements DomainModelInterface
      * @var string $description
      */
     protected $description;
-    
+
 
     /**
      * Date of item
@@ -83,7 +82,7 @@ class Item extends AbstractEntity implements DomainModelInterface
      * @var \DateTime $date
      */
     protected $date;
-    
+
 
     /**
      * URI of item's source
@@ -95,12 +94,11 @@ class Item extends AbstractEntity implements DomainModelInterface
 
     /**
      * Holds md5 hash of original image
-     * 
+     *
      * @var string
      */
     protected $filehash;
-    
-    
+
 
     /**
      * Type of item
@@ -108,8 +106,7 @@ class Item extends AbstractEntity implements DomainModelInterface
      * @var string $itemType
      */
     protected $itemType;
-    
-    
+
 
     /**
      * Width of item
@@ -117,8 +114,7 @@ class Item extends AbstractEntity implements DomainModelInterface
      * @var integer $width
      */
     protected $width;
-    
-    
+
 
     /**
      * Height of item
@@ -126,8 +122,7 @@ class Item extends AbstractEntity implements DomainModelInterface
      * @var integer $height
      */
     protected $height;
-    
-    
+
 
     /**
      * Filesize of item
@@ -135,8 +130,7 @@ class Item extends AbstractEntity implements DomainModelInterface
      * @var integer $filesize
      */
     protected $filesize;
-    
-    
+
 
     /**
      * UID of fe user that owns item
@@ -144,8 +138,7 @@ class Item extends AbstractEntity implements DomainModelInterface
      * @var integer $feUserUid
      */
     protected $feUserUid;
-    
-    
+
 
     /**
      * UID of fe group that owns item
@@ -153,8 +146,7 @@ class Item extends AbstractEntity implements DomainModelInterface
      * @var integer $feGroupUid
      */
     protected $feGroupUid;
-    
-    
+
 
     /**
      * Holds album to which item belongs to
@@ -162,26 +154,24 @@ class Item extends AbstractEntity implements DomainModelInterface
      * @var Album $album
      */
     protected $album;
-    
-    
+
 
     /**
      * Holds meta data for item
-     * 
+     *
      * @lazy
      * @var ItemMeta $itemMeta
      */
     protected $itemMeta;
-    
-    
-    
+
+
     /**
      * Holds an sorting id for an item within an album
      *
      * @var int
      */
     protected $sorting;
-    
+
 
     /**
      * tags
@@ -224,12 +214,10 @@ class Item extends AbstractEntity implements DomainModelInterface
     protected $tstamp;
 
 
-
     /**
      * @var float
      */
     protected $rating;
-
 
 
     /**
@@ -238,17 +226,14 @@ class Item extends AbstractEntity implements DomainModelInterface
     protected $objectManager;
 
 
-
-    public function __construct()
-    {
+    public function __construct() {
         $this->initStorageObjects();
     }
 
 
-    public function __wakeUp()
-    {
-        if (!$this->objectManager instanceof ObjectManager) {
-            $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+    public function __wakeUp() {
+        if ( ! $this->objectManager instanceof ObjectManager ) {
+            $this->objectManager = GeneralUtility::makeInstance( 'TYPO3\\CMS\\Extbase\\Object\\ObjectManager' );
         } // TYPO3 4.5 Fix
     }
 
@@ -256,36 +241,32 @@ class Item extends AbstractEntity implements DomainModelInterface
     /**
      * @param ObjectManager $objectManager
      */
-    public function injectObjectManager( ObjectManager $objectManager)
-    {
+    public function injectObjectManager( ObjectManager $objectManager ) {
         $this->objectManager = $objectManager;
     }
-    
-    
+
+
     /**
      * Initializes all \TYPO3\CMS\Extbase\Persistence\ObjectStorage instances.
      *
      * @return void
      */
-    protected function initStorageObjects()
-    {
-        $this->tags = new ObjectStorage();
+    protected function initStorageObjects() {
+        $this->tags       = new ObjectStorage();
         $this->categories = new ObjectStorage();
     }
-
 
 
     /**
      * Setter for title
      *
      * @param string $title Title of item
+     *
      * @return void
      */
-    public function setTitle($title)
-    {
+    public function setTitle( $title ) {
         $this->title = $title;
     }
-
 
 
     /**
@@ -293,24 +274,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return string Title of item
      */
-    public function getTitle()
-    {
+    public function getTitle() {
         return $this->title;
     }
-
 
 
     /**
      * Setter for filename
      *
      * @param string $filename filename of item
+     *
      * @return void
      */
-    public function setFilename($filename)
-    {
+    public function setFilename( $filename ) {
         $this->filename = $filename;
     }
-
 
 
     /**
@@ -318,24 +296,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return string filename of item
      */
-    public function getFilename()
-    {
+    public function getFilename() {
         return $this->filename;
     }
-
 
 
     /**
      * Setter for description
      *
      * @param string $description Description of item
+     *
      * @return void
      */
-    public function setDescription($description)
-    {
+    public function setDescription( $description ) {
         $this->description = $description;
     }
-
 
 
     /**
@@ -343,24 +318,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return string Description of item
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
-
 
 
     /**
      * Setter for date
      *
      * @param \DateTime $date Date of item
+     *
      * @return void
      */
-    public function setDate($date)
-    {
+    public function setDate( $date ) {
         $this->date = $date;
     }
-
 
 
     /**
@@ -368,24 +340,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return \DateTime Date of item
      */
-    public function getDate()
-    {
+    public function getDate() {
         return $this->date;
     }
-
 
 
     /**
      * Setter for source uri
      *
      * @param string $sourceURI URI of item's source
+     *
      * @return void
      */
-    public function setSourceuri($sourceURI)
-    {
+    public function setSourceuri( $sourceURI ) {
         $this->sourceuri = $sourceURI;
     }
-
 
 
     /**
@@ -393,24 +362,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return string URI of item's source
      */
-    public function getSourceuri()
-    {
+    public function getSourceuri() {
         return $this->sourceuri;
     }
-
 
 
     /**
      * Setter for itemType
      *
      * @param string $itemType Type of item
+     *
      * @return void
      */
-    public function setItemType($itemType)
-    {
+    public function setItemType( $itemType ) {
         $this->itemType = $itemType;
     }
-
 
 
     /**
@@ -418,24 +384,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return string Type of item
      */
-    public function getItemType()
-    {
+    public function getItemType() {
         return $this->itemType;
     }
-
 
 
     /**
      * Setter for width
      *
      * @param integer $width Width of item
+     *
      * @return void
      */
-    public function setWidth($width)
-    {
+    public function setWidth( $width ) {
         $this->width = $width;
     }
-
 
 
     /**
@@ -443,24 +406,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return integer Width of item
      */
-    public function getWidth()
-    {
+    public function getWidth() {
         return $this->width;
     }
-
 
 
     /**
      * Setter for height
      *
      * @param integer $height Height of item
+     *
      * @return void
      */
-    public function setHeight($height)
-    {
+    public function setHeight( $height ) {
         $this->height = $height;
     }
-
 
 
     /**
@@ -468,24 +428,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return integer Height of item
      */
-    public function getHeight()
-    {
+    public function getHeight() {
         return $this->height;
     }
-
 
 
     /**
      * Setter for fileSize
      *
      * @param integer $fileSize FileSize of item
+     *
      * @return void
      */
-    public function setFilesize($fileSize)
-    {
+    public function setFilesize( $fileSize ) {
         $this->filesize = $fileSize;
     }
-
 
 
     /**
@@ -493,24 +450,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return integer Filesize of item
      */
-    public function getFilesize()
-    {
+    public function getFilesize() {
         return $this->filesize;
     }
-
 
 
     /**
      * Setter for feUserUid
      *
      * @param integer $feUserUid UID of fe user that owns item
+     *
      * @return void
      */
-    public function setFeUserUid($feUserUid)
-    {
+    public function setFeUserUid( $feUserUid ) {
         $this->feUserUid = $feUserUid;
     }
-
 
 
     /**
@@ -518,24 +472,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return integer UID of fe user that owns item
      */
-    public function getFeUserUid()
-    {
+    public function getFeUserUid() {
         return $this->feUserUid;
     }
-
 
 
     /**
      * Setter for feGroupUid
      *
      * @param integer $feGroupUid UID of fe group that owns item
+     *
      * @return void
      */
-    public function setFeGroupUid($feGroupUid)
-    {
+    public function setFeGroupUid( $feGroupUid ) {
         $this->feGroupUid = $feGroupUid;
     }
-
 
 
     /**
@@ -543,24 +494,21 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return integer UID of fe group that owns item
      */
-    public function getFeGroupUid()
-    {
+    public function getFeGroupUid() {
         return $this->feGroupUid;
     }
-
 
 
     /**
      * Setter for album
      *
      * @param Album $album Holds album to which item belongs to
+     *
      * @return void
      */
-    public function setAlbum(Album $album)
-    {
+    public function setAlbum( Album $album ) {
         $this->album = $album;
     }
-
 
 
     /**
@@ -568,11 +516,9 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return Album Holds album to which item belongs to
      */
-    public function getAlbum()
-    {
-        return \Tx_PtExtbase_Div::getLazyLoadedObject($this->album);
+    public function getAlbum() {
+        return \Tx_PtExtbase_Div::getLazyLoadedObject( $this->album );
     }
-
 
 
     /**
@@ -580,39 +526,34 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @param string $filehash
      */
-    public function setFilehash($filehash)
-    {
+    public function setFilehash( $filehash ) {
         $this->filehash = $filehash;
     }
 
 
-
     /**
      * Getter for md5 file hash
-     * 
+     *
      * @return string
      */
-    public function getFilehash()
-    {
+    public function getFilehash() {
         return $this->filehash;
     }
-
 
 
     /**
      * Setter for itemMeta
      *
      * @param ItemMeta $itemMeta Holds meta data for item
+     *
      * @return void
      */
-    public function setItemMeta(ItemMeta $itemMeta)
-    {
+    public function setItemMeta( ItemMeta $itemMeta ) {
         $this->itemMeta = $itemMeta;
-        if ($itemMeta->getCaptureDate() instanceof \DateTime) {
-            $this->setDate($itemMeta->getCaptureDate());
+        if ( $itemMeta->getCaptureDate() instanceof \DateTime ) {
+            $this->setDate( $itemMeta->getCaptureDate() );
         }
     }
-
 
 
     /**
@@ -620,52 +561,46 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return ItemMeta Holds meta data for item
      */
-    public function getItemMeta()
-    {
-        \Tx_PtExtbase_Div::getLazyLoadedObject($this->itemMeta);
-        if (!$this->itemMeta instanceof ItemMeta) {
-            $this->itemMeta = $this->objectManager->get('ItemMeta');
+    public function getItemMeta() {
+        \Tx_PtExtbase_Div::getLazyLoadedObject( $this->itemMeta );
+        if ( ! $this->itemMeta instanceof ItemMeta ) {
+            $this->itemMeta = $this->objectManager->get( 'ItemMeta' );
         }
+
         return $this->itemMeta;
     }
-
 
 
     /**
      * @param float $rating
      */
-    public function setRating($rating)
-    {
+    public function setRating( $rating ) {
         $this->rating = $rating;
     }
-
 
 
     /**
      * @return float
      */
-    public function getRating()
-    {
+    public function getRating() {
         return $this->rating;
     }
-
 
 
     /**
      * Get image path by resolution config
      *
      * @param ResolutionConfig $resolutionConfig
+     *
      * @return ResolutionFileCache
      */
-    public function getResolutionByConfig($resolutionConfig)
-    {
-        if ($resolutionConfig != null) {
-            return ResolutionFileCacheFactory::getInstance()->getItemFileResolutionPathByConfiguration($this, $resolutionConfig);
+    public function getResolutionByConfig( $resolutionConfig ) {
+        if ( $resolutionConfig != null ) {
+            return ResolutionFileCacheFactory::getInstance()->getItemFileResolutionPathByConfiguration( $this, $resolutionConfig );
         } else {
             return $this->getOriginalResolution();
         }
     }
-
 
 
     /**
@@ -673,21 +608,19 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return array
      */
-    public function getResolutions()
-    {
+    public function getResolutions() {
         $resolutionConfigs = ConfigurationBuilderFactory::getInstance()
-                                    ->buildThemeConfiguration()
-                                    ->getResolutionConfigCollection();
+                                                        ->buildThemeConfiguration()
+                                                        ->getResolutionConfigCollection();
 
         $resolutions = array();
 
-        foreach ($resolutionConfigs as $resolutionName => $resolutionConfig) {
-            $resolutions[$resolutionName] = $this->getResolutionByConfig($resolutionConfig);
+        foreach ( $resolutionConfigs as $resolutionName => $resolutionConfig ) {
+            $resolutions[ $resolutionName ] = $this->getResolutionByConfig( $resolutionConfig );
         }
 
         return $resolutions;
     }
-
 
 
     /**
@@ -695,8 +628,7 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return ResolutionFileCache
      */
-    public function getOriginalResolution()
-    {
+    public function getOriginalResolution() {
         $resolutionFile = new ResolutionFileCache(
             $this,
             $this->sourceuri,
@@ -707,105 +639,97 @@ class Item extends AbstractEntity implements DomainModelInterface
 
         return $resolutionFile;
     }
-    
-    
-    
+
+
     /**
      * Getter for sorting
      *
      * @return int Sorting of item within an album
      */
-    public function getSorting()
-    {
+    public function getSorting() {
         return $this->sorting;
     }
-    
-    
-    
+
+
     /**
      * Setter for sorting. Sets position of item within an album
      *
      * @param int $sorting
      */
-    public function setSorting($sorting)
-    {
+    public function setSorting( $sorting ) {
         $this->sorting = $sorting;
     }
-    
-    
+
 
     /**
      * Deletes item and its cached files from.
      *
      * @param bool $deleteCachedFiles If set to true, file cache for item is also deleted
      */
-    public function delete($deleteCachedFiles = true)
-    {
+    public function delete( $deleteCachedFiles = true ) {
         // If we delete an item, we have to check, whether it has been the thumb of an album
         $resetThumb = false;
 
-        if ($this->getAlbum()->getThumb() !== null && $this->getAlbum()->getThumb()->getUid() == $this->getUid()) {
+        if ( $this->getAlbum()->getThumb() !== null && $this->getAlbum()->getThumb()->getUid() == $this->getUid() ) {
             $resetThumb = true;
         }
 
-        $this->objectManager->get('FileManager')->removeImageFileFromAlbumDirectory($this);
-        if ($deleteCachedFiles) {
+        $this->objectManager->get( 'FileManager' )->removeImageFileFromAlbumDirectory( $this );
+        if ( $deleteCachedFiles ) {
             $this->deleteCachedFiles();
         }
 
-        if ($this->getItemMeta()) {
-            $itemMetaRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemMetaRepository'); /* @var $itemMetaRepository ItemMetaRepository */
-            $itemMetaRepository->remove($this->getItemMeta());
+        if ( $this->getItemMeta() ) {
+            $itemMetaRepository = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\ItemMetaRepository' );
+            /* @var $itemMetaRepository ItemMetaRepository */
+            $itemMetaRepository->remove( $this->getItemMeta() );
         }
-        
-        $this->album->removeItem($this);
 
-        if ($resetThumb) {
+        $this->album->removeItem( $this );
+
+        if ( $resetThumb ) {
             $this->album->setThumbToTopOfItems();
         }
 
-        $this->objectManager->get('DL\\Yag\\Domain\\Repository\\AlbumRepository')->update($this->album);
+        $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\AlbumRepository' )->update( $this->album );
 
-        $itemRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ItemRepository'); /* @var $itemRepository ItemRepository */
-        $itemRepository->remove($this);
+        $itemRepository = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\ItemRepository' );
+        /* @var $itemRepository ItemRepository */
+        $itemRepository->remove( $this );
     }
-    
-    
-    
+
+
     /**
      * Deletes cached files for item
      */
-    public function deleteCachedFiles()
-    {
-        $resolutionFileCacheRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\ResolutionFileCacheRepository'); /* @var $resolutionFileCacheRepository ResolutionFileCacheRepository */
-        $resolutionFileCacheRepository->removeByItem($this);
+    public function deleteCachedFiles() {
+        $resolutionFileCacheRepository = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\ResolutionFileCacheRepository' );
+        /* @var $resolutionFileCacheRepository ResolutionFileCacheRepository */
+        $resolutionFileCacheRepository->removeByItem( $this );
     }
-    
-    
-    
+
+
     /**
      * Set this item as album thumb, if no thumbnail for album is existing
      *
      */
-    public function setItemAsAlbumThumbIfNotExisting()
-    {
-        if ($this->album->getThumb() == null) {
-            $this->album->setThumb($this);
+    public function setItemAsAlbumThumbIfNotExisting() {
+        if ( $this->album->getThumb() == null ) {
+            $this->album->setThumb( $this );
         }
     }
-    
-    
-    
+
+
     /**
      * Returns TRUE if item is thumb of associated album, 0 else
      *
      * @return boolean TRUE if item is thumb of associated album
      */
-    public function getIsAlbumThumb()
-    {
-        if ($this->getAlbum() instanceof Album
-            && $this->getAlbum()->getThumb() instanceof Item
-            && $this->getAlbum()->getThumb()->getUid() === $this->uid) {
+    public function getIsAlbumThumb() {
+        if ( $this->getAlbum() instanceof Album
+             && $this->getAlbum()->getThumb() instanceof Item
+             && $this->getAlbum()->getThumb()->getUid() === $this->uid
+        ) {
             return true;
         } else {
             return false;
@@ -816,172 +740,160 @@ class Item extends AbstractEntity implements DomainModelInterface
     /**
      * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage
      */
-    public function setCategories($categories)
-    {
+    public function setCategories( $categories ) {
         $this->categories = $categories;
     }
-
 
 
     /**
      * @return ObjectStorage
      */
-    public function getCategories()
-    {
+    public function getCategories() {
         return $this->categories;
     }
 
-    
-    
+
     /**
      * Returns 1 if image is landscape, else returns 0
      *
      * @return int
      */
-    public function getIsLandscape()
-    {
-        if ($this->width > $this->height) {
+    public function getIsLandscape() {
+        if ( $this->width > $this->height ) {
             return 1;
         } else {
             return 0;
         }
     }
-    
 
 
     /**
      * @param $tagsAsCSV
      */
-    public function setTagsFromCSV($tagsAsCSV)
-    {
-        $tags = array_filter(GeneralUtility::trimExplode(',', $tagsAsCSV));
+    public function setTagsFromCSV( $tagsAsCSV ) {
+        $tags        = array_filter( GeneralUtility::trimExplode( ',', $tagsAsCSV ) );
         $currentTags = clone $this->tags;
 
-        foreach ($currentTags as $tag) { /** @var Tag $tag */
-            if (!in_array(trim($tag->getName()), $tags)) {
+        foreach ( $currentTags as $tag ) {
+            /** @var Tag $tag */
+            if ( ! in_array( trim( $tag->getName() ), $tags ) ) {
                 $tag->decreaseCount();
-                $this->tags->detach($tag);
+                $this->tags->detach( $tag );
             }
         }
 
-        foreach ($tags as $tagName) {
+        foreach ( $tags as $tagName ) {
             $tagIsExistent = false;
 
-            foreach ($this->tags as $existentTag) { /** @var Tag $existentTag */
-                if ($existentTag->getName() == $tagName) {
+            foreach ( $this->tags as $existentTag ) {
+                /** @var Tag $existentTag */
+                if ( $existentTag->getName() == $tagName ) {
                     $tagIsExistent = true;
                 }
             }
 
-            if (!$tagIsExistent) {
+            if ( ! $tagIsExistent ) {
                 $tagToBeAdded = new Tag();
 
-                $tagToBeAdded->setName($tagName);
-                $this->addTag($tagToBeAdded);
+                $tagToBeAdded->setName( $tagName );
+                $this->addTag( $tagToBeAdded );
             }
         }
     }
 
-    
-    
+
     /**
      * Add a list of tags separated by comma
-     * 
+     *
      * @param string $tagsAsCSV
      */
-    public function addTagsFromCSV($tagsAsCSV)
-    {
-        $tags = array_filter(GeneralUtility::trimExplode(',', $tagsAsCSV));
+    public function addTagsFromCSV( $tagsAsCSV ) {
+        $tags = array_filter( GeneralUtility::trimExplode( ',', $tagsAsCSV ) );
 
-        foreach ($tags as $tagName) {
+        foreach ( $tags as $tagName ) {
             $tag = new Tag();
-            
-            $tag->setName($tagName);
-            
-            $this->addTag($tag);
+
+            $tag->setName( $tagName );
+
+            $this->addTag( $tag );
         }
     }
-    
-    
-    
+
+
     /**
      * Build a csv string of all tags
      *
      * @param  string $separator
+     *
      * @return string
      */
-    public function getTagsSeparated($separator = ', ')
-    {
+    public function getTagsSeparated( $separator = ', ' ) {
         $tagNames = array();
 
-        foreach ($this->tags as $tag) {
+        foreach ( $this->tags as $tag ) {
             $tagNames[] = $tag->getName();
         }
 
-        return implode($separator, $tagNames);
+        return implode( $separator, $tagNames );
     }
 
-    
-    
+
     /**
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag\Domain\Model\Tag>
      */
-    public function getTags()
-    {
+    public function getTags() {
         return $this->tags;
     }
 
 
-
     /**
      * @param $tags
+     *
      * @return void
      */
-    public function setTags($tags)
-    {
+    public function setTags( $tags ) {
         $this->tags = $tags;
     }
 
-    
-    
+
     /**
      * Add Tag if it is not already existing and update counter
-     * 
+     *
      * @param Tag the Tag to be added
+     *
      * @return void
      */
-    public function addTag(Tag $tag)
-    {
-        $tagRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\TagRepository');
-        $existingTag = $tagRepository->findOneByName($tag->getName()); /** @var Tag $existingTag */
-        
-        if ($existingTag === null || $tag === $existingTag) {
-            $tag->setCount(1);
-            $this->tags->attach($tag);
+    public function addTag( Tag $tag ) {
+        $tagRepository = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\TagRepository' );
+        $existingTag   = $tagRepository->findOneByName( $tag->getName() );
+        /** @var Tag $existingTag */
+
+        if ( $existingTag === null || $tag === $existingTag ) {
+            $tag->setCount( 1 );
+            $this->tags->attach( $tag );
         } else {
             $existingTag->increaseCount();
-            $this->tags->attach($existingTag);
+            $this->tags->attach( $existingTag );
         }
     }
 
-    
-    
+
     /**
      * @param Tag the Tag to be removed
+     *
      * @return void
      */
-    public function removeTag(Tag $tagToRemove)
-    {
-        $tagRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\TagRepository');
-        $existingTag = $tagRepository->findOneByName($tagToRemove->getName()); /** @var Tag $existingTag */
+    public function removeTag( Tag $tagToRemove ) {
+        $tagRepository = $this->objectManager->get( 'DL\\Yag\\Domain\\Repository\\TagRepository' );
+        $existingTag   = $tagRepository->findOneByName( $tagToRemove->getName() );
+        /** @var Tag $existingTag */
 
-        if ($existingTag instanceof Tag) {
+        if ( $existingTag instanceof Tag ) {
             $existingTag->decreaseCount();
         }
 
-        $this->tags->detach($tagToRemove);
+        $this->tags->detach( $tagToRemove );
     }
-
 
 
     /**
@@ -989,10 +901,10 @@ class Item extends AbstractEntity implements DomainModelInterface
      *
      * @return bool
      */
-    public function getIsMine()
-    {
-        if (TYPO3_MODE == 'FE' && !empty($GLOBALS['TSFE']->fe_user->user['uid'])) {
-            $isMine = ($GLOBALS['TSFE']->fe_user->user['uid'] == $this->feUserUid);
+    public function getIsMine() {
+        if ( TYPO3_MODE == 'FE' && ! empty( $GLOBALS['TSFE']->fe_user->user['uid'] ) ) {
+            $isMine = ( $GLOBALS['TSFE']->fe_user->user['uid'] == $this->feUserUid );
+
             return $isMine;
         }
 
@@ -1000,74 +912,62 @@ class Item extends AbstractEntity implements DomainModelInterface
     }
 
 
-
     /**
      * @param string $link
      */
-    public function setLink($link)
-    {
+    public function setLink( $link ) {
         $this->link = $link;
     }
-
 
 
     /**
      * @return string
      */
-    public function getLink()
-    {
+    public function getLink() {
         return $this->link;
     }
-
 
 
     /**
      * @param string $originalFilename
      */
-    public function setOriginalFilename($originalFilename)
-    {
+    public function setOriginalFilename( $originalFilename ) {
         $this->originalFilename = $originalFilename;
     }
-
 
 
     /**
      * @return string
      */
-    public function getOriginalFilename()
-    {
+    public function getOriginalFilename() {
         return $this->originalFilename;
     }
 
     /**
      * @param \DateTime $crdate
      */
-    public function setCrdate($crdate)
-    {
+    public function setCrdate( $crdate ) {
         $this->crdate = $crdate;
     }
 
     /**
      * @return \DateTime
      */
-    public function getCrdate()
-    {
+    public function getCrdate() {
         return $this->crdate;
     }
 
     /**
      * @param \DateTime $tstamp
      */
-    public function setTstamp($tstamp)
-    {
+    public function setTstamp( $tstamp ) {
         $this->tstamp = $tstamp;
     }
 
     /**
      * @return \DateTime
      */
-    public function getTstamp()
-    {
+    public function getTstamp() {
         return $this->tstamp;
     }
 }

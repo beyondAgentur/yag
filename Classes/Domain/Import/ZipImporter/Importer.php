@@ -33,13 +33,12 @@ use TYPO3\CMS\Core\Utility\CommandUtility;
 /**
  * Zip Importer for YAG gallery. Enables importing images from ZIP files
  *
- * @package Domain
+ * @package    Domain
  * @subpackage Import\ZipImporter
- * @author Michael Knoll <mimi@kaktusteam.de>
- * @author Daniel Lienert <typo3@lienert.cc>
+ * @author     Michael Knoll <mimi@kaktusteam.de>
+ * @author     Daniel Lienert <typo3@lienert.cc>
  */
-class Importer extends AbstractImporter
-{
+class Importer extends AbstractImporter {
     /**
      * Holds path to zipFile
      *
@@ -68,8 +67,7 @@ class Importer extends AbstractImporter
      *
      * @param string $zipFilename Filname of zip file to be imported
      */
-    public function setZipFilename($zipFilename)
-    {
+    public function setZipFilename( $zipFilename ) {
         $this->zipFilename = $zipFilename;
     }
 
@@ -77,8 +75,7 @@ class Importer extends AbstractImporter
     /**
      * @param $unzipExecutable
      */
-    public function setUnzipExecutable($unzipExecutable)
-    {
+    public function setUnzipExecutable( $unzipExecutable ) {
         $this->unzipExecutable = $unzipExecutable;
     }
 
@@ -88,16 +85,15 @@ class Importer extends AbstractImporter
      * runs directory importer to actually import the files contained
      * in zip file.
      */
-    public function runImport()
-    {
+    public function runImport() {
         // Unpack zip file
-        $tempDir = Div::tempdir(sys_get_temp_dir(), 'yag_zip_extraction');
-        $this->unzipArchive($this->zipFilename, $tempDir);
+        $tempDir = Div::tempdir( sys_get_temp_dir(), 'yag_zip_extraction' );
+        $this->unzipArchive( $this->zipFilename, $tempDir );
 
         // Initialize directory crawler on extracted file's directory and run import
-        $directoryImporter = ImporterBuilder::getInstance()->getInstanceByDirectoryAndAlbum($tempDir, $this->album);
+        $directoryImporter = ImporterBuilder::getInstance()->getInstanceByDirectoryAndAlbum( $tempDir, $this->album );
         $directoryImporter->setMoveFilesToOrigsDirectoryToTrue(); // Files will be moved to origs directory before they are processed
-        $directoryImporter->setCrawlRecursive(true);
+        $directoryImporter->setCrawlRecursive( true );
         $directoryImporter->runImport();
 
         $this->itemsImported = $directoryImporter->getItemsImported();
@@ -106,30 +102,30 @@ class Importer extends AbstractImporter
 
     /**
      * @param $zipPathAndFileName string
-     * @param $tempDir string
+     * @param $tempDir            string
+     *
      * @return bool
      * @throws Exception
      */
-    protected function unzipArchive($zipPathAndFileName, $tempDir)
-    {
+    protected function unzipArchive( $zipPathAndFileName, $tempDir ) {
 
         // check if the PHP module ZipArchive is loaded and use it
-        if (extension_loaded('zip')) {
+        if ( extension_loaded( 'zip' ) ) {
             $zip = new ZipArchive;
 
-            if ($zip->open($zipPathAndFileName) === true) {
-                $zip->extractTo($tempDir);
+            if ( $zip->open( $zipPathAndFileName ) === true ) {
+                $zip->extractTo( $tempDir );
                 $zip->close();
             } else {
-                throw new Exception('Error while trying to extract a zip archive using the PHP module ZipArchive', 1294159795);
+                throw new Exception( 'Error while trying to extract a zip archive using the PHP module ZipArchive', 1294159795 );
             }
         }
 
 
         // call the unzip executable if set
-        if ($this->unzipExecutable && is_executable($this->unzipExecutable)) {
+        if ( $this->unzipExecutable && is_executable( $this->unzipExecutable ) ) {
             $cmd = $this->unzipExecutable . ' -qq "' . $zipPathAndFileName . '" -d "' . $tempDir . '"';
-            CommandUtility::exec($cmd);
+            CommandUtility::exec( $cmd );
         }
     }
 
@@ -137,8 +133,7 @@ class Importer extends AbstractImporter
     /**
      *
      */
-    public function isAvailable()
-    {
+    public function isAvailable() {
     }
 
 
@@ -147,8 +142,7 @@ class Importer extends AbstractImporter
      *
      * @return int
      */
-    public function getItemsImported()
-    {
+    public function getItemsImported() {
         return $this->itemsImported;
     }
 }
