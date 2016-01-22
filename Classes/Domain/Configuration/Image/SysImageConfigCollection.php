@@ -37,7 +37,7 @@ class SysImageConfigCollection extends \Tx_PtExtbase_Collection_ObjectCollection
     /**
      * @var string
      */
-    protected $restrictedClassName = 'SysImageConfig';
+    protected $restrictedClassName = 'DL\\Yag\\Domain\\Configuration\\Image\\SysImageConfig';
 
 
     /**

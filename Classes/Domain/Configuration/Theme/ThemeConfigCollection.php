@@ -37,7 +37,7 @@ class ThemeConfigCollection extends \Tx_PtExtbase_Collection_ObjectCollection {
     /**
      * @var string
      */
-    protected $restrictedClassName = 'ThemeConfiguration';
+    protected $restrictedClassName = 'DL\\Yag\\Domain\\Configuration\\Theme\\ThemeConfiguration';
 
 
     /**

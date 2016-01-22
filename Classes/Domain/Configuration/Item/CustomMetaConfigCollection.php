@@ -37,7 +37,7 @@ class CustomMetaConfigCollection extends \Tx_PtExtbase_Collection_ObjectCollecti
     /**
      * @var string
      */
-    protected $restrictedClassName = 'CustomMetaConfig';
+    protected $restrictedClassName = 'DL\\Yag\\Domain\\Configuration\\Item\\CustomMetaConfig';
 
 
     /**

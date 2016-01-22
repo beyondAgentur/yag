@@ -37,7 +37,7 @@ class ResolutionConfigCollection extends \Tx_PtExtbase_Collection_ObjectCollecti
     /**
      * @var string
      */
-    protected $restrictedClassName = 'ResolutionConfig';
+    protected $restrictedClassName = 'DL\\Yag\\Domain\\Configuration\\Image\\ResolutionConfig';
 
     /**
      * @param string $resolutionName
