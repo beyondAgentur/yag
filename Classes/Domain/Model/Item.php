@@ -924,7 +924,7 @@ class Item extends AbstractEntity implements DomainModelInterface
     
     
     /**
-     * @return ObjectStorage<Tag>
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag\Domain\Model\Tag>
      */
     public function getTags()
     {

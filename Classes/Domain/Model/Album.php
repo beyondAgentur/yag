@@ -361,7 +361,7 @@ class Album extends AbstractEntity implements DomainModelInterface
     /**
      * Getter for items
      *
-     * @return ObjectStorage<Item> Holds items of this album
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag\Domain\Model\Item> Holds items of this album
      */
     public function getItems()
     {

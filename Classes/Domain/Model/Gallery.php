@@ -293,7 +293,7 @@ class Gallery extends AbstractEntity implements DomainModelInterface
      *
      * @param ObjectStorage $albums
      *
-     * @internal param $ \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Album> $albums Holds albums for this gallery
+     * @internal param $ \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag\Domain\Model\Album> $albums Holds albums for this gallery
      */
     public function setAlbums( ObjectStorage $albums)
     {
@@ -305,7 +305,7 @@ class Gallery extends AbstractEntity implements DomainModelInterface
     /**
      * Getter for albums
      *
-     * @return ObjectStorage<Album> Holds albums for this gallery
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag\Domain\Model\Album> Holds albums for this gallery
      */
     public function getAlbums()
     {
