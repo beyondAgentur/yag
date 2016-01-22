@@ -186,13 +186,13 @@ class Item extends AbstractEntity implements DomainModelInterface
     /**
      * tags
      * @lazy
-     * @var ObjectStorage<Tag> $tags
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag\Domain\Model\Tag> $tags
      */
     protected $tags;
 
 
     /**
-     * @var ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag\Domain\Model\Category>
      * @lazy
      */
     protected $categories;

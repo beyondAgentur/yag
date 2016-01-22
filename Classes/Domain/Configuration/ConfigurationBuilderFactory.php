@@ -25,6 +25,8 @@
 
 namespace DL\Yag\Domain\Configuration;
 
+use TYPO3\CMS\Backend\Exception;
+
 /**
  * Class implements factory for configuration builder
  *

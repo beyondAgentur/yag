@@ -30,6 +30,8 @@ use DL\Yag\Domain\Model\Album;
 use DL\Yag\Domain\Model\Item;
 use DL\Yag\Domain\Repository\AlbumRepository;
 use DL\Yag\Domain\Repository\GalleryRepository;
+use DL\Yag\Utility\PidDetector;
+use TYPO3\CMS\Backend\Exception;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -76,7 +78,7 @@ class RecordSelector extends AbstractFlexformUtility
     /**
      * Holds instance of pid detector
      *
-     * @var \DL\Yag\Utility\PidDetector
+     * @var PidDetector
      */
     protected $pidDetector;
 
@@ -199,7 +201,7 @@ class RecordSelector extends AbstractFlexformUtility
         $this->determineCurrentPID();
         $this->init();
 
-        $this->pidDetector->setMode(\DL\Yag\Utility\PidDetector::MANUAL_MODE);
+        $this->pidDetector->setMode( PidDetector::MANUAL_MODE);
 
         $galleryRepository = $this->objectManager->get('DL\\Yag\\Domain\\Repository\\GalleryRepository');
         /** @var $galleryRepository GalleryRepository */

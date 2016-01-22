@@ -102,7 +102,7 @@ class Album extends AbstractEntity implements DomainModelInterface
      * Holds items of this album
      *
      * @lazy
-     * @var ObjectStorage<DL\\Yag|\Domain\\Model\\Item> $items
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag|Domain\Model\Item> $items
      */
     protected $items;
 

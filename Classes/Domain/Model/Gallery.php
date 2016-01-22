@@ -97,7 +97,7 @@ class Gallery extends AbstractEntity implements DomainModelInterface
      * Holds albums for this gallery
      * 
      * @lazy
-     * @var ObjectStorage<Album> $albums
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\DL\Yag\Domain\Model\Album> $albums
      */
     protected $albums;
 
