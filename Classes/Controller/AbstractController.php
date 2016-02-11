@@ -393,7 +393,7 @@ abstract class AbstractController extends \Tx_PtExtbase_Controller_AbstractActio
 
         // Stage 1: get the identifier from GET / POST
         $identifier = GeneralUtility::makeInstance( 'TYPO3\\CMS\\Extbase\\Object\\ObjectManager' )
-                                    ->get( '\Tx_PtExtlist_Domain_StateAdapter_GetPostVarAdapterFactory' )->getInstance()->extractGpVarsByNamespace( 'contextIdentifier' );
+                                    ->get( 'Tx_PtExtlist_Domain_StateAdapter_GetPostVarAdapterFactory' )->getInstance()->extractGpVarsByNamespace( 'contextIdentifier' );
 
         // Stage 2: get a defined identifier
         if ( ! $identifier ) {
