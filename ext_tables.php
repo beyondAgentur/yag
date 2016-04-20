@@ -22,7 +22,7 @@ if (TYPO3_MODE === 'BE') {
      * Registers a Backend Module
      */
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        $_EXTKEY,
+        'DL.' . $_EXTKEY,
         'web', // Make module a submodule of 'web'
         'tx_yag_m1', // Submodule key
         '', // Position

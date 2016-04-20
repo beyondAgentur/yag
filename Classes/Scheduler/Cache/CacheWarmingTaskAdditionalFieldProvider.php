@@ -52,7 +52,7 @@ class CacheWarmingTaskAdditionalFieldProvider extends AbstractAdditionalFieldPro
         $typoScriptPageUid = 1;
         $selectedThemes    = array();
         $imagesPerRun      = 10;
-        
+
         if ($task instanceof \YAG\Yag\Scheduler\Cache\CacheWarmingTask) {
             $typoScriptPageUid = $task->getTyposcriptPageUid();
             $selectedThemes    = $task->getSelectedThemes();
